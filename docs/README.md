@@ -26,7 +26,11 @@ Please contact us!
 
 Thank you!
 
-*team members names*
+- Beatriz Mendes
+- Clara Martins
+- Daniel Monteiro
+- Gonçalo Pascoal
+- João Mascarenhas
 
 ---
 
