@@ -50,7 +50,7 @@ To learn more about how to write a good product vision, please see also:
 
 ---
 ## Elevator Pitch
-Have you ever been to a conference only to find yourself running from one workshop to another and having to leave in the middle of the most interesting part just so you could see a little bit of another one? Or even failed to enter a workshop because the session was full? Then Eventee is the app for you. List your favourite workshops and it will give you a schedule without having to deal with partial sessions or full rooms.
+Have you ever been to a conference only to find yourself running from one workshop to another and having to leave in the middle of the most interesting part just so you could see a little bit of another one? Or even failed to enter a workshop because the session was full? Then Eventee is the app for you. List your favorite workshops and it will give you a schedule without having to deal with partial sessions or full rooms.
 
 ---
 ## Requirements
