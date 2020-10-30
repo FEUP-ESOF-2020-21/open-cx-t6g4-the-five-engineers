@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Create a Conference'),
     );
   }
 }
@@ -50,6 +50,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final startDateController = TextEditingController();
+  final endDateController = TextEditingController();
+
   void _createConference() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -83,6 +86,46 @@ class _MyHomePageState extends State<MyHomePage> {
                 border: OutlineInputBorder(),
                 labelText: 'Name'
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: TextField(
+              readOnly: true,
+              controller: startDateController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Start Date'
+              ),
+              onTap: () async {
+                DateTime date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100)
+                );
+                startDateController.text = date.toString().substring(0, 10);
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: TextField(
+              readOnly: true,
+              controller: endDateController,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'End Date'
+              ),
+              onTap: () async {
+                DateTime date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100)
+                );
+                endDateController.text = date.toString().substring(0, 10);
+              },
             ),
           ),
           Padding(
