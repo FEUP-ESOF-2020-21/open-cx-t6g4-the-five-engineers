@@ -50,17 +50,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final nameController = TextEditingController();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final locationController = TextEditingController();
 
-  void _createConference() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-    });
+  Future<dynamic> createConference() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          StringBuffer messageBuffer = new StringBuffer();
+
+          if (nameController.text.isEmpty) {
+            messageBuffer.writeln('Name not entered!');
+          }
+          if (startDateController.text.isEmpty) {
+            messageBuffer.writeln('Start date not entered!');
+          }
+          if (endDateController.text.isEmpty) {
+            messageBuffer.writeln('End date not entered!');
+          }
+          if (descriptionController.text.isEmpty) {
+            messageBuffer.writeln('Description not entered!');
+          }
+          if (locationController.text.isEmpty) {
+            messageBuffer.writeln('Location not entered!');
+          }
+
+          if (messageBuffer.isEmpty) {
+            messageBuffer.writeln('Success!');
+          }
+
+          return AlertDialog(
+            content: Text(messageBuffer.toString()),
+          );
+        }
+    );
   }
 
   @override
@@ -75,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextField(
+                controller: nameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Name'
@@ -134,6 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextField(
+                controller: descriptionController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Description'
@@ -144,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextField(
+                controller: locationController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   suffixIcon: Icon(Icons.location_on),
@@ -155,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _createConference,
+        onPressed: createConference,
         tooltip: 'Create',
         child: Icon(Icons.check),
       ),
