@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 
 void main() {
   runApp(MyApp());
@@ -53,8 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
   final nameController = TextEditingController();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
-  final descriptionController = TextEditingController();
   final locationController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  List _items = new List();
 
   Future<dynamic> createConference() {
     return showDialog(
@@ -71,11 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
           if (endDateController.text.isEmpty) {
             messageBuffer.writeln('End date not entered!');
           }
-          if (descriptionController.text.isEmpty) {
-            messageBuffer.writeln('Description not entered!');
-          }
           if (locationController.text.isEmpty) {
             messageBuffer.writeln('Location not entered!');
+          }
+          if (descriptionController.text.isEmpty) {
+            messageBuffer.writeln('Description not entered!');
           }
 
           if (messageBuffer.isEmpty) {
@@ -158,16 +161,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Description'
-                ),
-              ),
-            ),
             // TODO: Google Places autocomplete integration
             Padding(
               padding: const EdgeInsets.all(15.0),
@@ -180,6 +173,60 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Description'
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                'Tags',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Tags(
+              textField: TagsTextField(
+                padding: const EdgeInsets.all(15.0),
+                width: double.infinity,
+                inputDecoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.tag),
+                ),
+                onSubmitted: (String str) {
+                  setState(() {
+                    _items.add(str);
+                  });
+                },
+              ),
+              itemCount: _items.length,
+              itemBuilder: (int index) {
+                final item = _items[index];
+
+                return ItemTags(
+                  key: Key(index.toString()),
+                  index: index,
+                  title: item,
+                  active: true,
+                  removeButton: ItemTagsRemoveButton(
+                    onRemoved: () {
+                      setState(() {
+                        _items.removeAt(index);
+                      });
+                      return true;
+                    },
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),
