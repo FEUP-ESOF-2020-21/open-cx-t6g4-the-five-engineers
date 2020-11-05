@@ -80,45 +80,55 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              readOnly: true,
-              controller: startDateController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Start Date'
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(15.0, 15.0, 7.5, 15.0),
+                  child: TextField(
+                    readOnly: true,
+                    controller: startDateController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.calendar_today),
+                      labelText: 'Start Date'
+                    ),
+                    onTap: () async {
+                      DateTime date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100)
+                      );
+                      startDateController.text = date.toString().substring(0, 10);
+                    },
+                  ),
+                ),
               ),
-              onTap: () async {
-                DateTime date = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100)
-                );
-                startDateController.text = date.toString().substring(0, 10);
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
-              readOnly: true,
-              controller: endDateController,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'End Date'
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(7.5, 15.0, 15.0, 15.0),
+                  child: TextField(
+                    readOnly: true,
+                    controller: endDateController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
+                        labelText: 'End Date'
+                    ),
+                    onTap: () async {
+                      DateTime date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100)
+                      );
+                      endDateController.text = date.toString().substring(0, 10);
+                    },
+                  ),
+                ),
               ),
-              onTap: () async {
-                DateTime date = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100)
-                );
-                endDateController.text = date.toString().substring(0, 10);
-              },
-            ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),
