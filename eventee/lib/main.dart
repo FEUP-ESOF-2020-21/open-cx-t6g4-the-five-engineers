@@ -231,14 +231,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
               },
-            )
+            ),
+            RaisedButton(
+              onPressed: createConference,
+              child: Text('Create'),
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: createConference,
-        tooltip: 'Create',
-        child: Icon(Icons.check),
       ),
     );
   }
