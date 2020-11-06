@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Create a Conference'),
     );
   }
 }
@@ -50,68 +51,201 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final nameController = TextEditingController();
+  final startDateController = TextEditingController();
+  final endDateController = TextEditingController();
+  final locationController = TextEditingController();
+  final descriptionController = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  List _items = new List();
+
+  Future<dynamic> createConference() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          StringBuffer messageBuffer = new StringBuffer();
+
+          if (nameController.text.isEmpty) {
+            messageBuffer.writeln('Name not entered!');
+          }
+          if (startDateController.text.isEmpty) {
+            messageBuffer.writeln('Start date not entered!');
+          }
+          if (endDateController.text.isEmpty) {
+            messageBuffer.writeln('End date not entered!');
+          }
+          if (locationController.text.isEmpty) {
+            messageBuffer.writeln('Location not entered!');
+          }
+          if (descriptionController.text.isEmpty) {
+            messageBuffer.writeln('Description not entered!');
+          }
+
+          DateTime startDate = DateTime.parse(startDateController.text),
+              endDate = DateTime.parse(endDateController.text);
+
+          if (endDate.isBefore(startDate)) {
+            messageBuffer.writeln('End date is before start date!');
+          }
+
+          if (messageBuffer.isEmpty) {
+            messageBuffer.writeln('Success!');
+          }
+
+          return AlertDialog(
+            content: Text(messageBuffer.toString()),
+          );
+        }
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SingleChildScrollView(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Name'
+                ),
+                maxLength: 50,
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(15.0, 15.0, 7.5, 15.0),
+                    child: TextField(
+                      readOnly: true,
+                      controller: startDateController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.calendar_today),
+                        labelText: 'Start Date'
+                      ),
+                      onTap: () async {
+                        DateTime date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100)
+                        );
+                        startDateController.text = date.toString().substring(0, 10);
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(7.5, 15.0, 15.0, 15.0),
+                    child: TextField(
+                      readOnly: true,
+                      controller: endDateController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          suffixIcon: Icon(Icons.calendar_today),
+                          labelText: 'End Date'
+                      ),
+                      onTap: () async {
+                        DateTime date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100)
+                        );
+                        endDateController.text = date.toString().substring(0, 10);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            // TODO: Google Places autocomplete integration
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextField(
+                controller: locationController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.location_on),
+                  labelText: 'Location',
+                ),
+                maxLength: 100,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Description'
+                ),
+                maxLines: 3,
+                maxLength: 1000,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                'Tags',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Tags(
+              textField: TagsTextField(
+                padding: const EdgeInsets.all(15.0),
+                width: double.infinity,
+                inputDecoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.tag),
+                ),
+                maxLength: 50,
+                onSubmitted: (String str) {
+                  setState(() {
+                    _items.add(str);
+                  });
+                },
+              ),
+              itemCount: _items.length,
+              itemBuilder: (int index) {
+                final item = _items[index];
+
+                return ItemTags(
+                  key: Key(index.toString()),
+                  index: index,
+                  title: item,
+                  active: true,
+                  removeButton: ItemTagsRemoveButton(
+                    onRemoved: () {
+                      setState(() {
+                        _items.removeAt(index);
+                      });
+                      return true;
+                    },
+                  ),
+                );
+              },
+            ),
+            RaisedButton(
+              onPressed: createConference,
+              child: Text('Create'),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
