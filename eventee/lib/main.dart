@@ -81,6 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
             messageBuffer.writeln('Description not entered!');
           }
 
+          DateTime startDate = DateTime.parse(startDateController.text),
+              endDate = DateTime.parse(endDateController.text);
+
+          if (endDate.isBefore(startDate)) {
+            messageBuffer.writeln('End date is before start date!');
+          }
+
           if (messageBuffer.isEmpty) {
             messageBuffer.writeln('Success!');
           }
