@@ -109,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: OutlineInputBorder(),
                   labelText: 'Name'
                 ),
+                maxLength: 50,
               ),
             ),
             Row(
@@ -171,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   suffixIcon: Icon(Icons.location_on),
                   labelText: 'Location',
                 ),
+                maxLength: 100,
               ),
             ),
             Padding(
@@ -181,6 +183,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     border: OutlineInputBorder(),
                     labelText: 'Description'
                 ),
+                maxLines: 3,
+                maxLength: 1000,
               ),
             ),
             Padding(
@@ -201,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   border: OutlineInputBorder(),
                   suffixIcon: Icon(Icons.tag),
                 ),
+                maxLength: 50,
                 onSubmitted: (String str) {
                   setState(() {
                     _items.add(str);
