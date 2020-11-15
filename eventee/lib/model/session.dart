@@ -12,4 +12,6 @@ class Session {
     @required this.location,
     this.attendanceLimit = 0
   });
+
+  bool isAttendanceLimited() => attendanceLimit > 0;
 }
