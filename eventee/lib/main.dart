@@ -281,17 +281,16 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
       checkbox.add(CheckboxListTile(
           title: Text(tags[i]),
           controlAffinity: ListTileControlAffinity.leading,
-          value: selected.contains(tags[i]),
+          value: selected.contains(tags[i]), // TODO: value isn't being affected by changes
           onChanged: (bool value) {
-            setState(() {
-              if (value) {
-                selected.add(tags[i]);
-              }
-              else {
-                selected.remove(tags[i]);
-              }
-              createConferencesPanel();
-            });
+            print("Changing value: " + value.toString());
+            if (value == true) {
+              selected.add(tags[i]);
+            }
+            else {
+              selected.remove(tags[i]);
+            }
+            createConferencesPanel();
           }
       ));
     }
@@ -309,7 +308,7 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
     for (int i = 0; i < conferences.length; ++ i) {
       conferencesPanel.add(ListTile(
         title: Text(conferences[i]),
-        onTap: null     // TODO: view/edit conference menu
+        onTap: () { print("Edit Selected Conference: " + conferences[i]); }     // TODO: view/edit conference menu
       ));
     }
   }
@@ -339,6 +338,7 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          print("Add Conference");
           // TODO : add conference
         },
         child: Icon(Icons.add),
