@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Create a Conference'),
+      home: MyConferenceSelection(title: 'Select a Conference'),
     );
   }
 }
@@ -245,6 +245,104 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MyConferenceSelection extends StatefulWidget {
+  MyConferenceSelection({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyConferenceSelectionState createState() => _MyConferenceSelectionState();
+}
+
+class _MyConferenceSelectionState extends State<MyConferenceSelection> {
+  List<String> tags;
+  List<String> selected;
+  List<Widget> checkbox;
+
+  List<String> conferences;
+  List<Widget> conferencesPanel;
+
+  obtainTags() {
+    tags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4"];
+    // TODO : obtain tags from database
+  }
+
+  createCheckbox() {
+    obtainTags();
+    selected = [];
+    checkbox = [];
+    for (int i = 0; i < tags.length; ++ i) {
+      selected.add(tags[i]);
+      checkbox.add(CheckboxListTile(
+          title: Text(tags[i]),
+          controlAffinity: ListTileControlAffinity.leading,
+          value: selected.contains(tags[i]),
+          onChanged: (bool value) {
+            setState(() {
+              if (value) {
+                selected.add(tags[i]);
+              }
+              else {
+                selected.remove(tags[i]);
+              }
+              createConferencesPanel();
+            });
+          }
+      ));
+    }
+    print(checkbox);
+  }
+
+  obtainConferences() {
+    conferences = ["Conference 1", "Conference 2", "Conference 3", "Conference 4", "Conference 5", "Conference 6"];
+    //TODO: obtain conferences from database
+  }
+
+  createConferencesPanel() {
+    obtainConferences();
+    conferencesPanel = [];
+    for (int i = 0; i < conferences.length; ++ i) {
+      conferencesPanel.add(ListTile(
+        title: Text(conferences[i]),
+        onTap: null     // TODO: view/edit conference menu
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    createCheckbox();
+    createConferencesPanel();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Row(
+        children: [
+          Flexible(
+            child: Column(
+              //children: []
+              children: checkbox
+            ),
+          ),
+          Flexible(
+            child: Column(
+              children: conferencesPanel
+            )
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO : add conference
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
     );
   }
