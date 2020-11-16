@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "773064369913",
+    "firebase_url": "https://eventee-tfe.firebaseio.com",
+    "project_id": "eventee-tfe",
+    "storage_bucket": "eventee-tfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773064369913:android:93a7b22269d96655ade428",
+        "android_client_info": {
+          "package_name": "com.tfe.eventee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773064369913-ahnc71252ggapknvbqevcjursvv7en0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-tC0wR4FyUkjRKGHgjsPsKY2KSsUGXGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773064369913-ahnc71252ggapknvbqevcjursvv7en0p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
