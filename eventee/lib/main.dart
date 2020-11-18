@@ -260,6 +260,8 @@ class MyConferenceSelection extends StatefulWidget {
 }
 
 class _MyConferenceSelectionState extends State<MyConferenceSelection> {
+  bool started = false;
+
   List<String> tags;
   List<String> selected;
   List<Widget> checkbox;
@@ -270,31 +272,34 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
   obtainTags() {
     tags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4"];
     // TODO : obtain tags from database
+
+    // In the start, all the tags will be selected
+    selected = [];
+    for (int i = 0; i < tags.length; ++ i) {
+      selected.add(tags[i]);
+    }
   }
 
   createCheckbox() {
-    obtainTags();
-    selected = [];
     checkbox = [];
     for (int i = 0; i < tags.length; ++ i) {
-      selected.add(tags[i]);
       checkbox.add(CheckboxListTile(
           title: Text(tags[i]),
           controlAffinity: ListTileControlAffinity.leading,
-          value: selected.contains(tags[i]), // TODO: value isn't being affected by changes
+          value: this.selected.contains(tags[i]), // TODO: value isn't being affected by changes
           onChanged: (bool value) {
-            print("Changing value: " + value.toString());
-            if (value == true) {
-              selected.add(tags[i]);
-            }
-            else {
-              selected.remove(tags[i]);
-            }
+            setState(() {
+              if (value == true) {
+                this.selected.add(tags[i]);
+              }
+              else {
+                this.selected.remove(tags[i]);
+              }
+            });
             createConferencesPanel();
           }
       ));
     }
-    print(checkbox);
   }
 
   obtainConferences() {
@@ -308,15 +313,20 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
     for (int i = 0; i < conferences.length; ++ i) {
       conferencesPanel.add(ListTile(
         title: Text(conferences[i]),
-        onTap: () { print("Edit Selected Conference: " + conferences[i]); }     // TODO: view/edit conference menu
+        onTap: () { print("Edit Selected Conference: " + conferences[i] + "\n"); }     // TODO: view/edit conference menu
       ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!started) {
+      obtainTags();
+      createConferencesPanel();
+      started = true;
+    }
     createCheckbox();
-    createConferencesPanel();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -338,7 +348,7 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("Add Conference");
+          print("Add Conference\n");
           // TODO : add conference
         },
         child: Icon(Icons.add),
