@@ -1,4 +1,5 @@
 
+import 'package:eventee/view/create_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_tags/flutter_tags.dart';
@@ -19,7 +20,7 @@ class _CreateEventState extends State<CreateEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create an Event'),
+        title: const Text('Create an Event'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -105,8 +106,13 @@ class _CreateEventState extends State<CreateEvent> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {},
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CreateSession())
+                      );
+                    },
                   ),
                 ],
               ),
@@ -125,7 +131,7 @@ class _CreateEventState extends State<CreateEvent> {
 
                 // TODO: Show information about session and add edit button
                 return ListTile(
-                  title: Text('Session'),
+                  title: Text('Session ${index + 1}'),
                 );
               },
               shrinkWrap: true,
