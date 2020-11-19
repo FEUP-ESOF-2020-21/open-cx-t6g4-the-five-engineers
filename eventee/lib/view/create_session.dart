@@ -17,7 +17,7 @@ class _CreateSessionState extends State<CreateSession> {
 
   DateTime _startDate = DateTime(2000), _endDate = DateTime(2100);
 
-  void pickStartDate() async {
+  void _pickStartDate() async {
     DateTime date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -34,7 +34,7 @@ class _CreateSessionState extends State<CreateSession> {
     startDateController.text = _startDate.toString().substring(0, 16);
   }
 
-  void pickEndDate() async {
+  void _pickEndDate() async {
     DateTime date = await showDatePicker(
       context: context,
       initialDate: _startDate,
@@ -55,7 +55,7 @@ class _CreateSessionState extends State<CreateSession> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a Session'),
+        title: const Text('Create a Session'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -70,7 +70,7 @@ class _CreateSessionState extends State<CreateSession> {
                   suffixIcon: const Icon(Icons.calendar_today),
                   labelText: 'Start Date',
                 ),
-                onTap: pickStartDate,
+                onTap: _pickStartDate,
               ),
             ),
             Padding(
@@ -83,7 +83,7 @@ class _CreateSessionState extends State<CreateSession> {
                   suffixIcon: const Icon(Icons.calendar_today),
                   labelText: 'End Date', 
                 ),
-                onTap: pickEndDate,
+                onTap: _pickEndDate,
               ),
             ),
             SwitchListTile(
@@ -110,7 +110,7 @@ class _CreateSessionState extends State<CreateSession> {
               visible: _attendanceLimited,
             ),
             RaisedButton(
-              child: Text('Create'),
+              child: const Text('Create'),
               onPressed: () {}, // TODO
             ),
           ],
