@@ -1,4 +1,5 @@
 
+import 'package:eventee/model/session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,6 +15,7 @@ class _CreateSessionState extends State<CreateSession> {
   final endDateController = TextEditingController();
 
   bool _attendanceLimited = false;
+  int _attendanceLimit;
 
   DateTime _startDate = DateTime(2000), _endDate = DateTime(2100);
 
@@ -49,6 +51,41 @@ class _CreateSessionState extends State<CreateSession> {
 
     _endDate = DateTime(date.year, date.month, date.day, time.hour, time.minute);
     endDateController.text = _endDate.toString().substring(0, 16);
+  }
+
+  void _submitForm() {
+    StringBuffer errorMessageBuffer = new StringBuffer();
+
+    if (_endDate.isBefore(_startDate)) {
+      errorMessageBuffer.writeln("End date is before start date!");
+    }
+    
+    if (_attendanceLimited && (_attendanceLimit == null || _attendanceLimit <= 0)) {
+      errorMessageBuffer.writeln("Invalid attendance limit!");
+    }
+
+    if (errorMessageBuffer.isEmpty) {
+      // Build session object
+      Session session = Session(startDate: _startDate, endDate: _endDate, location: null);
+      if (_attendanceLimited) {
+        session.attendanceLimit = _attendanceLimit;
+      }
+
+      // Return to create event screen
+      Navigator.pop(context, session);
+    }
+    else {
+      // Error occurred: show an AlertDialog with the relevant error message
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(errorMessageBuffer.toString()),
+          );
+        }
+      );
+    }
   }
 
   @override
@@ -104,6 +141,9 @@ class _CreateSessionState extends State<CreateSession> {
                     labelText: 'Limit',
                     suffixIcon: const Icon(Icons.people),
                   ),
+                  onChanged: (String newValue) {
+                    _attendanceLimit = int.tryParse(newValue);
+                  },
                   keyboardType: TextInputType.number,
                 ),
               ),
@@ -111,7 +151,7 @@ class _CreateSessionState extends State<CreateSession> {
             ),
             RaisedButton(
               child: const Text('Create'),
-              onPressed: () {}, // TODO
+              onPressed: _submitForm,
             ),
           ],
         ),
