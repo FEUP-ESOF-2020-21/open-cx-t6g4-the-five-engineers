@@ -1,5 +1,6 @@
 
 import 'package:eventee/view/create_session.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_tags/flutter_tags.dart';
@@ -130,16 +131,47 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
               ),
             ),
-            ListView.builder(
+            ListView.separated(
               itemCount: _sessions.length,
               itemBuilder: (BuildContext context, int index) {
                 final Session session = _sessions[index];
 
-                // TODO: Show information about session and add edit button
+                // TODO: Improve how sessions are displayed (user interface)
+                StringBuffer buf = new StringBuffer();
+                buf.writeln('From ${session.startDate.toString().substring(0, 16)}'
+                    ' to ${session.startDate.toString().substring(0, 16)}');
+
+                if (session.isAttendanceLimited()) {
+                  buf.write('Attendance limited to ${session.attendanceLimit} people');
+                }
+
                 return ListTile(
+                  subtitle: Text(buf.toString()),
                   title: Text('Session ${index + 1}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {}, // TODO
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          setState(() {
+                            _sessions.removeAt(index);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+
                 );
               },
+              separatorBuilder: (context, index) => const Divider(
+                color: Colors.black54,
+                thickness: 1.0,
+              ),
               shrinkWrap: true,
             ),
             RaisedButton(
