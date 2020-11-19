@@ -107,11 +107,17 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final Session ret = await Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => CreateSession())
                       );
+
+                      if (ret != null) {
+                        setState(() {
+                          _sessions.add(ret);
+                        });
+                      }
                     },
                   ),
                 ],
