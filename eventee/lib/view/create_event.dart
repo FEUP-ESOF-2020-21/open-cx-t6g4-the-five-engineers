@@ -14,6 +14,9 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
   List<String> _tags = new List();
   List<Session> _sessions = new List();
 
@@ -53,6 +56,33 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
+  void _submitForm() {
+    StringBuffer errorMessageBuffer = new StringBuffer();
+
+    if (_nameController.text.isEmpty) {
+      errorMessageBuffer.writeln('Name not entered!');
+    }
+    if (_descriptionController.text.isEmpty) {
+      errorMessageBuffer.writeln('Description not entered!');
+    }
+    if (_sessions.isEmpty) {
+      errorMessageBuffer.writeln('Event must have at least one session!');
+    }
+
+    if (errorMessageBuffer.isEmpty) {
+      // TODO
+    }
+    else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessageBuffer.toString()),
+        )
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +95,7 @@ class _CreateEventState extends State<CreateEvent> {
             Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 7.5),
               child: TextField(
+                controller: _nameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Name'
@@ -75,6 +106,7 @@ class _CreateEventState extends State<CreateEvent> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
               child: TextField(
+                controller: _descriptionController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Description'
@@ -177,7 +209,7 @@ class _CreateEventState extends State<CreateEvent> {
               shrinkWrap: true,
             ),
             RaisedButton(
-              onPressed: () {},
+              onPressed: _submitForm,
               child: Text('Create'),
             ),
           ],
