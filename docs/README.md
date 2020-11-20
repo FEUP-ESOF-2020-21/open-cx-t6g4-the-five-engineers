@@ -65,7 +65,7 @@ Briefly describe each use case mentioning the following:
 
 **Version 1 - First Sprint**
 
-![User Case Diagram](img/useCaseDiagram.png)
+![User Case Diagram](img/use_case_diagram.png)
 
 ### User stories
 This section will contain the requirements of the product described as **user stories**, organized in a global **[user story map](https://plan.io/blog/user-story-mapping/)** with **user roles** or **themes**.
