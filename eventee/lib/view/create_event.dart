@@ -14,6 +14,8 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  static const int maxSessions = 100;
+
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -96,7 +98,7 @@ class _CreateEventState extends State<CreateEvent> {
               padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 7.5),
               child: TextField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Name'
                 ),
@@ -107,7 +109,7 @@ class _CreateEventState extends State<CreateEvent> {
               padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
               child: TextField(
                 controller: _descriptionController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Description'
                 ),
@@ -115,7 +117,7 @@ class _CreateEventState extends State<CreateEvent> {
                 maxLength: 1000,
               ),
             ),
-            Padding(
+            const Padding(
               padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
               child: Text(
                 'Tags',
@@ -129,7 +131,7 @@ class _CreateEventState extends State<CreateEvent> {
               textField: TagsTextField(
                 padding: const EdgeInsets.all(15.0),
                 width: double.infinity,
-                inputDecoration: InputDecoration(
+                inputDecoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   suffixIcon: Icon(Icons.tag),
                 ),
@@ -167,27 +169,30 @@ class _CreateEventState extends State<CreateEvent> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
-                      'Sessions',
-                      style: TextStyle(
+                      'Sessions (${_sessions.length} / $maxSessions)',
+                      style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () async {
-                      final Session ret = await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CreateSession())
-                      );
+                  Visibility(
+                    child: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () async {
+                        final Session ret = await Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CreateSession())
+                        );
 
-                      if (ret != null) {
-                        setState(() {
-                          _sessions.add(ret);
-                        });
-                      }
-                    },
+                        if (ret != null) {
+                          setState(() {
+                            _sessions.add(ret);
+                          });
+                        }
+                      },
+                    ),
+                    visible: _sessions.length < maxSessions,
                   ),
                 ],
               ),
@@ -210,7 +215,7 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             RaisedButton(
               onPressed: _submitForm,
-              child: Text('Create'),
+              child: const Text('Create'),
             ),
           ],
         ),
