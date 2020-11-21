@@ -1,4 +1,4 @@
-# openCX-*your module name* Development Report
+# openCX-T6G4-The-Five-Engineers Development Report
 
 Welcome to the documentation pages of the *your (sub)product name* of **openCX**!
 
@@ -63,9 +63,21 @@ Briefly describe each use case mentioning the following:
 * **Normal Flow**. Provide a detailed description of the user actions and system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. This is best done as a numbered list of actions performed by the actor, alternating with responses provided by the system. 
 * **Alternative Flows and Exceptions**. Document other, legitimate usage scenarios that can take place within this use case, stating any differences in the sequence of steps that take place. In addition, describe any anticipated error conditions that could occur during execution of the use case, and define how the system is to respond to those conditions. 
 
-**Version 1 - First Sprint**
+**Version 2 - Third Sprint**
 
 ![User Case Diagram](img/use_case_diagram.png)
+
+* **Actors**
+  * **Attendee** - the attendee is the main user of out app. He uses our product to decide which conferences he wants to attend and get the schedule with all the sessions which he revealed some interest.
+  * **Event Organizer** - the event organizer is the user that gets our product to create and edit the conferences and events which he is responsible for. Without this user, the attendees don't get much value from the app. 
+* **Description**
+  * With this use case, the attendee can select a conference to attend and get his personalized schedule for that same conference. On the other hand, the event organizer can create new conferences with diferent sessions, which the attendees will be able to choose from all the available conferences.
+* **Preconditions and Postconditions**
+  * If we want to be able to use the final product, we need to create an account or login to ours, otherwise we can't get the personalized schedule for a conference or create a new one. At the conclusion of the use case execution, if we're the attendee, we will have a personalized schedule for a certain conference, while if we're the organizer, we can edit a conference that we created before.
+* **Normal Flow**
+  * With *Eventee*, it's possible to get all the important information about a conference which we want to attend and at the same time get the best possible schedule for us, simply by login-in or creating a new acount and provide our availabity and interest in sessions from a certain conference. After this, we can click on our main page and visualize our personalized schedule for the conference that we want to attend. On the other hand, if we want to organize a certain event, we can simply create it with our user-friendly interface, add new sessions to it and make it available for all the users of the app. If we want to edit a conference that we already created, we can do it and then notify all the attendees for that conference of the new changes.
+* **Alternative Flows and Exceptions**
+  * TODO
 
 ### User stories
 This section will contain the requirements of the product described as **user stories**, organized in a global **[user story map](https://plan.io/blog/user-story-mapping/)** with **user roles** or **themes**.
@@ -89,11 +101,163 @@ For each user story you should write also the acceptance tests (textually in Ghe
 **Value and effort**.
 At the end, it is good to add a rough indication of the value of the user story to the customers (e.g. [MoSCoW](https://en.wikipedia.org/wiki/MoSCoW_method) method) and the team should add an estimation of the effort to implement it, for example, using t-shirt sizes (XS, S, M, L, XL).
 
+- Using MoSCoW method and t-shirt sizes; 
+
 *As an organizer I want to be able to create a conference*
 
 **User interface mockup**
 
 ![Create Conference Mockup](img/mockup_create_conference.png)
+
+**Acceptance tests**.
+  * Name size <= 50 chars
+  * Start date and finish date must be valid dates
+  * Start date must be before or the same as finish date
+  * Short description size <= 1000 chars
+
+**Value and effort**.
+  * Must Have
+  * M
+
+*As an organizer, I want to be able to select a conference so that I can view it, edit it or see its statistics*
+
+**User interface mockup**
+
+![Select Conference Mockup](img/mockup_select_conference.png)
+
+**Acceptance tests**.
+  TODO
+
+**Value and effort**.
+  * Must Have
+  * M
+
+*As an organizer, I want to be able to define sessions for an event*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Must Have
+  * S
+
+*As an organizer, I want to be able to control the session capacity*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Should Have
+  * XS
+
+*As an organizer, I want to be able to register a new event so that I can manage a new conference*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Must Have
+  * L
+
+*As an attendee, I want to be able to select a conference so I can see details about it or participate in it*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Must Have
+  * M
+
+*As an attendee, I want to be notified when the sessions from the conference that I'm going to attend are added/removed/edited*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Could Have
+  * L
+
+*As an organizer, I want to be able to check conference statistics*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Could Have
+  * L
+
+*As an organizer, I want to be able to login or register in the app*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Should Have
+  * M
+
+*As an attendee, I want to be able to login or register in the app*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Should Have
+  * M
+
+*As an attendee, I want to be given the best schedule matching my availability so that I can participate in the most events possible*
+
+**User interface mockup**
+
+TODO
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Must Have
+  * XL
+
 
 ### Domain model
 
