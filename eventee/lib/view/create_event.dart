@@ -15,6 +15,7 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   static const int maxSessions = 100;
+  static const int maxTags = 50;
 
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -117,11 +118,11 @@ class _CreateEventState extends State<CreateEvent> {
                 maxLength: 1000,
               ),
             ),
-            const Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
               child: Text(
-                'Tags',
-                style: TextStyle(
+                'Tags (${_tags.length} / $maxTags)',
+                style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -133,14 +134,15 @@ class _CreateEventState extends State<CreateEvent> {
                 width: double.infinity,
                 inputDecoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.tag),
+                  suffixIcon: const Icon(Icons.tag),
                 ),
                 maxLength: 50,
                 onSubmitted: (String str) {
                   setState(() {
                     _tags.add(str);
                   });
-                }
+                },
+                enabled: _tags.length < maxTags,
               ),
               itemCount: _tags.length,
               itemBuilder: (int index) {
