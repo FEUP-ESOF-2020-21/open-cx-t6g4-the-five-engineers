@@ -263,58 +263,45 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
   bool started = false;
 
   List<String> tags;
-  List<String> selected;
-  List<Widget> checkbox;
+  List<Widget> tabsPanel;
 
   List<String> conferences;
   List<Widget> conferencesPanel;
 
   obtainTags() {
-    tags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4"];
+    tags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4", "Tag 5", "Tag 6", "Tag 7"];
     // TODO : obtain tags from database
-
-    // In the start, all the tags will be selected
-    selected = [];
-    for (int i = 0; i < tags.length; ++ i) {
-      selected.add(tags[i]);
-    }
   }
 
-  createCheckbox() {
-    checkbox = [];
+  createTabs() {
+    tabsPanel = [];
     for (int i = 0; i < tags.length; ++ i) {
-      checkbox.add(CheckboxListTile(
-          title: Text(tags[i]),
-          controlAffinity: ListTileControlAffinity.leading,
-          value: this.selected.contains(tags[i]), // TODO: value isn't being affected by changes
-          onChanged: (bool value) {
-            setState(() {
-              if (value == true) {
-                this.selected.add(tags[i]);
-              }
-              else {
-                this.selected.remove(tags[i]);
-              }
-            });
-            createConferencesPanel();
-          }
+      tabsPanel.add(Tab(
+          text: tags[i],
       ));
     }
   }
 
-  obtainConferences() {
+  obtainConferences(tag) {
     conferences = ["Conference 1", "Conference 2", "Conference 3", "Conference 4", "Conference 5", "Conference 6"];
     //TODO: obtain conferences from database
   }
 
   createConferencesPanel() {
-    obtainConferences();
     conferencesPanel = [];
-    for (int i = 0; i < conferences.length; ++ i) {
-      conferencesPanel.add(ListTile(
-        title: Text(conferences[i]),
-        onTap: () { print("Edit Selected Conference: " + conferences[i] + "\n"); }     // TODO: view/edit conference menu
-      ));
+    var conferencesPanelAux;
+    for (int i = 0; i < tags.length; ++i) {
+      conferencesPanelAux = <Widget>[];
+      obtainConferences(tags[i]);
+      for (int j = 0; j < conferences.length; ++j) {
+        conferencesPanelAux.add(ListTile(
+          title: Text(conferences[j]),
+          onTap: () { print("Edit Selected Conference: " + conferences[j] + "\n"); }     // TODO: view/edit conference menu
+        ),);
+      }
+      conferencesPanel.add(Column(
+        children: conferencesPanelAux,
+      ),);
     }
   }
 
@@ -323,39 +310,32 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
     if (!started) {
       obtainTags();
       createConferencesPanel();
+      print(tags.length);
+      print(conferences.length);
+      createTabs();
       started = true;
     }
-    createCheckbox();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-              children: conferencesPanel
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Text('Filter Tags'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            Column(
-              children: checkbox,
-            ),
-          ],
+    return DefaultTabController(
+      length: tags.length,
+        child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          bottom: TabBar(
+            tabs: tabsPanel,
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("Add Conference\n");
-          // TODO : add conference
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
+        body: TabBarView(
+          children: conferencesPanel,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print("Add Conference\n");
+            // TODO : add conference
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.blue,
+        ),
       ),
     );
   }
