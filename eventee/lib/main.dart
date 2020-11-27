@@ -331,20 +331,23 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Row(
-        children: [
-          Flexible(
-            child: Column(
-              //children: []
-              children: checkbox
-            ),
-          ),
-          Flexible(
-            child: Column(
+      body: Column(
               children: conferencesPanel
-            )
-          )
-        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Text('Filter Tags'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            Column(
+              children: checkbox,
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
