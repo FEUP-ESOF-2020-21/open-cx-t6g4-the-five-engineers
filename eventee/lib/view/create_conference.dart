@@ -1,4 +1,6 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/model/conference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 
@@ -16,7 +18,7 @@ class _CreateConferenceState extends State<CreateConference> {
   final locationController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  List _items = new List();
+  List<String> _tags = new List();
 
   Future<dynamic> createConference() {
     return showDialog(
@@ -40,15 +42,30 @@ class _CreateConferenceState extends State<CreateConference> {
             messageBuffer.writeln('Description not entered!');
           }
 
-          DateTime startDate = DateTime.parse(startDateController.text),
-              endDate = DateTime.parse(endDateController.text);
-
-          if (endDate.isBefore(startDate)) {
-            messageBuffer.writeln('End date is before start date!');
-          }
-
           if (messageBuffer.isEmpty) {
-            messageBuffer.writeln('Success!');
+            DateTime startDate = DateTime.parse(startDateController.text),
+                endDate = DateTime.parse(endDateController.text);
+
+            if (endDate.isBefore(startDate)) {
+              messageBuffer.writeln('End date is before start date!');
+            }
+            else {
+              Conference conference = new Conference(
+                name: nameController.text,
+                startDate: startDate,
+                endDate: endDate,
+                location: locationController.text,
+                description: descriptionController.text,
+                tags: _tags,
+              );
+
+              CollectionReference conferences = FirebaseFirestore.instance.collection('conferences');
+
+              conferences.add(conference.toDatabaseFormat())
+                  .then((value) => messageBuffer.writeln('Success!'))
+                  .catchError((error) => messageBuffer.writeln(
+                  'Error occurred when creating conference: $error'));
+            }
           }
 
           return AlertDialog(
@@ -174,13 +191,13 @@ class _CreateConferenceState extends State<CreateConference> {
                 maxLength: 50,
                 onSubmitted: (String str) {
                   setState(() {
-                    _items.add(str);
+                    _tags.add(str);
                   });
                 },
               ),
-              itemCount: _items.length,
+              itemCount: _tags.length,
               itemBuilder: (int index) {
-                final item = _items[index];
+                final item = _tags[index];
 
                 return ItemTags(
                   key: Key(index.toString()),
@@ -190,7 +207,7 @@ class _CreateConferenceState extends State<CreateConference> {
                   removeButton: ItemTagsRemoveButton(
                     onRemoved: () {
                       setState(() {
-                        _items.removeAt(index);
+                        _tags.removeAt(index);
                       });
                       return true;
                     },
