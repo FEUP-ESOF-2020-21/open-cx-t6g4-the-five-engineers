@@ -19,7 +19,7 @@ class Event {
     name = map['name'];
     description = map['description'];
     tags = map['tags'];
-    sessions = map['sessions'].map((sessionMap) => Session.fromDatabaseFormat(sessionMap));
+    sessions = map['sessions'].map((sessionMap) => Session.fromDatabaseFormat(sessionMap)).toList();
   }
 
   Map<String, dynamic> toDatabaseFormat() {
@@ -27,7 +27,7 @@ class Event {
       'name': name,
       'description': description,
       'tags': tags,
-      'sessions': sessions.map((session) => session.toDatabaseFormat()),
+      'sessions': sessions.map((session) => session.toDatabaseFormat()).toList(),
     };
   }
 }

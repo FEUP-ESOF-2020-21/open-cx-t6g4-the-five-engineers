@@ -1,9 +1,11 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/view/create_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:eventee/model/event.dart';
 import 'package:eventee/model/session.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -73,7 +75,30 @@ class _CreateEventState extends State<CreateEvent> {
     }
 
     if (errorMessageBuffer.isEmpty) {
-      // TODO
+      // FIXME: Temporary solution to test out firestore integration, will be changed later!
+      CollectionReference events = FirebaseFirestore.instance.collection('events');
+
+      Event event = new Event(
+        name: _nameController.text,
+        description: _descriptionController.text,
+        tags: _tags,
+        sessions: _sessions
+      );
+
+      events.add(event.toDatabaseFormat())
+          .then((value) => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Success!'),
+            )
+          ))
+          .catchError((error) => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Error!'),
+              content: Text('Information: $error'),
+            )
+          ));
     }
     else {
       showDialog(
