@@ -2,16 +2,58 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:flutter/material.dart';
 
-class ConferenceSelection extends StatefulWidget {
-  ConferenceSelection({Key key}) : super(key: key);
+class ConferenceSelectionAttendee extends StatefulWidget {
+  ConferenceSelectionAttendee({Key key}) : super(key: key);
 
   final String title = "Select Conference";
 
   @override
-  _ConferenceSelectionState createState() => _ConferenceSelectionState();
+  _ConferenceSelectionAttendeeState createState() => _ConferenceSelectionAttendeeState();
 }
 
-class _ConferenceSelectionState extends State<ConferenceSelection> {
+class _ConferenceSelectionAttendeeState extends State<ConferenceSelectionAttendee> {
+  bool started = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title)
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              snap: false,
+              title: Text("Search"),
+              actions: <Widget> [
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+    );
+  }
+}
+
+class ConferenceSelectionOrganizer extends StatefulWidget {
+  ConferenceSelectionOrganizer({Key key}) : super(key: key);
+
+  final String title = "Select Conference";
+
+  @override
+  _ConferenceSelectionOrganizerState createState() => _ConferenceSelectionOrganizerState();
+}
+
+class _ConferenceSelectionOrganizerState extends State<ConferenceSelectionOrganizer> {
   bool started = false;
 
   List<String> tags;
@@ -69,27 +111,13 @@ class _ConferenceSelectionState extends State<ConferenceSelection> {
       length: tags.length,
       child: Scaffold(
         appBar: AppBar(
-            title: Text(widget.title)
+          title: Text(widget.title),
+          bottom: TabBar(
+            tabs: tabsPanel,
+          ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              floating: true,
-              snap: false,
-              title: Text("Search"),
-              actions: <Widget> [
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    showSearch(
-                      context: context,
-                      delegate: CustomSearchDelegate(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
+        body: TabBarView(
+          children: conferencesPanel,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -103,7 +131,6 @@ class _ConferenceSelectionState extends State<ConferenceSelection> {
     );
   }
 }
-
 
 class CustomSearchDelegate extends SearchDelegate {
   /*
