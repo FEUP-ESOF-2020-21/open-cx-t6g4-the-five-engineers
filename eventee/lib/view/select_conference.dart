@@ -3,9 +3,9 @@ import 'package:eventee/model/conference.dart';
 import 'package:flutter/material.dart';
 
 class ConferenceSelection extends StatefulWidget {
-  ConferenceSelection({Key key, this.title}) : super(key: key);
+  ConferenceSelection({Key key}) : super(key: key);
 
-  final String title;
+  final String title = "Select Conference";
 
   @override
   _ConferenceSelectionState createState() => _ConferenceSelectionState();
@@ -170,7 +170,7 @@ class CustomSearchDelegate extends SearchDelegate {
                   var result = results[index];
                   return ListTile(
                       title: Text(result.title),
-                      onTap: () { print("Edit Selected Conference: \n"); }     // TODO: view/edit conference menu
+                      onTap: () { print("Edit Selected Conference\n"); }     // TODO: view/edit conference menu
                   );
                 },
               );
