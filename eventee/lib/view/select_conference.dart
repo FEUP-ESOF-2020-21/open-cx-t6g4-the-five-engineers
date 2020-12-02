@@ -1,13 +1,17 @@
-class MyConferenceSelection extends StatefulWidget {
-  MyConferenceSelection({Key key, this.title}) : super(key: key);
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/model/conference.dart';
+import 'package:flutter/material.dart';
+
+class ConferenceSelection extends StatefulWidget {
+  ConferenceSelection({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyConferenceSelectionState createState() => _MyConferenceSelectionState();
+  _ConferenceSelectionState createState() => _ConferenceSelectionState();
 }
 
-class _MyConferenceSelectionState extends State<MyConferenceSelection> {
+class _ConferenceSelectionState extends State<ConferenceSelection> {
   bool started = false;
 
   List<String> tags;
@@ -182,22 +186,6 @@ class CustomSearchDelegate extends SearchDelegate {
     // This method is called every time the search term changes.
     // If you want to add search suggestions as the user enters their search term, this is the place to do that.
     return Column();
-  }
-}
-
-class InheritedBlocks extends InheritedWidget {
-  InheritedBlocks({
-    Key key,
-    this.searchBlock,
-    this.child
-  }) : super(key: key, child: child);
-
-  final Widget child;
-  final SearchBlock searchBlock;
-
-  @override
-  bool updateShouldNotify(InheritedBlocks oldWidget) {
-    return true;
   }
 }
 
