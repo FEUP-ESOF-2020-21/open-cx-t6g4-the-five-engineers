@@ -18,9 +18,8 @@ class Conference {
     @required this.location,
     @required this.description,
     @required this.tags,
-  }) {
-    events = new List();
-  }
+    @required this.events,
+  });
 
   Conference.fromDatabaseFormat(Map<String, dynamic> map) {
     name = map['name'];
@@ -28,7 +27,7 @@ class Conference {
     endDate = DateTime.fromMillisecondsSinceEpoch(map['end_date'].millisecondsSinceEpoch);
     location = map['location'];
     description = map['description'];
-    tags = map['tags'];
+    tags = List.castFrom(map['tags']);
   }
 
   Map<String, dynamic> toDatabaseFormat() {

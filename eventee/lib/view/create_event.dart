@@ -155,6 +155,7 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             Tags(
               textField: TagsTextField(
+                autofocus: false,
                 padding: const EdgeInsets.all(15.0),
                 width: double.infinity,
                 inputDecoration: const InputDecoration(
