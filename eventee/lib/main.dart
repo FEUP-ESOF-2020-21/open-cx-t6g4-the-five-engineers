@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 
@@ -269,8 +271,7 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
   List<Widget> conferencesPanel;
 
   obtainTags() {
-    tags = ["Tag 1", "Tag 2", "Tag 3", "Tag 4", "Tag 5", "Tag 6", "Tag 7"];
-    // TODO : obtain tags from database
+    tags = ["Scheduled", "In course", "Past"];
   }
 
   createTabs() {
@@ -282,7 +283,7 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
     }
   }
 
-  obtainConferences(tag) {
+  obtainConferences(String tag) {
     conferences = ["Conference 1", "Conference 2", "Conference 3", "Conference 4", "Conference 5", "Conference 6"];
     //TODO: obtain conferences from database
   }
@@ -310,8 +311,6 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
     if (!started) {
       obtainTags();
       createConferencesPanel();
-      print(tags.length);
-      print(conferences.length);
       createTabs();
       started = true;
     }
@@ -319,24 +318,154 @@ class _MyConferenceSelectionState extends State<MyConferenceSelection> {
     return DefaultTabController(
       length: tags.length,
         child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          bottom: TabBar(
-            tabs: tabsPanel,
+          appBar: AppBar(
+            title: Text(widget.title)
+          ),
+          body: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  floating: true,
+                  snap: false,
+                  title: Text("Search"),
+                  actions: <Widget> [
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        showSearch(
+                          context: context,
+                          delegate: CustomSearchDelegate(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              print("Add Conference\n");
+              // TODO : add conference
+            },
+            child: Icon(Icons.add),
+            backgroundColor: Colors.blue,
           ),
         ),
-        body: TabBarView(
-          children: conferencesPanel,
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print("Add Conference\n");
-            // TODO : add conference
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.blue,
-        ),
-      ),
     );
   }
+}
+
+
+class CustomSearchDelegate extends SearchDelegate {
+  /*
+      https://medium.com/codechai/implementing-search-in-flutter-17dc5aa72018
+   */
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = ''; //TODO
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+
+    // The SearchBlock will handle the search for the conferences
+    // The Results will be on the results stream.
+    SearchBlock.search(query);
+
+    return Column(
+      children: <Widget> [
+        // Build the results based on the searchResults stream in the searchBloc
+        StreamBuilder(
+          //stream: SearchBlock.results,
+          builder: (context, AsyncSnapshot<List<Result>> snapshot) {
+            if (!snapshot.hasData) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget> [
+                  Center(child: CircularProgressIndicator()),
+                ],
+              );
+            }
+            else if (snapshot.data.length == 0) {
+              return Column(
+                children: <Widget> [
+                  Text(
+                    "No Results Found.",
+                  ),
+                ],
+              );
+            }
+            else {
+              var results = snapshot.data;
+              return ListView.builder(
+                itemCount: results.length,
+                itemBuilder: (context, index) {
+                  var result = results[index];
+                  return ListTile(
+                    title: Text(result.title),
+                    onTap: () { print("Edit Selected Conference: \n"); }     // TODO: view/edit conference menu
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // This method is called every time the search term changes.
+    // If you want to add search suggestions as the user enters their search term, this is the place to do that.
+    return Column();
+  }
+}
+
+class InheritedBlocks extends InheritedWidget {
+  InheritedBlocks({
+    Key key,
+    this.searchBlock,
+    this.child
+  }) : super(key: key, child: child);
+
+  final Widget child;
+  final SearchBlock searchBlock;
+
+  @override
+  bool updateShouldNotify(InheritedBlocks oldWidget) {
+    return true;
+  }
+}
+
+class SearchBlock {
+  static Stream<Result> results;
+
+  static void search(String query) {
+    // Perform the Search on the Database and place the answer on the Results Stream
+    // TODO
+    return;
+  }
+}
+
+class Result {
+  String data;
+  String title;
 }
