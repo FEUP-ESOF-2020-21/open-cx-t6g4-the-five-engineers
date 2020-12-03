@@ -158,7 +158,9 @@ TODO
 
 **Acceptance tests**.
 
-TODO
+* Session duration > 0
+* It needs at least 1 speaker
+* Maximum attendance > 0
 
 **Value and effort**.
   * Must Have
