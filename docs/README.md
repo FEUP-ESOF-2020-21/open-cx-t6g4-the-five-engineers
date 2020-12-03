@@ -182,7 +182,7 @@ TODO
 
 **User interface mockup**
 
-TODO
+![Create Event Mockup](img/create_event.png)
 
 **Acceptance tests**.
 
