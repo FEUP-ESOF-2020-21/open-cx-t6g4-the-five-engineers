@@ -126,7 +126,6 @@ At the end, it is good to add a rough indication of the value of the user story 
 ![Select Conference Mockup](img/mockup_select_conference.png)
 
 **Acceptance tests**.
-  TODO
 
 **Value and effort**.
   * Must Have
@@ -154,8 +153,6 @@ At the end, it is good to add a rough indication of the value of the user story 
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
 
 * Session duration > 0
@@ -170,11 +167,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Should Have
@@ -207,11 +200,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Must Have
@@ -221,11 +210,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Could Have
@@ -235,11 +220,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Could Have
@@ -249,11 +230,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Should Have
@@ -263,11 +240,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Should Have
@@ -277,11 +250,7 @@ TODO
 
 **User interface mockup**
 
-TODO
-
 **Acceptance tests**.
-
-TODO
 
 **Value and effort**.
   * Must Have
