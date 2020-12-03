@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
-import 'package:eventee/model/event.dart';
 import 'package:eventee/view/events_list_view.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
@@ -22,21 +21,10 @@ class _ViewConferenceState extends State<ViewConference> {
     return snapshot.then((value) => Conference.fromDatabaseFormat(value.data()));
   }
 
-  Future<Conference> _sampleConference = Future.delayed(Duration(seconds: 1)).then((value) => Conference(
-    name: 'SampleCon',
-    description: 'A sample description! Wow!',
-    startDate: DateTime.parse('2020-12-11'),
-    endDate: DateTime.parse('2020-12-13'),
-    location: 'Porto, Portugal',
-    tags: ['test tag', 'another one'],
-    events: [Event(name: 'Programming contest', description: 'This event has a sample description! But it is more than 100 chars so it will get clipped',
-        tags: ['programming', 'python', 'c'], sessions: [])],
-  ));
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Conference>(
-      future: _sampleConference,
+      future: _refreshConference(),
       builder: (context, snapshot) {
         Widget body;
 
@@ -132,7 +120,7 @@ class _ViewConferenceState extends State<ViewConference> {
           );
         }
         else {
-          body = GenericLoadingIndicator();
+          body = const GenericLoadingIndicator();
         }
 
         return Scaffold(
