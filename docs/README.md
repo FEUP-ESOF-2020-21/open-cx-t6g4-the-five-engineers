@@ -140,7 +140,11 @@ At the end, it is good to add a rough indication of the value of the user story 
 
 **Acceptance tests**.
 
-TODO
+* Name, start and end dates, tags and description should be shown
+* A list of all events from that conference should be shown
+* Tapping an event leads to a screen with more information about it
+* Can create a new event from this screen
+* Can remove events, but a confirmation dialog should be shown
 
 **Value and effort**.
   * Must Have
