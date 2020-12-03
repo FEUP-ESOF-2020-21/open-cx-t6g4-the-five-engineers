@@ -1,10 +1,11 @@
 
-import 'package:eventee/view/events_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/event.dart';
+import 'package:eventee/view/events_list_view.dart';
+import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewConference extends StatefulWidget {
   final DocumentReference ref;
@@ -116,7 +117,7 @@ class _ViewConferenceState extends State<ViewConference> {
                   ),
                 ),
               ),
-              EventsListView(conference: snapshot.data),
+              EventsListView(conferenceRef: widget.ref),
             ],
           );
         }
@@ -131,13 +132,7 @@ class _ViewConferenceState extends State<ViewConference> {
           );
         }
         else {
-          body = const Center(
-            child: SizedBox(
-              child: CircularProgressIndicator(),
-              width: 80,
-              height: 80,
-            ),
-          );
+          body = GenericLoadingIndicator();
         }
 
         return Scaffold(
