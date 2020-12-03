@@ -9,9 +9,9 @@ import 'package:eventee/model/event.dart';
 import 'package:eventee/model/session.dart';
 
 class CreateEvent extends StatefulWidget {
-  CreateEvent({Key key, this.conferenceSnapshot}) : super(key: key);
+  CreateEvent({Key key, this.conferenceRef}) : super(key: key);
 
-  final DocumentSnapshot conferenceSnapshot;
+  final DocumentReference conferenceRef;
 
   @override
   _CreateEventState createState() => _CreateEventState();
@@ -84,7 +84,7 @@ class _CreateEventState extends State<CreateEvent> {
         sessions: _sessions
       );
       
-      widget.conferenceSnapshot.reference.collection('events').add(event.toDatabaseFormat())
+      widget.conferenceRef.collection('events').add(event.toDatabaseFormat())
           .then(
             (value) async {
               await showDialog(
@@ -102,7 +102,7 @@ class _CreateEventState extends State<CreateEvent> {
               await showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Error!'),
+                  title: const Text('Error'),
                   content: Text('Information: $error'),
                 )
               );

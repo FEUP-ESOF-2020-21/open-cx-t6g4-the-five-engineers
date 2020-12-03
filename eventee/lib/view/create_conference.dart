@@ -20,60 +20,64 @@ class _CreateConferenceState extends State<CreateConference> {
 
   List<String> _tags = new List();
 
-  Future<dynamic> createConference() {
-    return showDialog(
+  void createConference() {
+    final StringBuffer messageBuffer = new StringBuffer();
+
+    final DateTime startDate = DateTime.tryParse(startDateController.text),
+        endDate = DateTime.tryParse(endDateController.text);
+
+    if (nameController.text.isEmpty) {
+      messageBuffer.writeln('Name not entered!');
+    }
+    if (startDate == null) {
+      messageBuffer.writeln('Start date not entered!');
+    }
+    if (endDate == null) {
+      messageBuffer.writeln('End date not entered!');
+    }
+    if (locationController.text.isEmpty) {
+      messageBuffer.writeln('Location not entered!');
+    }
+    if (descriptionController.text.isEmpty) {
+      messageBuffer.writeln('Description not entered!');
+    }
+
+    if (messageBuffer.isEmpty) {
+      if (endDate.isBefore(startDate)) {
+        messageBuffer.writeln('End date is before start date!');
+      }
+      else {
+        final Conference conference = new Conference(
+          name: nameController.text,
+          startDate: startDate,
+          endDate: endDate,
+          location: locationController.text,
+          description: descriptionController.text,
+          tags: _tags,
+          events: [],
+        );
+
+        // Add new conference to database
+        final CollectionReference conferences = FirebaseFirestore.instance.collection('conferences');
+
+        conferences.add(conference.toDatabaseFormat())
+          .then((value) => Navigator.pop(context))
+          .catchError((error) => messageBuffer.writeln('Error occurred when creating conference: $error'));
+      }
+    }
+
+    // If an error occurred, show an AlertDialog with the error message
+    if (messageBuffer.isNotEmpty) {
+      showDialog(
         context: context,
         builder: (context) {
-          StringBuffer messageBuffer = new StringBuffer();
-
-          if (nameController.text.isEmpty) {
-            messageBuffer.writeln('Name not entered!');
-          }
-          if (startDateController.text.isEmpty) {
-            messageBuffer.writeln('Start date not entered!');
-          }
-          if (endDateController.text.isEmpty) {
-            messageBuffer.writeln('End date not entered!');
-          }
-          if (locationController.text.isEmpty) {
-            messageBuffer.writeln('Location not entered!');
-          }
-          if (descriptionController.text.isEmpty) {
-            messageBuffer.writeln('Description not entered!');
-          }
-
-          if (messageBuffer.isEmpty) {
-            DateTime startDate = DateTime.parse(startDateController.text),
-                endDate = DateTime.parse(endDateController.text);
-
-            if (endDate.isBefore(startDate)) {
-              messageBuffer.writeln('End date is before start date!');
-            }
-            else {
-              Conference conference = new Conference(
-                name: nameController.text,
-                startDate: startDate,
-                endDate: endDate,
-                location: locationController.text,
-                description: descriptionController.text,
-                tags: _tags,
-                events: [],
-              );
-
-              CollectionReference conferences = FirebaseFirestore.instance.collection('conferences');
-
-              conferences.add(conference.toDatabaseFormat())
-                  .then((value) => messageBuffer.writeln('Success!'))
-                  .catchError((error) => messageBuffer.writeln(
-                  'Error occurred when creating conference: $error'));
-            }
-          }
-
           return AlertDialog(
+            title: const Text('Error'),
             content: Text(messageBuffer.toString()),
           );
         }
-    );
+      );
+    }
   }
 
   @override
@@ -146,7 +150,6 @@ class _CreateConferenceState extends State<CreateConference> {
                 ),
               ],
             ),
-            // TODO: Google Places autocomplete integration
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextField(
