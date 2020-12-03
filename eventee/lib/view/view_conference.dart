@@ -1,10 +1,10 @@
 
+import 'package:eventee/view/events_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/event.dart';
-import 'package:eventee/view/create_event.dart';
 
 class ViewConference extends StatefulWidget {
   final DocumentReference ref;
@@ -28,7 +28,8 @@ class _ViewConferenceState extends State<ViewConference> {
     endDate: DateTime.parse('2020-12-13'),
     location: 'Porto, Portugal',
     tags: ['test tag', 'another one'],
-    events: List()
+    events: [Event(name: 'Programming contest', description: 'This event has a sample description! But it is more than 100 chars so it will get clipped',
+        tags: ['programming', 'python', 'c'], sessions: [])],
   ));
 
   @override
@@ -115,53 +116,18 @@ class _ViewConferenceState extends State<ViewConference> {
                   ),
                 ),
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        'Events',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      child: IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () async {
-                          final Event ret = await Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => CreateEvent())
-                          );
-
-                          if (ret != null) {
-                            // TODO
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blue[200],
-                  border: Border.all(
-                    color: Colors.blueAccent,
-                    width: 3.0,
-                  ),
-                ),
-              ),
+              EventsListView(conference: snapshot.data),
             ],
           );
         }
         else if (snapshot.hasError) {
           print(snapshot.error);
-          body = const Icon(
-            Icons.error_outline,
-            color: Colors.red,
+          body = const Center(
+            child: Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 80,
+            ),
           );
         }
         else {
@@ -179,7 +145,7 @@ class _ViewConferenceState extends State<ViewConference> {
             title: const Text('View Conference'),
             actions: [
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
                 onPressed: () {},
               ),
             ],
