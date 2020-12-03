@@ -9,7 +9,9 @@ import 'package:eventee/model/event.dart';
 import 'package:eventee/model/session.dart';
 
 class CreateEvent extends StatefulWidget {
-  CreateEvent({Key key}) : super(key: key);
+  CreateEvent({Key key, this.conferenceRef}) : super(key: key);
+
+  final DocumentReference conferenceRef;
 
   @override
   _CreateEventState createState() => _CreateEventState();
@@ -75,30 +77,39 @@ class _CreateEventState extends State<CreateEvent> {
     }
 
     if (errorMessageBuffer.isEmpty) {
-      // FIXME: Temporary solution to test out firestore integration, will be changed later!
-      CollectionReference events = FirebaseFirestore.instance.collection('events');
-
       Event event = new Event(
         name: _nameController.text,
         description: _descriptionController.text,
         tags: _tags,
         sessions: _sessions
       );
+      
+      widget.conferenceRef.collection('events').add(event.toDatabaseFormat())
+          .then(
+            (value) async {
+              await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Success!'),
+                )
+              );
 
-      events.add(event.toDatabaseFormat())
-          .then((value) => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Success!'),
-            )
-          ))
-          .catchError((error) => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Error!'),
-              content: Text('Information: $error'),
-            )
-          ));
+              Navigator.pop(context, event);
+            }
+          )
+          .catchError(
+            (error) async {
+              await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Error'),
+                  content: Text('Information: $error'),
+                )
+              );
+
+              Navigator.pop(context);
+            }
+          );
     }
     else {
       showDialog(
@@ -155,6 +166,7 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             Tags(
               textField: TagsTextField(
+                autofocus: false,
                 padding: const EdgeInsets.all(15.0),
                 width: double.infinity,
                 inputDecoration: const InputDecoration(
