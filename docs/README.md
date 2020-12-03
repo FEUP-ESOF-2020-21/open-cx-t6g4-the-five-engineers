@@ -107,7 +107,7 @@ At the end, it is good to add a rough indication of the value of the user story 
 
 **User interface mockup**
 
-![Create Conference Mockup](img/mockup_create_conference.png)
+![Create Conference Mockup](img/create_conference.png)
 
 **Acceptance tests**.
   * Name size <= 50 chars
