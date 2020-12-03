@@ -1,9 +1,12 @@
 
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/view/view_conference.dart';
 import 'package:eventee/view/create_conference.dart';
+import 'package:eventee/view/utils/generic_loading_indicator.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 
 class ConferenceSelectionAttendee extends StatefulWidget {
   ConferenceSelectionAttendee({Key key}) : super(key: key);
@@ -56,6 +59,7 @@ class ConferenceSelectionOrganizer extends StatefulWidget {
 
 class _ConferenceSelectionOrganizerState extends State<ConferenceSelectionOrganizer> {
   final CollectionReference ref = FirebaseFirestore.instance.collection('conferences');
+  static const int maxTags = 5;
 
   List<QueryDocumentSnapshot> _conferenceSnapshots;
 
@@ -65,7 +69,29 @@ class _ConferenceSelectionOrganizerState extends State<ConferenceSelectionOrgani
 
     return ListTile(
       title: Text(conference.name),
-      subtitle: Text(conference.description),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(conference.description),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Tags(
+              itemCount: min(maxTags, conference.tags.length),
+              itemBuilder: (int index) {
+                final String item = conference.tags[index];
+
+                return ItemTags(
+                  key: Key(index.toString()),
+                  index: index,
+                  title: item,
+                  active: true,
+                  pressEnabled: false,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
       onTap: () {
         Navigator.push(
           context,
@@ -93,11 +119,23 @@ class _ConferenceSelectionOrganizerState extends State<ConferenceSelectionOrgani
     return StreamBuilder<QuerySnapshot>(
       stream: ref.snapshots(),
       builder: (context, snapshot) {
+        Widget body;
+
+        if (snapshot.hasData) {
+          body = _buildConferenceList(snapshot);
+        }
+        else if (snapshot.hasError) {
+          print(snapshot.error);
+        }
+        else {
+          body = GenericLoadingIndicator();
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: const Text('Select Conference'),
           ),
-          body: _buildConferenceList(snapshot),
+          body: body,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
