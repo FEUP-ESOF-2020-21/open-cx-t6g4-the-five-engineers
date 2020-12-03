@@ -125,7 +125,11 @@ At the end, it is good to add a rough indication of the value of the user story 
 
 ![Select Conference Mockup](img/mockup_select_conference.png)
 
-**Acceptance tests**.
+**Acceptance tests**
+
+* All conferences from the organizer that wants to select a conference have to be shown
+* Can create a new conference from this screen
+* Tapping a conference leads to a screen with more information about it
 
 **Value and effort**.
   * Must Have
