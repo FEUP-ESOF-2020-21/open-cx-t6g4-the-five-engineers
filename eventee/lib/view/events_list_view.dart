@@ -1,16 +1,17 @@
 
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/view/utils/generic_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
-import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_event.dart';
 
 class EventsListView extends StatefulWidget {
-  EventsListView({Key key, this.conference}) : super(key: key);
+  EventsListView({Key key, this.conferenceRef}) : super(key: key);
 
-  final Conference conference;
+  final DocumentReference conferenceRef;
 
   @override
   _EventsListViewState createState() => _EventsListViewState();
@@ -19,8 +20,11 @@ class EventsListView extends StatefulWidget {
 class _EventsListViewState extends State<EventsListView> {
   static final int _maxDescriptionChars = 100, _maxTags = 3;
 
+  List<QueryDocumentSnapshot> _eventSnapshots;
+
   Widget _buildListItem(BuildContext context, int index) {
-    final Event event = widget.conference.events[index];
+    final QueryDocumentSnapshot eventSnapshot = _eventSnapshots[index];
+    final Event event = Event.fromDatabaseFormat(eventSnapshot.data());
 
     return ListTile(
       title: Text(event.name),
@@ -51,65 +55,100 @@ class _EventsListViewState extends State<EventsListView> {
           ),
         ],
       ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () {
+          showDialog(
+            context: context, 
+            builder: (context) => AlertDialog(
+              title: const Text('Warning'),
+              content: const Text('Do you really wish to delete this event?'),
+              actions: [
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: Text('Remove', style: TextStyle(color: Colors.red)),
+                  onPressed: () {
+                    eventSnapshot.reference.delete()
+                        .catchError((error) => print(error));
+                  },
+                )
+              ],
+            ),
+          );
+        }
+      ),
     );
   }
 
   @override
   Widget build(context) {
-    return Column(
-      children: [
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StreamBuilder<QuerySnapshot>(
+      stream: widget.conferenceRef.collection('events').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _eventSnapshots = snapshot.data.docs;
+
+          return Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text(
-                  'Events',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        'Events',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      child: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CreateEvent(conferenceRef: widget.conferenceRef))
+                          );
+                        },
+                      ),
+                      visible: true, // TODO (replace with organizer check)
+                    )
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.blue[200],
+                  border: Border.all(
+                    color: Colors.blueAccent,
+                    width: 3.0,
                   ),
                 ),
               ),
-              Visibility(
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () async {
-                    final Event ret = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CreateEvent())
-                    );
-
-                    if (ret != null) {
-                      setState(() {
-                        widget.conference.events.add(ret);
-                      });
-                    }
-                  },
+              ListView.separated(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: _buildListItem,
+                separatorBuilder: (content, index) => const Divider(
+                  color: Colors.black54,
+                  thickness: 1.0,
                 ),
-                visible: true, // TODO (replace with organizer check)
-              )
+                shrinkWrap: true,
+              ),
             ],
-          ),
-          decoration: BoxDecoration(
-            color: Colors.blue[200],
-            border: Border.all(
-              color: Colors.blueAccent,
-              width: 3.0,
-            ),
-          ),
-        ),
-        ListView.separated(
-          itemCount: widget.conference.events.length,
-          itemBuilder: _buildListItem,
-          separatorBuilder: (content, index) => const Divider(
-            color: Colors.black54,
-            thickness: 1.0,
-          ),
-          shrinkWrap: true,
-        ),
-      ],
+          );
+        }
+        else if (snapshot.hasError) {
+          // TODO: Improve this
+          return Center(child: Text('ERROR'));
+        }
+        else {
+          return const GenericLoadingIndicator(size: 50);
+        }
+      }
     );
   }
 }
