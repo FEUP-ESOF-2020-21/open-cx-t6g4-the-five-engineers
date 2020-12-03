@@ -132,6 +132,20 @@ At the end, it is good to add a rough indication of the value of the user story 
   * Must Have
   * M
 
+*As an organizer, I want to be able to view information about a conference so that I can edit it and manage its events*
+
+**User interface mockup**
+
+![View Conference Organizer Mockup](img/organizer_view_conference.png)
+
+**Acceptance tests**.
+
+TODO
+
+**Value and effort**.
+  * Must Have
+  * S
+
 *As an organizer, I want to be able to define sessions for an event*
 
 **User interface mockup**
