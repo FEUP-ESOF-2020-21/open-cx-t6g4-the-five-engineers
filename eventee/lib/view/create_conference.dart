@@ -57,6 +57,7 @@ class _CreateConferenceState extends State<CreateConference> {
                 location: locationController.text,
                 description: descriptionController.text,
                 tags: _tags,
+                events: [],
               );
 
               CollectionReference conferences = FirebaseFirestore.instance.collection('conferences');
@@ -161,6 +162,7 @@ class _CreateConferenceState extends State<CreateConference> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TextField(
+                autofocus: false,
                 controller: descriptionController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),

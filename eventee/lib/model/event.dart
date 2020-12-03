@@ -18,7 +18,7 @@ class Event {
   Event.fromDatabaseFormat(Map<String, dynamic> map) {
     name = map['name'];
     description = map['description'];
-    tags = map['tags'];
+    tags = List.castFrom(map['tags']);
     sessions = map['sessions'].map((sessionMap) => Session.fromDatabaseFormat(sessionMap)).toList();
   }
 
