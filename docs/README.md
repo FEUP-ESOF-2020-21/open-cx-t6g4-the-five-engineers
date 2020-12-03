@@ -186,7 +186,16 @@ TODO
 
 **Acceptance tests**.
 
-TODO
+* Name size <= 50 chars
+* Start date and finish date of each session must be valid dates
+* Start date of each session must be before or same as the finish date
+* Start date of each session must be same or after conference start date
+* Finish date of each session must be same or before conference finish date
+* Maximum of 100 sessions (may change later)
+* Maximum of 50 tags
+* Tag size <= 50 chars
+* Attendance limit, if it exists, must be a positive number
+* Short description size <= 1000 chars
 
 **Value and effort**.
   * Must Have
