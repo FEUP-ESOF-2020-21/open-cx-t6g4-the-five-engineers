@@ -1,12 +1,13 @@
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eventee/view/utils/generic_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_event.dart';
+import 'package:eventee/view/view_event.dart';
+import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class EventsListView extends StatefulWidget {
   EventsListView({Key key, this.conferenceRef}) : super(key: key);
@@ -55,6 +56,12 @@ class _EventsListViewState extends State<EventsListView> {
           ),
         ],
       ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ViewEvent(ref: eventSnapshot.reference)),
+        );
+      },
       trailing: IconButton(
         icon: const Icon(Icons.delete),
         onPressed: () {
@@ -72,7 +79,11 @@ class _EventsListViewState extends State<EventsListView> {
                   child: Text('Remove', style: TextStyle(color: Colors.red)),
                   onPressed: () {
                     eventSnapshot.reference.delete()
-                        .catchError((error) => print(error));
+                        .then((value) => Navigator.of(context).pop())
+                        .catchError((error) {
+                          print(error);
+                          Navigator.of(context).pop();
+                        });
                   },
                 )
               ],

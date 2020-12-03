@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:eventee/model/event.dart';
+import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewEvent extends StatefulWidget {
   final DocumentReference ref;
@@ -56,13 +57,7 @@ class _ViewEventState extends State<ViewEvent> {
           );
         }
         else {
-          body = Center(
-            child: SizedBox(
-              child: CircularProgressIndicator(),
-              width: 80,
-              height: 80,
-            ),
-          );
+          body = GenericLoadingIndicator();
         }
 
         return Scaffold(
