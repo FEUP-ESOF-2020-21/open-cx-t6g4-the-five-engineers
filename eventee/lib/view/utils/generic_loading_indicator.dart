@@ -2,13 +2,16 @@
 import 'package:flutter/material.dart';
 
 class GenericLoadingIndicator extends StatelessWidget {
+  final double size;
+  const GenericLoadingIndicator({this.size = 80});
+
   @override
   Widget build(context) {
-    return const Center(
+    return Center(
       child: SizedBox(
-        child: CircularProgressIndicator(),
-        width: 80,
-        height: 80,
+        child: const CircularProgressIndicator(),
+        width: this.size,
+        height: this.size,
       ),
     );
   }
