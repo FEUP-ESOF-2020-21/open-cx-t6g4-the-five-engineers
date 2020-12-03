@@ -230,6 +230,10 @@ At the end, it is good to add a rough indication of the value of the user story 
 
 **User interface mockup**
 
+![SplashScreen Mockup](img/splashscreen.png)
+![Login Organizer Mockup](img/login_organizer.png)
+![Register Organizer Mockup](img/register_organizer.png)
+
 **Acceptance tests**.
 
 **Value and effort**.
@@ -239,6 +243,10 @@ At the end, it is good to add a rough indication of the value of the user story 
 *As an attendee, I want to be able to login or register in the app*
 
 **User interface mockup**
+
+![SplashScreen Mockup](img/splashscreen.png)
+![Login Attendee Mockup](img/login_attendee.png)
+![Register Attendee Mockup](img/register_attendee.png)
 
 **Acceptance tests**.
 
