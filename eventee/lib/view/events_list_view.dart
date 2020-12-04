@@ -7,6 +7,7 @@ import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_event.dart';
 import 'package:eventee/view/view_event.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class EventsListView extends StatefulWidget {
@@ -153,8 +154,8 @@ class _EventsListViewState extends State<EventsListView> {
           );
         }
         else if (snapshot.hasError) {
-          // TODO: Improve this
-          return Center(child: Text('ERROR'));
+          print(snapshot.error);
+          return const GenericErrorIndicator();
         }
         else {
           return const GenericLoadingIndicator(size: 50);
