@@ -1,9 +1,11 @@
 
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_session.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
 
 class SessionsListView extends StatefulWidget {
   final DocumentReference conferenceRef, eventRef;
@@ -15,12 +17,20 @@ class SessionsListView extends StatefulWidget {
 }
 
 class _SessionsListViewState extends State<SessionsListView> {
+  Event event;
+
+  Widget _buildListItem(BuildContext context, int index) {
+    // TODO
+  }
+
   @override
   Widget build(context) {
     return StreamBuilder<DocumentSnapshot>(
       stream: widget.eventRef.snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          event = Event.fromDatabaseFormat(snapshot.data.data());
+
           return Column(
             children: [
               Container(
@@ -55,6 +65,12 @@ class _SessionsListViewState extends State<SessionsListView> {
                     width: 3.0,
                   ),
                 ),
+              ),
+              ListView.separated(
+                itemCount: snapshot.data['sessions'].length,
+                itemBuilder: _buildListItem,
+                separatorBuilder: (context, index) => const GenericSeparator(),
+                shrinkWrap: true,
               ),
             ],
           );

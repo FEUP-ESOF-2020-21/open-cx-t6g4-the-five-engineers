@@ -7,6 +7,7 @@ import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_event.dart';
 import 'package:eventee/view/view_event.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
@@ -144,10 +145,7 @@ class _EventsListViewState extends State<EventsListView> {
               ListView.separated(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: _buildListItem,
-                separatorBuilder: (content, index) => const Divider(
-                  color: Colors.black54,
-                  thickness: 1.0,
-                ),
+                separatorBuilder: (content, index) => const GenericSeparator(),
                 shrinkWrap: true,
               ),
             ],
