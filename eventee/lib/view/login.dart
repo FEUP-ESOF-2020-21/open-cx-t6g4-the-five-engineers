@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildLoginAsAnAttendeeButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -68,11 +68,42 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () {},
                 child: Text(
-                  "Login",
+                  "Login as an Attendee",
                   style: TextStyle(
                     color: Colors.white,
                     letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 40,
+                    fontSize: MediaQuery.of(context).size.height / 50,
+                  ),
+                ),
+              ),
+            ))
+      ],
+    );
+  }
+
+  Widget _buildLoginAsAnOrganizerButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.only(top: 0),
+            child: Container(
+              height: 1.4 * (MediaQuery.of(context).size.height / 20),
+              width: 5 * (MediaQuery.of(context).size.width / 10),
+              margin: EdgeInsets.only(bottom: 20),
+              child: RaisedButton(
+                elevation: 5.0,
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                onPressed: () {},
+                child: Text(
+                  "Login as an Organizer",
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                    fontSize: MediaQuery.of(context).size.height / 50,
                   ),
                 ),
               ),
@@ -112,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 _buildEmailRow(),
                 _buildPasswordRow(),
-                _buildLoginButton(),
+                _buildLoginAsAnAttendeeButton(),
+                _buildLoginAsAnOrganizerButton(),
               ],
             ),
           ),
@@ -130,8 +162,11 @@ class _LoginPageState extends State<LoginPage> {
         body: Stack(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
