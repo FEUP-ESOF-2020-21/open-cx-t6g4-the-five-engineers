@@ -154,6 +154,39 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget _buildBacktoMainPageButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.only(top: 40),
+            child: Container(
+              height: 1 * (MediaQuery.of(context).size.height / 20),
+              width: 3.5 * (MediaQuery.of(context).size.width / 10),
+              margin: EdgeInsets.only(bottom: 20),
+              child: RaisedButton(
+                elevation: 5.0,
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Back to Main Page",
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                    fontSize: MediaQuery.of(context).size.height / 70,
+                  ),
+                ),
+              ),
+            ))
+      ],
+    );
+  }
+
   Widget _buildContainer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -163,7 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Radius.circular(20),
           ),
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).size.height * 0.8,
             width: MediaQuery.of(context).size.width * 0.8,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -189,6 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 _buildConfirmPasswordRow(),
                 _buildRegisterAsAnAttendeeButton(),
                 _buildRegisterAsAnOrganizerButton(),
+                _buildBacktoMainPageButton(),
               ],
             ),
           ),

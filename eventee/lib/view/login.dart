@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-            padding: EdgeInsets.only(top: 70),
+            padding: EdgeInsets.only(top: 30),
             child: Container(
               height: 1.4 * (MediaQuery.of(context).size.height / 20),
               width: 5 * (MediaQuery.of(context).size.width / 10),
@@ -112,6 +112,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _buildBacktoMainPageButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.only(top: 40),
+            child: Container(
+              height: 1 * (MediaQuery.of(context).size.height / 20),
+              width: 3.5 * (MediaQuery.of(context).size.width / 10),
+              margin: EdgeInsets.only(bottom: 20),
+              child: RaisedButton(
+                elevation: 5.0,
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Back to Main Page",
+                  style: TextStyle(
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                    fontSize: MediaQuery.of(context).size.height / 70,
+                  ),
+                ),
+              ),
+            ))
+      ],
+    );
+  }
+
   Widget _buildContainer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -145,6 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                 _buildPasswordRow(),
                 _buildLoginAsAnAttendeeButton(),
                 _buildLoginAsAnOrganizerButton(),
+                _buildBacktoMainPageButton(),
               ],
             ),
           ),

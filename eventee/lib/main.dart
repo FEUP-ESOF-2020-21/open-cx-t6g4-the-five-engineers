@@ -1,9 +1,7 @@
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'package:eventee/view/select_conference.dart';
-//import 'package:eventee/view/login.dart';
-import 'package:eventee/view/register.dart';
+import 'package:eventee/view/main_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +19,7 @@ class MyApp extends StatelessWidget {
         Widget home;
 
         if (snapshot.connectionState == ConnectionState.done) {
-          home = RegisterPage();
+          home = MainScreenPage();
         } else {
           home = Scaffold(body: GenericLoadingIndicator());
         }
