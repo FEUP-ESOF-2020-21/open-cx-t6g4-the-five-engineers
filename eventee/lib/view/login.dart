@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eventee/view/select_conference.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -66,7 +67,9 @@ class _LoginPageState extends State<LoginPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _submitAttendeeForm();
+                },
                 child: Text(
                   "Login as an Attendee",
                   style: TextStyle(
@@ -97,7 +100,9 @@ class _LoginPageState extends State<LoginPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _submitOrganizerForm();
+                },
                 child: Text(
                   "Login as an Organizer",
                   style: TextStyle(
@@ -185,6 +190,57 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ],
     );
+  }
+
+  void _submitAttendeeForm() {
+    StringBuffer errorMessageBuffer = new StringBuffer();
+
+    if (email == null) {
+      errorMessageBuffer.writeln('Email not entered!');
+    }
+    if (password == null) {
+      errorMessageBuffer.writeln('Password not entered!');
+    }
+
+    if (errorMessageBuffer.isEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
+        // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text('Error'),
+                content: Text(errorMessageBuffer.toString()),
+              ));
+    }
+  }
+
+  void _submitOrganizerForm() {
+    StringBuffer errorMessageBuffer = new StringBuffer();
+
+    if (email == null) {
+      errorMessageBuffer.writeln('Email not entered!');
+    }
+    if (password == null) {
+      errorMessageBuffer.writeln('Password not entered!');
+    }
+
+    if (errorMessageBuffer.isEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
+      );
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text('Error'),
+                content: Text(errorMessageBuffer.toString()),
+              ));
+    }
   }
 
   @override

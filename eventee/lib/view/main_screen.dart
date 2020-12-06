@@ -98,13 +98,7 @@ class _MainScreenPage extends State<MainScreenPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "Eventee",
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height / 15,
-                    color: Colors.white,
-                  ),
-                ),
+                Image(image: AssetImage('assets/logo_eventee.png')),
                 _buildLoginButton(),
                 _buildRegisterButton(),
               ],
