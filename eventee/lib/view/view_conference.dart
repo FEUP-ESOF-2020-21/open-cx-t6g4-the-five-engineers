@@ -79,7 +79,7 @@ class _ViewConferenceState extends State<ViewConference> {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                   child: Tags(
                     itemCount: snapshot.data.tags.length,
                     itemBuilder: (int index) {

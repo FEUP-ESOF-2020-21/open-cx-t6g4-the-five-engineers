@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 
 class ViewEvent extends StatefulWidget {
   final DocumentReference ref;
@@ -22,7 +23,7 @@ class _ViewEventState extends State<ViewEvent> {
 
   @override
   Widget build(context) {
-    return FutureBuilder(
+    return FutureBuilder<Event>(
       future: _refreshEvent(),
       builder: (context, snapshot) {
         Widget body;
@@ -30,6 +31,7 @@ class _ViewEventState extends State<ViewEvent> {
         if (snapshot.hasData) {
           body = SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Padding(
@@ -40,6 +42,34 @@ class _ViewEventState extends State<ViewEvent> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
+                    child: Tags(
+                      itemCount: snapshot.data.tags.length,
+                      itemBuilder: (int index) {
+                        final item = snapshot.data.tags[index];
+
+                        return ItemTags(
+                          key: Key(index.toString()),
+                          index: index,
+                          title: item,
+                          active: true,
+                          pressEnabled: false,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
+                  child: Text(
+                    '${snapshot.data.description}',
+                    style: const TextStyle(
+                      fontSize: 15.0,
                     ),
                   ),
                 ),
