@@ -1,15 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/event.dart';
+import 'package:eventee/view/sessions_list_view.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 
 class ViewEvent extends StatefulWidget {
-  final DocumentReference ref;
+  final DocumentReference conferenceRef, eventRef;
 
-  ViewEvent({Key key, this.ref}) : super(key: key);
+  ViewEvent({Key key, this.conferenceRef, this.eventRef}) : super(key: key);
 
   @override
   _ViewEventState createState() => _ViewEventState();
@@ -17,7 +18,7 @@ class ViewEvent extends StatefulWidget {
 
 class _ViewEventState extends State<ViewEvent> {
   Future<Event> _refreshEvent() {
-    Future<DocumentSnapshot> snapshot = widget.ref.get();
+    Future<DocumentSnapshot> snapshot = widget.eventRef.get();
     return snapshot.then((value) => Event.fromDatabaseFormat(value.data()));
   }
 
@@ -73,6 +74,7 @@ class _ViewEventState extends State<ViewEvent> {
                     ),
                   ),
                 ),
+                SessionsListView(conferenceRef: widget.conferenceRef, eventRef: widget.eventRef),
               ],
             ),
           );

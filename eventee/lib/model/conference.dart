@@ -11,6 +11,8 @@ class Conference {
   List<String> tags;
   List<Event> events;
 
+  static const int maxTags = 50;
+
   Conference({
     @required this.name,
     @required this.startDate,

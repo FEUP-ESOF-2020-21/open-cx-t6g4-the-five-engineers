@@ -60,7 +60,7 @@ class _EventsListViewState extends State<EventsListView> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewEvent(ref: eventSnapshot.reference)),
+          MaterialPageRoute(builder: (context) => ViewEvent(conferenceRef: widget.conferenceRef, eventRef: eventSnapshot.reference)),
         );
       },
       trailing: IconButton(
