@@ -35,7 +35,7 @@ Thank you!
 ---
 
 ## Product Vision
-To provide conference attendees with a personalized schedule.
+To provide conference attendees with an automatic, personalized schedule to reduce time spent preparing for the conference.
 
 ---
 ## Elevator Pitch
