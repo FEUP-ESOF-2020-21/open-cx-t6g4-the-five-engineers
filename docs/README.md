@@ -67,28 +67,6 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * TODO
 
 ### User stories
-This section will contain the requirements of the product described as **user stories**, organized in a global **[user story map](https://plan.io/blog/user-story-mapping/)** with **user roles** or **themes**.
-
-For each theme, or role, you may add a small description. User stories should be detailed in the tool you decided to use for project management (e.g. trello or github projects).
-
-A user story is a description of desired functionality told from the perspective of the user or customer. A starting template for the description of a user story is 
-
-*As a < user role >, I want < goal > so that < reason >.*
-
-
-**INVEST in good user stories**. 
-You may add more details after, but the shorter and complete, the better. In order to decide if the user story is good, please follow the [INVEST guidelines](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
-
-**User interface mockups**.
-After the user story text, you should add a draft of the corresponding user interfaces, a simple mockup or draft, if applicable.
-
-**Acceptance tests**.
-For each user story you should write also the acceptance tests (textually in Gherkin), i.e., a description of scenarios (situations) that will help to confirm that the system satisfies the requirements addressed by the user story.
-
-**Value and effort**.
-At the end, it is good to add a rough indication of the value of the user story to the customers (e.g. [MoSCoW](https://en.wikipedia.org/wiki/MoSCoW_method) method) and the team should add an estimation of the effort to implement it, for example, using t-shirt sizes (XS, S, M, L, XL).
-
-- Using MoSCoW method and t-shirt sizes; 
 
 *As an organizer I want to be able to create a conference*
 
@@ -265,14 +243,6 @@ To better understand the context of the software system, it is very useful to ha
 ---
 
 ## Architecture and Design
-The architecture of a software system encompasses the set of key decisions about its overall organization. 
-
-A well written architecture document is brief but reduces the amount of time it takes new programmers to a project to understand the code to feel able to make modifications and enhancements.
-
-To document the architecture requires describing the decomposition of the system in their parts (high-level components) and the key behaviors and collaborations between them. 
-
-In this section you should start by briefly describing the overall components of the project and their interrelations. You should also describe how you solved typical problems you may have encountered, pointing to well-known architectural and design patterns, if applicable.
-
 ### Logical architecture
 
 ![Logical Architecture](img/logical_architecture.png)
