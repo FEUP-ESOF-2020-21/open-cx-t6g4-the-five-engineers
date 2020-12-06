@@ -88,7 +88,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 **User interface mockup**
 
-![Select Conference Mockup](img/mockup_select_conference.png)
+![Select Conference Mockup](img/select_conference_organizer.png)
 
 **Acceptance tests**
 
@@ -168,6 +168,9 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 *As an attendee, I want to be able to select a conference so I can see details about it or participate in it*
 
 **User interface mockup**
+
+![Select Conference as Attendee Mockup](img/select_conference_attendee.png)
+![Select Conference as Attendee Searched Mockup](img/select_conference_attendee_searched.png)
 
 **Acceptance tests**.
 
