@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildEmailRow() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
+      child: TextField(
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
@@ -31,9 +31,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildPasswordRow() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
+      child: TextField(
         controller: _passwordController,
-        keyboardType: TextInputType.text,
         obscureText: true,
         decoration: const InputDecoration(
           prefixIcon: Icon(
@@ -46,170 +45,112 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginAsAnAttendeeButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(top: 30),
-            child: Container(
-              height: 1.4 * (MediaQuery.of(context).size.height / 20),
-              width: 5 * (MediaQuery.of(context).size.width / 10),
-              margin: EdgeInsets.only(bottom: 20),
-              child: RaisedButton(
-                elevation: 5.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                onPressed: () {
-                  _submitAttendeeForm();
-                },
-                child: Text(
-                  "Login as an Attendee",
-                  style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 50,
-                  ),
-                ),
-              ),
-            ))
-      ],
-    );
-  }
-
-  Widget _buildLoginAsAnOrganizerButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(top: 0),
-            child: Container(
-              height: 1.4 * (MediaQuery.of(context).size.height / 20),
-              width: 5 * (MediaQuery.of(context).size.width / 10),
-              margin: EdgeInsets.only(bottom: 20),
-              child: RaisedButton(
-                elevation: 5.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                onPressed: () {
-                  _submitOrganizerForm();
-                },
-                child: Text(
-                  "Login as an Organizer",
-                  style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 50,
-                  ),
-                ),
-              ),
-            ))
-      ],
+  Widget _buildLoginButton({String text, void Function() onPressed}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: RaisedButton(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+        elevation: 5.0,
+        color: Colors.blue,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 15.0,
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildBacktoMainPageButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Container(
-              height: 1 * (MediaQuery.of(context).size.height / 20),
-              width: 3.5 * (MediaQuery.of(context).size.width / 10),
-              margin: EdgeInsets.only(bottom: 20),
-              child: RaisedButton(
-                elevation: 5.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Back to Main Page",
-                  style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 70,
-                  ),
-                ),
-              ),
-            ))
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 30.0),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20.0),
+        child: RaisedButton(
+          elevation: 5.0,
+          color: Colors.blueGrey[600],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            "Back",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.0,
+            ),
+          ),
+        ),
+      )
     );
   }
 
   Widget _buildContainer() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height / 30,
-                      ),
-                    ),
-                  ],
-                ),
-                _buildEmailRow(),
-                _buildPasswordRow(),
-                _buildLoginAsAnAttendeeButton(),
-                _buildLoginAsAnOrganizerButton(),
-                _buildBacktoMainPageButton(),
-              ],
-            ),
-          ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20.0),
+      ),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        decoration: const BoxDecoration(
+          color: Colors.white,
         ),
-      ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Login",
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height / 30,
+                ),
+              ),
+            ),
+            _buildEmailRow(),
+            _buildPasswordRow(),
+            _buildLoginButton(text: "Login as Attendee", onPressed: _submitAttendeeForm),
+            _buildLoginButton(text: "Login as Organizer", onPressed: _submitOrganizerForm),
+            _buildBacktoMainPageButton(),
+          ],
+        ),
+      ),
     );
   }
 
-  Future<void> _submitAttendeeForm() async {
+  void _submitAttendeeForm() async {
     StringBuffer errorMessageBuffer = new StringBuffer();
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    if (_emailController.text == null) {
+    if (_emailController.text.isEmpty) {
       errorMessageBuffer.writeln('Email not entered!');
     }
-    if (_passwordController.text == null) {
+    if (_passwordController.text.isEmpty) {
       errorMessageBuffer.writeln('Password not entered!');
     }
 
-    try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text
-      );
-    }
-    on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        errorMessageBuffer.writeln('No user found for that email.');
+    if (errorMessageBuffer.isEmpty) {
+      try {
+        UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text
+        );
       }
-      else if (e.code == 'wrong-password') {
-        errorMessageBuffer.writeln('Wrong password provided for that user.');
+      on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          errorMessageBuffer.writeln('No user found for that email.');
+        }
+        else if (e.code == 'wrong-password') {
+          errorMessageBuffer.writeln('Wrong password provided for that user.');
+        }
       }
     }
 
@@ -224,10 +165,10 @@ class _LoginPageState extends State<LoginPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: Text(errorMessageBuffer.toString()),
-          )
-        );
+          title: const Text('Error'),
+          content: Text(errorMessageBuffer.toString()),
+        )
+      );
     }
   }
 
@@ -260,26 +201,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: Color(0xfff2f3f7),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildContainer(),
-              ],
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: Center(
+        child: SingleChildScrollView(
+          child: _buildContainer(),
         ),
       ),
     );
