@@ -8,40 +8,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String email, password;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   Widget _buildEmailRow() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _emailController,
         keyboardType: TextInputType.emailAddress,
-        onChanged: (value) {
-          setState(() {
-            email = value;
-          });
-        },
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.email,
-              color: Colors.blue,
-            ),
-            labelText: 'E-mail'),
+        decoration: const InputDecoration(
+          prefixIcon: Icon(
+            Icons.email,
+            color: Colors.blue,
+          ),
+          labelText: 'E-mail'
+        ),
       ),
     );
   }
 
   Widget _buildPasswordRow() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _passwordController,
         keyboardType: TextInputType.text,
         obscureText: true,
-        onChanged: (value) {
-          setState(() {
-            password = value;
-          });
-        },
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.lock,
             color: Colors.blue,
@@ -195,47 +189,55 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _submitAttendeeForm() async {
     StringBuffer errorMessageBuffer = new StringBuffer();
-    //FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseAuth auth = FirebaseAuth.instance;
 
-    if (email == null) {
+    if (_emailController.text == null) {
       errorMessageBuffer.writeln('Email not entered!');
     }
-    if (password == null) {
+    if (_passwordController.text == null) {
       errorMessageBuffer.writeln('Password not entered!');
     }
-    /*try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
+
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text
+      );
+    }
+    on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         errorMessageBuffer.writeln('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
+      }
+      else if (e.code == 'wrong-password') {
         errorMessageBuffer.writeln('Wrong password provided for that user.');
       }
-    }*/
+    }
+
     if (errorMessageBuffer.isEmpty) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
         // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
       );
-    } else {
+    }
+    else {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: Text(errorMessageBuffer.toString()),
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: Text(errorMessageBuffer.toString()),
+          )
+        );
     }
   }
 
   void _submitOrganizerForm() {
     StringBuffer errorMessageBuffer = new StringBuffer();
 
-    if (email == null) {
+    if (_emailController.text == null) {
       errorMessageBuffer.writeln('Email not entered!');
     }
-    if (password == null) {
+    if (_passwordController.text == null) {
       errorMessageBuffer.writeln('Password not entered!');
     }
 
@@ -244,13 +246,15 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
       );
-    } else {
+    }
+    else {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: Text(errorMessageBuffer.toString()),
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessageBuffer.toString()),
+        )
+      );
     }
   }
 
@@ -265,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
             ),
