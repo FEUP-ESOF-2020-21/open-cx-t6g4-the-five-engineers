@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _submitAttendeeForm() async {
     StringBuffer errorMessageBuffer = new StringBuffer();
-    FirebaseAuth auth = FirebaseAuth.instance;
+    //FirebaseAuth auth = FirebaseAuth.instance;
 
     if (email == null) {
       errorMessageBuffer.writeln('Email not entered!');
@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
     if (password == null) {
       errorMessageBuffer.writeln('Password not entered!');
     }
-    try {
+    /*try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
       } else if (e.code == 'wrong-password') {
         errorMessageBuffer.writeln('Wrong password provided for that user.');
       }
-    }
+    }*/
     if (errorMessageBuffer.isEmpty) {
       Navigator.push(
         context,
