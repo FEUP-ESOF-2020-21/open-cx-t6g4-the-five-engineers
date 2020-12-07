@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eventee/view/select_conference.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -192,8 +193,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submitAttendeeForm() {
+  Future<void> _submitAttendeeForm() async {
     StringBuffer errorMessageBuffer = new StringBuffer();
+    FirebaseAuth auth = FirebaseAuth.instance;
 
     if (email == null) {
       errorMessageBuffer.writeln('Email not entered!');
@@ -201,7 +203,16 @@ class _LoginPageState extends State<LoginPage> {
     if (password == null) {
       errorMessageBuffer.writeln('Password not entered!');
     }
-
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        errorMessageBuffer.writeln('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        errorMessageBuffer.writeln('Wrong password provided for that user.');
+      }
+    }
     if (errorMessageBuffer.isEmpty) {
       Navigator.push(
         context,
