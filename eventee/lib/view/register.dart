@@ -7,60 +7,53 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String fullname, email, password, confirmPassword;
+  final _fullNameController = TextEditingController(),
+      _emailController = TextEditingController(),
+      _passwordController = TextEditingController(),
+      _confirmPasswordController = TextEditingController();
 
   Widget _buildFullNameRow() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _fullNameController,
         keyboardType: TextInputType.emailAddress,
-        onChanged: (value) {
-          setState(() {
-            fullname = value;
-          });
-        },
         decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.blue,
-            ),
-            labelText: 'Full Name'),
+          prefixIcon: Icon(
+            Icons.account_circle,
+            color: Colors.blue,
+          ),
+          labelText: 'Full Name'
+        ),
       ),
     );
   }
 
   Widget _buildEmailRow() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _emailController,
         keyboardType: TextInputType.emailAddress,
-        onChanged: (value) {
-          setState(() {
-            email = value;
-          });
-        },
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.email,
-              color: Colors.blue,
-            ),
-            labelText: 'E-mail'),
+        decoration: const InputDecoration(
+          prefixIcon: Icon(
+            Icons.email,
+            color: Colors.blue,
+          ),
+          labelText: 'E-mail'
+        ),
       ),
     );
   }
 
   Widget _buildPasswordRow() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _passwordController,
         keyboardType: TextInputType.text,
         obscureText: true,
-        onChanged: (value) {
-          setState(() {
-            password = value;
-          });
-        },
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.lock,
             color: Colors.blue,
@@ -73,16 +66,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildConfirmPasswordRow() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _confirmPasswordController,
         keyboardType: TextInputType.text,
         obscureText: true,
-        onChanged: (value) {
-          setState(() {
-            confirmPassword = value;
-          });
-        },
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.lock,
             color: Colors.blue,
@@ -164,20 +153,18 @@ class _RegisterPageState extends State<RegisterPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-            padding: EdgeInsets.only(top: 40),
+            padding: const EdgeInsets.only(top: 40.0),
             child: Container(
-              height: 1 * (MediaQuery.of(context).size.height / 20),
+              height: (MediaQuery.of(context).size.height / 20),
               width: 3.5 * (MediaQuery.of(context).size.width / 10),
-              margin: EdgeInsets.only(bottom: 20),
+              margin: const EdgeInsets.only(bottom: 20.0),
               child: RaisedButton(
                 elevation: 5.0,
                 color: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 child: Text(
                   "Back to Main Page",
                   style: TextStyle(
@@ -239,21 +226,20 @@ class _RegisterPageState extends State<RegisterPage> {
   void _submitAttendeeForm() {
     StringBuffer errorMessageBuffer = new StringBuffer();
 
-    if (fullname == null) {
+    if (_fullNameController.text == null) {
       errorMessageBuffer.writeln('Full Name not entered!');
     }
-    if (email == null) {
+    if (_emailController.text == null) {
       errorMessageBuffer.writeln('Email not entered!');
     }
-    if (password == null) {
+    if (_passwordController.text == null) {
       errorMessageBuffer.writeln('Password not entered!');
     }
-    if (confirmPassword == null) {
-      errorMessageBuffer.writeln('Confirm Password not entered!');
+    if (_confirmPasswordController.text == null) {
+      errorMessageBuffer.writeln('Confirm password not entered!');
     }
-    if (password != confirmPassword) {
-      errorMessageBuffer
-          .writeln('Confirmed Password is different from Password');
+    if (_passwordController.text != _confirmPasswordController.text) {
+      errorMessageBuffer.writeln('Confirmed password is different from password!');
     }
 
     if (errorMessageBuffer.isEmpty) {
@@ -262,34 +248,35 @@ class _RegisterPageState extends State<RegisterPage> {
         MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
         // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
       );
-    } else {
+    }
+    else {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: Text(errorMessageBuffer.toString()),
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessageBuffer.toString()),
+        )
+      );
     }
   }
 
   void _submitOrganizerForm() {
     StringBuffer errorMessageBuffer = new StringBuffer();
 
-    if (fullname == null) {
+    if (_fullNameController.text == null) {
       errorMessageBuffer.writeln('Full Name not entered!');
     }
-    if (email == null) {
+    if (_emailController.text == null) {
       errorMessageBuffer.writeln('Email not entered!');
     }
-    if (password == null) {
+    if (_passwordController.text == null) {
       errorMessageBuffer.writeln('Password not entered!');
     }
-    if (confirmPassword == null) {
-      errorMessageBuffer.writeln('Confirm Password not entered!');
+    if (_confirmPasswordController.text == null) {
+      errorMessageBuffer.writeln('Confirm password not entered!');
     }
-    if (password != confirmPassword) {
-      errorMessageBuffer
-          .writeln('Confirmed Password is different from Password');
+    if (_passwordController.text != _confirmPasswordController.text) {
+      errorMessageBuffer.writeln('Confirmed password is different from password!');
     }
 
     if (errorMessageBuffer.isEmpty) {
@@ -297,13 +284,15 @@ class _RegisterPageState extends State<RegisterPage> {
         context,
         MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
       );
-    } else {
+    }
+    else {
       showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: const Text('Error'),
-                content: Text(errorMessageBuffer.toString()),
-              ));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessageBuffer.toString()),
+        )
+      );
     }
   }
 
