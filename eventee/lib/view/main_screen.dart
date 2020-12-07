@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:eventee/view/login.dart';
 import 'package:eventee/view/register.dart';
 
-class MainScreenPage extends StatefulWidget {
-  @override
-  _MainScreenPage createState() => _MainScreenPage();
-}
-
-class _MainScreenPage extends State<MainScreenPage> {
-  Widget _buildLoginButton() {
+class MainScreenPage extends StatelessWidget {
+  Widget _buildLoginButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -44,7 +39,7 @@ class _MainScreenPage extends State<MainScreenPage> {
     );
   }
 
-  Widget _buildRegisterButton() {
+  Widget _buildRegisterButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -103,8 +98,8 @@ class _MainScreenPage extends State<MainScreenPage> {
                   /*width: 300,
                     height: 300*/
                 ),
-                _buildLoginButton(),
-                _buildRegisterButton(),
+                _buildLoginButton(context),
+                _buildRegisterButton(context),
               ],
             )
           ],
