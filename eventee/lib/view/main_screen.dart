@@ -13,7 +13,7 @@ class _MainScreenPage extends State<MainScreenPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-            padding: EdgeInsets.only(top: 70),
+            padding: EdgeInsets.only(top: 0),
             child: Container(
               height: 1.4 * (MediaQuery.of(context).size.height / 20),
               width: 5 * (MediaQuery.of(context).size.width / 10),
@@ -98,7 +98,11 @@ class _MainScreenPage extends State<MainScreenPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image(image: AssetImage('assets/logo_eventee.png')),
+                Image(
+                  image: AssetImage('assets/eventee_logo.png'),
+                  /*width: 300,
+                    height: 300*/
+                ),
                 _buildLoginButton(),
                 _buildRegisterButton(),
               ],
