@@ -15,10 +15,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildFullNameRow() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
+      child: TextField(
         controller: _fullNameController,
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.account_circle,
             color: Colors.blue,
@@ -51,7 +50,6 @@ class _RegisterPageState extends State<RegisterPage> {
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         controller: _passwordController,
-        keyboardType: TextInputType.text,
         obscureText: true,
         decoration: const InputDecoration(
           prefixIcon: Icon(
@@ -69,7 +67,6 @@ class _RegisterPageState extends State<RegisterPage> {
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
         controller: _confirmPasswordController,
-        keyboardType: TextInputType.text,
         obscureText: true,
         decoration: const InputDecoration(
           prefixIcon: Icon(
@@ -82,144 +79,84 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildRegisterAsAnAttendeeButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Container(
-              height: 1.4 * (MediaQuery.of(context).size.height / 20),
-              width: 5 * (MediaQuery.of(context).size.width / 10),
-              margin: EdgeInsets.only(bottom: 20),
-              child: RaisedButton(
-                elevation: 5.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                onPressed: () {
-                  _submitAttendeeForm();
-                },
-                child: Text(
-                  "Register as an Attendee",
-                  style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 60,
-                  ),
-                ),
-              ),
-            ))
-      ],
+  Widget _buildRegisterButton({String text, void Function() onPressed}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: RaisedButton(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+        elevation: 5.0,
+        color: Colors.blue,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15.0,
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildRegisterAsAnOrganizerButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(top: 0),
-            child: Container(
-              height: 1.4 * (MediaQuery.of(context).size.height / 20),
-              width: 5 * (MediaQuery.of(context).size.width / 10),
-              margin: EdgeInsets.only(bottom: 20),
-              child: RaisedButton(
-                elevation: 5.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                onPressed: () {
-                  _submitOrganizerForm();
-                },
-                child: Text(
-                  "Register as an Organizer",
-                  style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 60,
-                  ),
-                ),
-              ),
-            ))
-      ],
-    );
-  }
-
-  Widget _buildBacktoMainPageButton() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-            padding: const EdgeInsets.only(top: 40.0),
-            child: Container(
-              height: (MediaQuery.of(context).size.height / 20),
-              width: 3.5 * (MediaQuery.of(context).size.width / 10),
-              margin: const EdgeInsets.only(bottom: 20.0),
-              child: RaisedButton(
-                elevation: 5.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  "Back to Main Page",
-                  style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    fontSize: MediaQuery.of(context).size.height / 70,
-                  ),
-                ),
-              ),
-            ))
-      ],
+  Widget _buildBackButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30.0),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20.0),
+        child: RaisedButton(
+          elevation: 5.0,
+          color: Colors.blueGrey[600],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          onPressed: () => Navigator.pop(context),
+          child: const Text(
+            'Back',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.0,
+            ),
+          ),
+        ),
+      )
     );
   }
 
   Widget _buildContainer() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            width: MediaQuery.of(context).size.width * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Register",
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height / 30,
-                      ),
-                    ),
-                  ],
-                ),
-                _buildFullNameRow(),
-                _buildEmailRow(),
-                _buildPasswordRow(),
-                _buildConfirmPasswordRow(),
-                _buildRegisterAsAnAttendeeButton(),
-                _buildRegisterAsAnOrganizerButton(),
-                _buildBacktoMainPageButton(),
-              ],
-            ),
-          ),
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20.0),
+      ),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        decoration: const BoxDecoration(
+          color: Colors.white,
         ),
-      ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Register",
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),
+              ),
+            ),
+            _buildFullNameRow(),
+            _buildEmailRow(),
+            _buildPasswordRow(),
+            _buildConfirmPasswordRow(),
+            _buildRegisterButton(text: 'Register as Attendee', onPressed: _submitAttendeeForm),
+            _buildRegisterButton(text: 'Register as Organizer', onPressed: _submitOrganizerForm),
+            _buildBackButton(),
+          ],
+        ),
+      ),
     );
   }
 
@@ -298,26 +235,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        backgroundColor: Color(0xfff2f3f7),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildContainer(),
-              ],
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: Center(
+        child: SingleChildScrollView(
+          child: _buildContainer(),
         ),
       ),
     );

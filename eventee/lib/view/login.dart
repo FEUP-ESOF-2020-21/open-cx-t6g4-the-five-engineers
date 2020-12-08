@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:eventee/view/select_conference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildBacktoMainPageButton() {
+  Widget _buildBackButton() {
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
       child: Container(
@@ -79,11 +80,9 @@ class _LoginPageState extends State<LoginPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           child: const Text(
-            "Back",
+            'Back',
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.0,
@@ -107,12 +106,12 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text(
                 "Login",
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height / 30,
+                  fontSize: 18.0,
                 ),
               ),
             ),
@@ -120,16 +119,15 @@ class _LoginPageState extends State<LoginPage> {
             _buildPasswordRow(),
             _buildLoginButton(text: "Login as Attendee", onPressed: _submitAttendeeForm),
             _buildLoginButton(text: "Login as Organizer", onPressed: _submitOrganizerForm),
-            _buildBacktoMainPageButton(),
+            _buildBackButton(),
           ],
         ),
       ),
     );
   }
 
-  void _submitAttendeeForm() async {
+  void _submitForm(String role) async {
     StringBuffer errorMessageBuffer = new StringBuffer();
-    FirebaseAuth auth = FirebaseAuth.instance;
 
     if (_emailController.text.isEmpty) {
       errorMessageBuffer.writeln('Email not entered!');
@@ -140,18 +138,22 @@ class _LoginPageState extends State<LoginPage> {
 
     if (errorMessageBuffer.isEmpty) {
       try {
-        UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text
         );
 
-        // TODO: Check if user is attendee
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
-          // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
-        );
+        Query query = FirebaseFirestore.instance.collection('users')
+            .where('uid', isEqualTo: userCredential.user.uid)
+            .where('role', isEqualTo: role);
+        
+        query.get()
+            .then((snapshot) {
+              if (snapshot.docs.isEmpty) {
+                errorMessageBuffer.writeln('No user found for that email.');
+              }
+            })
+            .catchError((error) => errorMessageBuffer.writeln('Error occurred while verifying credentials.'));
       }
       on FirebaseAuthException catch (ex) {
         switch (ex.code) {
@@ -183,33 +185,21 @@ class _LoginPageState extends State<LoginPage> {
         )
       );
     }
-  }
-
-  void _submitOrganizerForm() {
-    StringBuffer errorMessageBuffer = new StringBuffer();
-
-    if (_emailController.text == null) {
-      errorMessageBuffer.writeln('Email not entered!');
-    }
-    if (_passwordController.text == null) {
-      errorMessageBuffer.writeln('Password not entered!');
-    }
-
-    if (errorMessageBuffer.isEmpty) {
+    else {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
+        // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
       );
     }
-    else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(errorMessageBuffer.toString()),
-        )
-      );
-    }
+  }
+
+  void _submitAttendeeForm() {
+    _submitForm('attendee');
+  }
+
+  void _submitOrganizerForm() {
+    _submitForm('organizer');
   }
 
   @override
