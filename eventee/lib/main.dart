@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           home = MainScreenPage();
-        } else {
+        }
+        else {
           home = Scaffold(body: GenericLoadingIndicator());
         }
 

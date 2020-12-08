@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eventee/view/select_conference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -143,25 +144,37 @@ class _LoginPageState extends State<LoginPage> {
           email: _emailController.text,
           password: _passwordController.text
         );
+
+        // TODO: Check if user is attendee
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
+          // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
+        );
       }
-      on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          errorMessageBuffer.writeln('No user found for that email.');
-        }
-        else if (e.code == 'wrong-password') {
-          errorMessageBuffer.writeln('Wrong password provided for that user.');
+      on FirebaseAuthException catch (ex) {
+        switch (ex.code) {
+          case 'user-not-found':
+            errorMessageBuffer.writeln('No user found for that email.');
+            break;
+          case 'wrong-password':
+            errorMessageBuffer.writeln('Wrong password provided for that user.');
+            break;
+          case 'user-disabled':
+            errorMessageBuffer.writeln('The account for that email has been disabled.');
+            break;
+          case 'invalid-email':
+            errorMessageBuffer.writeln('An invalid email was provided.');
+            break;
+          default:
+            errorMessageBuffer.writeln('An error occurred when logging in.');
+            break;
         }
       }
     }
 
-    if (errorMessageBuffer.isEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
-        // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
-      );
-    }
-    else {
+    if (errorMessageBuffer.isNotEmpty) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
