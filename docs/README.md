@@ -206,7 +206,13 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 ![Login Organizer Mockup](img/login_organizer.png)
 ![Register Organizer Mockup](img/register_organizer.png)
 
-**Acceptance tests**.
+**Acceptance tests**
+* Full name <= 300 characters
+* Email <= 300 characters
+* When registering an account as an organizer, attempting to log in as an attendee should display an error
+* After successfully logging in, the user should be redirected to the conference selection screen
+* An error should be displayed when:
+  * Attempting to log in with an incorrect or invalid email / password
 
 **Value and effort**.
   * Should Have
@@ -220,7 +226,16 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 ![Login Attendee Mockup](img/login_attendee.png)
 ![Register Attendee Mockup](img/register_attendee.png)
 
-**Acceptance tests**.
+**Acceptance tests**
+* Full name <= 300 characters
+* Email <= 300 characters
+* When registering an account as an attendee, attempting to log in as an organizer should display an error
+* After successfully logging in, the user should be redirected to the conference selection screen
+* An error should be displayed when:
+  * Attempting to log in with an incorrect or invalid email / password
+  * Attempting to register a new account with an email that is already in use
+  * Attempting to register an account with a weak password
+  * Attempting to register an account and the password and confirm password fields don't match
 
 **Value and effort**.
   * Should Have
