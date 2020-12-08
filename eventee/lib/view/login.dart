@@ -28,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           labelText: 'E-mail'
         ),
+        maxLength: 300,
       ),
     );
   }
