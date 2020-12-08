@@ -196,8 +196,40 @@ class ConferenceSearchDelegate extends SearchDelegate {
     );
   }
 
-  ListView _buildConferenceList(AsyncSnapshot<QuerySnapshot> snapshot) {
-    _conferenceSnapshots = snapshot.data.docs;
+  List<QueryDocumentSnapshot> filterByTags(List<QueryDocumentSnapshot> snapshots) {
+    List<String> tags = query.split(',');
+    for (String tag in tags) { tag.trim(); }
+
+    List<QueryDocumentSnapshot> filteredSnapshots = [];
+
+    for (QueryDocumentSnapshot snapshot in snapshots) {
+      if (matchingTags(snapshot, tags)) {
+        // One of the Conference Tags corresponds to one of the Query Tags
+        filteredSnapshots.add(snapshot);
+      }
+    }
+
+    return filteredSnapshots;
+  }
+
+  bool matchingTags(QueryDocumentSnapshot snapshot, List<String> tags) {
+    final Conference conference = Conference.fromDatabaseFormat(snapshot.data());
+    for (String tag in tags) {
+      if (conference.tags.contains(tag)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Widget _buildConferenceList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _conferenceSnapshots = filterByTags(snapshot.data.docs);
+
+    if (_conferenceSnapshots.length == 0) {
+      return Center(
+        child: Text("No Results Found.",),
+      );
+    }
 
     return ListView.separated(
       itemBuilder: _buildListItem,
@@ -241,31 +273,19 @@ class ConferenceSearchDelegate extends SearchDelegate {
               return _buildConferenceList(snapshot);
             }
             else {
-              return Column(
-                children: [
-                  Text(
-                    "No Results Found.",
-                  ),
-                ],
+              return Center(
+                child: Text("No Results Found.",),
               );
             }
           }
           else if (snapshot.hasError) {
-            return Column(
-              children: [
-                Text(
-                  snapshot.error,
-                ),
-              ],
+            return Center(
+              child: Text(snapshot.error,),
             );
           }
           else {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(child: CircularProgressIndicator()),
-              ],
+            return Center(
+              child: CircularProgressIndicator(),
             );
           }
         }
