@@ -1,7 +1,9 @@
 import 'package:eventee/model/session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:flutter_duration_picker/flutter_duration_picker.dart';
+
+external DateTime add(Duration duration);
 
 class CreateSession extends StatefulWidget {
   CreateSession({Key key}) : super(key: key);
@@ -18,7 +20,7 @@ class _CreateSessionState extends State<CreateSession> {
   int _attendanceLimit;
 
   DateTime _startDate = DateTime(2000), _endDate = DateTime(2100);
-
+  Duration _initialDuration = Duration(hours: 0, minutes: 30);
   void _pickStartDate() async {
     DateTime date = await showDatePicker(
       context: context,
@@ -37,27 +39,20 @@ class _CreateSessionState extends State<CreateSession> {
     startDateController.text = _startDate.toString().substring(0, 16);
   }
 
-  void _pickEndDate() async {
-    DateTime date = await showDatePicker(
-      context: context,
-      initialDate: _startDate,
-      firstDate: _startDate,
-      lastDate: DateTime(2100),
-    );
+  void _pickDuration() async {
+    _initialDuration = await showDurationPicker(
+        context: context, initialTime: _initialDuration);
 
-    TimeOfDay time = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 0, minute: 0),
-    );
-
-    _endDate =
-        DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    _endDate = _startDate.add(_initialDuration);
     endDateController.text = _endDate.toString().substring(0, 16);
   }
 
   void _submitForm() {
     StringBuffer errorMessageBuffer = new StringBuffer();
-
+    Duration maxDuration = Duration(hours: 24, minutes: 0);
+    if (_initialDuration > maxDuration) {
+      errorMessageBuffer.writeln("Duration can't be longer than 1 day!");
+    }
     if (_endDate.isBefore(_startDate)) {
       errorMessageBuffer.writeln("End date is before start date!");
     }
@@ -119,10 +114,10 @@ class _CreateSessionState extends State<CreateSession> {
                 readOnly: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  suffixIcon: const Icon(Icons.calendar_today),
+                  suffixIcon: const Icon(Icons.access_time),
                   labelText: 'End Date',
                 ),
-                onTap: _pickEndDate,
+                onTap: _pickDuration,
               ),
             ),
             SwitchListTile(
