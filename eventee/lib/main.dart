@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         Widget home;
 
         if (snapshot.connectionState == ConnectionState.done) {
-          home = ConferenceSelectionOrganizer();
+          home = ConferenceSelection(type: "Attendee");
         }
         else {
           home = Scaffold(body: GenericLoadingIndicator());

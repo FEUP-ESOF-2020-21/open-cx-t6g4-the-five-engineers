@@ -8,18 +8,28 @@ import 'package:eventee/view/create_conference.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 
-class ConferenceSelectionAttendee extends StatefulWidget {
-  ConferenceSelectionAttendee({Key key}) : super(key: key);
+class ConferenceSelection extends StatefulWidget {
+  ConferenceSelection({Key key, this.type}) : super(key: key);
 
   final String title = "Select Conference";
+  final String type;
 
   @override
-  _ConferenceSelectionAttendeeState createState() => _ConferenceSelectionAttendeeState();
+  _ConferenceSelectionState createState() {
+    if (this.type == "Organizer") {
+      return _ConferenceSelectionOrganizerState();
+    }
+    else if (this.type == "Attendee") {
+      return _ConferenceSelectionAttendeeState();
+    }
+  }
 }
 
-class _ConferenceSelectionAttendeeState extends State<ConferenceSelectionAttendee> {
-  bool started = false;
+abstract class _ConferenceSelectionState extends State<ConferenceSelection> {}
 
+class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
+
+class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +48,7 @@ class _ConferenceSelectionAttendeeState extends State<ConferenceSelectionAttende
                   onPressed: () {
                     showSearch(
                       context: context,
-                      delegate: CustomSearchDelegate(),
+                      delegate: ConferenceSearchDelegate(),
                     );
                   },
                 ),
@@ -50,14 +60,7 @@ class _ConferenceSelectionAttendeeState extends State<ConferenceSelectionAttende
   }
 }
 
-class ConferenceSelectionOrganizer extends StatefulWidget {
-  ConferenceSelectionOrganizer({Key key}) : super(key: key);
-
-  @override
-  _ConferenceSelectionOrganizerState createState() => _ConferenceSelectionOrganizerState();
-}
-
-class _ConferenceSelectionOrganizerState extends State<ConferenceSelectionOrganizer> {
+class ConferenceSearchDelegate extends SearchDelegate {
   final CollectionReference ref = FirebaseFirestore.instance.collection('conferences');
   static const int maxTags = 5;
 
@@ -161,7 +164,7 @@ class CustomSearchDelegate extends SearchDelegate {
       IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
-          query = ''; //TODO
+          query = '';
         },
       ),
     ];
