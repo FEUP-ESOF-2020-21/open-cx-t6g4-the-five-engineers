@@ -1,8 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:eventee/model/role.dart';
 import 'package:flutter/material.dart';
-import 'package:eventee/view/select_conference.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eventee/view/select_conference.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -111,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
                 "Login",
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 22.0,
                 ),
               ),
             ),
@@ -126,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submitForm(String role) async {
+  void _submitForm(Role role) async {
     StringBuffer errorMessageBuffer = new StringBuffer();
 
     if (_emailController.text.isEmpty) {
@@ -145,9 +147,9 @@ class _LoginPageState extends State<LoginPage> {
 
         Query query = FirebaseFirestore.instance.collection('users')
             .where('uid', isEqualTo: userCredential.user.uid)
-            .where('role', isEqualTo: role);
+            .where('role', isEqualTo: role.index);
         
-        query.get()
+        await query.get()
             .then((snapshot) {
               if (snapshot.docs.isEmpty) {
                 errorMessageBuffer.writeln('No user found for that email.');
@@ -195,11 +197,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _submitAttendeeForm() {
-    _submitForm('attendee');
+    _submitForm(Role.attendee);
   }
 
   void _submitOrganizerForm() {
-    _submitForm('organizer');
+    _submitForm(Role.organizer);
   }
 
   @override

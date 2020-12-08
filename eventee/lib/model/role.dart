@@ -1,0 +1,5 @@
+
+enum Role {
+  attendee,
+  organizer
+}

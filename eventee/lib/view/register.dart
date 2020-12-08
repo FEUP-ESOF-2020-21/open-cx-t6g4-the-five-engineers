@@ -1,4 +1,8 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/view/select_conference.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -143,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Text(
                 "Register",
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 22.0,
                 ),
               ),
             ),
@@ -160,33 +164,55 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void _submitAttendeeForm() {
+  void _submitForm(Role role) async {
     StringBuffer errorMessageBuffer = new StringBuffer();
 
-    if (_fullNameController.text == null) {
+    if (_fullNameController.text.isEmpty) {
       errorMessageBuffer.writeln('Full Name not entered!');
     }
-    if (_emailController.text == null) {
+    if (_emailController.text.isEmpty) {
       errorMessageBuffer.writeln('Email not entered!');
     }
-    if (_passwordController.text == null) {
+    if (_passwordController.text.isEmpty) {
       errorMessageBuffer.writeln('Password not entered!');
     }
-    if (_confirmPasswordController.text == null) {
+    if (_confirmPasswordController.text.isEmpty) {
       errorMessageBuffer.writeln('Confirm password not entered!');
     }
     if (_passwordController.text != _confirmPasswordController.text) {
       errorMessageBuffer.writeln('Confirmed password is different from password!');
     }
 
+    UserCredential userCredential;
+
     if (errorMessageBuffer.isEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
-        // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
-      );
+      try {
+        userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text
+        );
+
+        userCredential.user.updateProfile(displayName: _fullNameController.text);
+      }
+      on FirebaseAuthException catch (ex) {
+        switch (ex.code) {
+          case 'email-already-in-use':
+            errorMessageBuffer.writeln('Email already in use.');
+            break;
+          case 'invalid-email':
+            errorMessageBuffer.writeln('An invalid email was provided.');
+            break;
+          case 'weak-password':
+            errorMessageBuffer.writeln('The provided password is too weak.');
+            break;
+          default:
+            errorMessageBuffer.writeln('An error occurred when registering.');
+            break;
+        }
+      }
     }
-    else {
+
+    if (errorMessageBuffer.isNotEmpty) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -194,43 +220,23 @@ class _RegisterPageState extends State<RegisterPage> {
           content: Text(errorMessageBuffer.toString()),
         )
       );
+    }
+    else {
+      FirebaseFirestore.instance.collection('users').add({
+        'uid': userCredential.user.uid,
+        'role': role.index,
+      });
+      
+      print('Authentication!');
     }
   }
 
+  void _submitAttendeeForm() {
+    _submitForm(Role.attendee);
+  }
+
   void _submitOrganizerForm() {
-    StringBuffer errorMessageBuffer = new StringBuffer();
-
-    if (_fullNameController.text == null) {
-      errorMessageBuffer.writeln('Full Name not entered!');
-    }
-    if (_emailController.text == null) {
-      errorMessageBuffer.writeln('Email not entered!');
-    }
-    if (_passwordController.text == null) {
-      errorMessageBuffer.writeln('Password not entered!');
-    }
-    if (_confirmPasswordController.text == null) {
-      errorMessageBuffer.writeln('Confirm password not entered!');
-    }
-    if (_passwordController.text != _confirmPasswordController.text) {
-      errorMessageBuffer.writeln('Confirmed password is different from password!');
-    }
-
-    if (errorMessageBuffer.isEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
-      );
-    }
-    else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(errorMessageBuffer.toString()),
-        )
-      );
-    }
+    _submitForm(Role.organizer);
   }
 
   @override
