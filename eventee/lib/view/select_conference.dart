@@ -28,6 +28,98 @@ class ConferenceSelection extends StatefulWidget {
 abstract class _ConferenceSelectionState extends State<ConferenceSelection> {}
 
 class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
+  final CollectionReference ref = FirebaseFirestore.instance.collection('conferences');
+  static const int maxTags = 5;
+
+  List<QueryDocumentSnapshot> _conferenceSnapshots;
+
+  Widget _buildListItem(BuildContext context, int index) {
+    final QueryDocumentSnapshot conSnapshot = _conferenceSnapshots[index];
+    final Conference conference = Conference.fromDatabaseFormat(conSnapshot.data());
+
+    return ListTile(
+      title: Text(conference.name),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(conference.description),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Tags(
+              itemCount: min(maxTags, conference.tags.length),
+              itemBuilder: (int index) {
+                final String item = conference.tags[index];
+
+                return ItemTags(
+                  key: Key(index.toString()),
+                  index: index,
+                  title: item,
+                  active: true,
+                  pressEnabled: false,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ViewConference(ref: conSnapshot.reference))
+        );
+      },
+    );
+  }
+
+  ListView _buildConferenceList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _conferenceSnapshots = snapshot.data.docs;
+
+    return ListView.separated(
+      itemBuilder: _buildListItem,
+      separatorBuilder: (context, index) => const Divider(
+        color: Colors.black54,
+        thickness: 1.0,
+      ),
+      itemCount: _conferenceSnapshots.length,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: ref.snapshots(),
+        builder: (context, snapshot) {
+          Widget body;
+
+          if (snapshot.hasData) {
+            body = _buildConferenceList(snapshot);
+          }
+          else if (snapshot.hasError) {
+            print(snapshot.error);
+          }
+          else {
+            body = GenericLoadingIndicator();
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Select Conference'),
+            ),
+            body: body,
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateConference())
+                );
+              },
+            ),
+          );
+        }
+    );
+  }
+}
 
 class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
   @override
@@ -118,47 +210,6 @@ class ConferenceSearchDelegate extends SearchDelegate {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: ref.snapshots(),
-      builder: (context, snapshot) {
-        Widget body;
-
-        if (snapshot.hasData) {
-          body = _buildConferenceList(snapshot);
-        }
-        else if (snapshot.hasError) {
-          print(snapshot.error);
-        }
-        else {
-          body = GenericLoadingIndicator();
-        }
-
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Select Conference'),
-          ),
-          body: body,
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CreateConference())
-              );
-            },
-          ),
-        );
-      }
-    );
-  }
-}
-
-class CustomSearchDelegate extends SearchDelegate {
-  /*
-      https://medium.com/codechai/implementing-search-in-flutter-17dc5aa72018
-   */
-  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -182,73 +233,47 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-
-    // The SearchBlock will handle the search for the conferences
-    // The Results will be on the results stream.
-    SearchBlock.search(query);
-
-    return Column(
-      children: <Widget> [
-        // Build the results based on the searchResults stream in the searchBloc
-        StreamBuilder(
-          //stream: SearchBlock.results,
-          builder: (context, AsyncSnapshot<List<Result>> snapshot) {
-            if (!snapshot.hasData) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget> [
-                  Center(child: CircularProgressIndicator()),
-                ],
-              );
+    return StreamBuilder<QuerySnapshot>(
+        stream: ref.snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.size != 0) {
+              return _buildConferenceList(snapshot);
             }
-            else if (snapshot.data.length == 0) {
+            else {
               return Column(
-                children: <Widget> [
+                children: [
                   Text(
                     "No Results Found.",
                   ),
                 ],
               );
             }
-            else {
-              var results = snapshot.data;
-              return ListView.builder(
-                itemCount: results.length,
-                itemBuilder: (context, index) {
-                  var result = results[index];
-                  return ListTile(
-                      title: Text(result.title),
-                      onTap: () { print("Edit Selected Conference\n"); }     // TODO: view/edit conference menu
-                  );
-                },
-              );
-            }
-          },
-        ),
-      ],
+          }
+          else if (snapshot.hasError) {
+            return Column(
+              children: [
+                Text(
+                  snapshot.error,
+                ),
+              ],
+            );
+          }
+          else {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(child: CircularProgressIndicator()),
+              ],
+            );
+          }
+        }
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // This method is called every time the search term changes.
-    // If you want to add search suggestions as the user enters their search term, this is the place to do that.
     return Column();
   }
-}
-
-class SearchBlock {
-  static Stream<Result> results;
-
-  static void search(String query) {
-    // Perform the Search on the Database and place the answer on the Results Stream
-    // TODO
-    return;
-  }
-}
-
-class Result {
-  String data;
-  String title;
 }
