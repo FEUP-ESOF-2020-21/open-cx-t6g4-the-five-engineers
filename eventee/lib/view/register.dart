@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,12 +21,12 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextField(
         controller: _fullNameController,
         decoration: const InputDecoration(
-          prefixIcon: Icon(
-            Icons.account_circle,
-            color: Colors.blue,
-          ),
-          labelText: 'Full Name'
-        ),
+            prefixIcon: Icon(
+              Icons.account_circle,
+              color: Colors.blue,
+            ),
+            labelText: 'Full Name'),
+        maxLength: 300,
       ),
     );
   }
@@ -39,12 +38,12 @@ class _RegisterPageState extends State<RegisterPage> {
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
-          prefixIcon: Icon(
-            Icons.email,
-            color: Colors.blue,
-          ),
-          labelText: 'E-mail'
-        ),
+            prefixIcon: Icon(
+              Icons.email,
+              color: Colors.blue,
+            ),
+            labelText: 'E-mail'),
+        maxLength: 300,
       ),
     );
   }
@@ -107,26 +106,25 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildBackButton() {
     return Padding(
-      padding: const EdgeInsets.only(top: 30.0),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20.0),
-        child: RaisedButton(
-          elevation: 5.0,
-          color: Colors.blueGrey[600],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          onPressed: () => Navigator.pop(context),
-          child: const Text(
-            'Back',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12.0,
+        padding: const EdgeInsets.only(top: 30.0),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 20.0),
+          child: RaisedButton(
+            elevation: 5.0,
+            color: Colors.blueGrey[600],
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Back',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12.0,
+              ),
             ),
           ),
-        ),
-      )
-    );
+        ));
   }
 
   Widget _buildContainer() {
@@ -155,8 +153,10 @@ class _RegisterPageState extends State<RegisterPage> {
             _buildEmailRow(),
             _buildPasswordRow(),
             _buildConfirmPasswordRow(),
-            _buildRegisterButton(text: 'Register as Attendee', onPressed: _submitAttendeeForm),
-            _buildRegisterButton(text: 'Register as Organizer', onPressed: _submitOrganizerForm),
+            _buildRegisterButton(
+                text: 'Register as Attendee', onPressed: _submitAttendeeForm),
+            _buildRegisterButton(
+                text: 'Register as Organizer', onPressed: _submitOrganizerForm),
             _buildBackButton(),
           ],
         ),
@@ -180,21 +180,22 @@ class _RegisterPageState extends State<RegisterPage> {
       errorMessageBuffer.writeln('Confirm password not entered!');
     }
     if (_passwordController.text != _confirmPasswordController.text) {
-      errorMessageBuffer.writeln('Confirmed password is different from password!');
+      errorMessageBuffer
+          .writeln('Confirmed password is different from password!');
     }
 
     UserCredential userCredential;
 
     if (errorMessageBuffer.isEmpty) {
       try {
-        userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text
-        );
+        userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailController.text,
+                password: _passwordController.text);
 
-        userCredential.user.updateProfile(displayName: _fullNameController.text);
-      }
-      on FirebaseAuthException catch (ex) {
+        userCredential.user
+            .updateProfile(displayName: _fullNameController.text);
+      } on FirebaseAuthException catch (ex) {
         switch (ex.code) {
           case 'email-already-in-use':
             errorMessageBuffer.writeln('Email already in use.');
@@ -214,19 +215,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (errorMessageBuffer.isNotEmpty) {
       showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(errorMessageBuffer.toString()),
-        )
-      );
-    }
-    else {
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text('Error'),
+                content: Text(errorMessageBuffer.toString()),
+              ));
+    } else {
       FirebaseFirestore.instance.collection('users').add({
         'uid': userCredential.user.uid,
         'role': role.index,
       });
-      
+
       print('Authentication!');
     }
   }
