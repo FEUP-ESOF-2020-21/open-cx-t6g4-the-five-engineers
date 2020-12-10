@@ -53,7 +53,34 @@ class _SessionsListViewState extends State<SessionsListView> {
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () {}, // TODO
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Warning'),
+                  content: const Text('Do you really wish to delete this session?'),
+                  actions: [
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    TextButton(
+                      child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                      onPressed: () {
+                        _event.sessions.removeAt(index);
+
+                        widget.eventRef.set(_event.toDatabaseFormat())
+                            .then((value) => Navigator.of(context).pop())
+                            .catchError((error) {
+                              print(error);
+                              Navigator.of(context).pop();
+                            });
+                      },
+                    ),
+                  ],
+                )
+              );
+            },
           ),
         ],
       ),
@@ -77,22 +104,30 @@ class _SessionsListViewState extends State<SessionsListView> {
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Text(
-                        'Sessions',
+                        'Sessions (${_event.sessions.length} / ${Event.maxSessions})',
                         style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    true ? IconButton( // TODO: replace with organizer check
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CreateSession())
-                        );
-                      },
-                    ) : null,
+                    Visibility(
+                      child: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () async {
+                          final Session ret = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CreateSession())
+                          );
+
+                          if (ret != null) {
+                            _event.sessions.add(ret);
+                            widget.eventRef.set(_event.toDatabaseFormat());
+                          }
+                        },
+                      ),
+                      visible: _event.sessions.length < Event.maxSessions && true, // TODO: replace with organizer check
+                    ),
                   ],
                 ),
                 decoration: BoxDecoration(

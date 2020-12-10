@@ -74,11 +74,11 @@ class _EventsListViewState extends State<EventsListView> {
               content: const Text('Do you really wish to delete this event?'),
               actions: [
                 TextButton(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 TextButton(
-                  child: Text('Remove', style: TextStyle(color: Colors.red)),
+                  child: const Text('Remove', style: TextStyle(color: Colors.red)),
                   onPressed: () {
                     eventSnapshot.reference.delete()
                         .then((value) => Navigator.of(context).pop())
