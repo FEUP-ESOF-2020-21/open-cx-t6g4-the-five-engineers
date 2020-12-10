@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/view/events_list_view.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewConference extends StatefulWidget {
@@ -78,7 +79,7 @@ class _ViewConferenceState extends State<ViewConference> {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                   child: Tags(
                     itemCount: snapshot.data.tags.length,
                     itemBuilder: (int index) {
@@ -111,13 +112,7 @@ class _ViewConferenceState extends State<ViewConference> {
         }
         else if (snapshot.hasError) {
           print(snapshot.error);
-          body = const Center(
-            child: Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 80,
-            ),
-          );
+          body = const GenericErrorIndicator();
         }
         else {
           body = const GenericLoadingIndicator();

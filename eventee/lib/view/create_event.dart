@@ -18,9 +18,6 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
-  static const int maxSessions = 100;
-  static const int maxTags = 50;
-
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -59,7 +56,6 @@ class _CreateEventState extends State<CreateEvent> {
           ),
         ],
       ),
-
     );
   }
 
@@ -157,7 +153,7 @@ class _CreateEventState extends State<CreateEvent> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
               child: Text(
-                'Tags (${_tags.length} / $maxTags)',
+                'Tags (${_tags.length} / ${Event.maxTags})',
                 style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -179,7 +175,7 @@ class _CreateEventState extends State<CreateEvent> {
                     _tags.add(str);
                   });
                 },
-                enabled: _tags.length < maxTags,
+                enabled: _tags.length < Event.maxTags,
               ),
               itemCount: _tags.length,
               itemBuilder: (int index) {
@@ -208,7 +204,7 @@ class _CreateEventState extends State<CreateEvent> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
-                      'Sessions (${_sessions.length} / $maxSessions)',
+                      'Sessions (${_sessions.length} / ${Event.maxSessions})',
                       style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -231,7 +227,7 @@ class _CreateEventState extends State<CreateEvent> {
                         }
                       },
                     ),
-                    visible: _sessions.length < maxSessions,
+                    visible: _sessions.length < Event.maxSessions,
                   ),
                 ],
               ),

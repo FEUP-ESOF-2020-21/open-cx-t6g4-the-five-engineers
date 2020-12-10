@@ -1,12 +1,13 @@
 
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/view/view_conference.dart';
 import 'package:eventee/view/create_conference.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 
 class ConferenceSelectionAttendee extends StatefulWidget {
   ConferenceSelectionAttendee({Key key}) : super(key: key);
@@ -126,6 +127,7 @@ class _ConferenceSelectionOrganizerState extends State<ConferenceSelectionOrgani
         }
         else if (snapshot.hasError) {
           print(snapshot.error);
+          body = const GenericErrorIndicator();
         }
         else {
           body = GenericLoadingIndicator();
