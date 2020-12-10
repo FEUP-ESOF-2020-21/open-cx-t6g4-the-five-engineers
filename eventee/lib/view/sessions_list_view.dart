@@ -1,4 +1,5 @@
 
+import 'package:eventee/model/session.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/model/event.dart';
@@ -17,10 +18,46 @@ class SessionsListView extends StatefulWidget {
 }
 
 class _SessionsListViewState extends State<SessionsListView> {
-  Event event;
+  Event _event;
 
   Widget _buildListItem(BuildContext context, int index) {
-    // TODO
+    Session session = _event.sessions[index];
+    
+    // TODO: Replace with proper date formatting
+    const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
+
+    List<InlineSpan> richText = [
+      const TextSpan(text: 'From: ', style: bold),
+      TextSpan(text: '${session.startDate.toString().substring(0, 16)}\n'),
+      const TextSpan(text: 'To: ', style: bold),
+      TextSpan(text: '${session.endDate.toString().substring(0, 16)}\n'),
+    ];
+
+    if (session.isAttendanceLimited()) {
+      richText.addAll([
+        const TextSpan(text: 'Attendance limited to '),
+        TextSpan(text: '${session.attendanceLimit}', style: bold),
+        const TextSpan(text: ' people'),
+      ]);
+    }
+
+    return ListTile(
+      subtitle: Text.rich(TextSpan(children: richText)),
+      title: Text('Session ${index + 1}'),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {}, // TODO
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {}, // TODO
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -29,7 +66,7 @@ class _SessionsListViewState extends State<SessionsListView> {
       stream: widget.eventRef.snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          event = Event.fromDatabaseFormat(snapshot.data.data());
+          _event = Event.fromDatabaseFormat(snapshot.data.data());
 
           return Column(
             children: [
