@@ -1,25 +1,27 @@
 
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/model/role.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/view/view_conference.dart';
 import 'package:eventee/view/create_conference.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
-import 'package:flutter_tags/flutter_tags.dart';
 
 class ConferenceSelection extends StatefulWidget {
-  ConferenceSelection({Key key, this.type}) : super(key: key);
+  ConferenceSelection({Key key, this.role}) : super(key: key);
 
   final String title = "Select Conference";
-  final String type;
+  final Role role;
 
   @override
   _ConferenceSelectionState createState() {
-    if (this.type == "Organizer") {
+    if (this.role == Role.organizer) {
       return _ConferenceSelectionOrganizerState();
     }
-    else if (this.type == "Attendee") {
+    else {
       return _ConferenceSelectionAttendeeState();
     }
   }

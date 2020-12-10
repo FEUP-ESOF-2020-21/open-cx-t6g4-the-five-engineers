@@ -1,7 +1,11 @@
 
-import 'package:eventee/model/session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:eventee/model/session.dart';
+
+external DateTime add(Duration duration);
 
 class CreateSession extends StatefulWidget {
   CreateSession({Key key}) : super(key: key);
@@ -11,14 +15,18 @@ class CreateSession extends StatefulWidget {
 }
 
 class _CreateSessionState extends State<CreateSession> {
+  static final Duration maxDuration = Duration(hours: 24, minutes: 0);
+  static final DateFormat dateFormat = DateFormat('dd MMM, yyyy - HH:mm');
+
   final startDateController = TextEditingController();
-  final endDateController = TextEditingController();
+  final durationController = TextEditingController();
 
   bool _attendanceLimited = false;
   int _attendanceLimit;
 
   DateTime _startDate = DateTime(2000), _endDate = DateTime(2100);
-
+  int _hours = 1, _minutes = 0;
+  
   void _pickStartDate() async {
     DateTime date = await showDatePicker(
       context: context,
@@ -27,39 +35,58 @@ class _CreateSessionState extends State<CreateSession> {
       lastDate: DateTime(2100),
     );
 
+    if (date == null) return;
+
     TimeOfDay time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: 0, minute: 0),
     );
 
+    if (time == null) return;
+
     _startDate = DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    startDateController.text = _startDate.toString().substring(0, 16);
+
+    setState(() {
+      startDateController.text = dateFormat.format(_startDate);
+      _endDate = _startDate.add(Duration(hours: _hours, minutes: _minutes));
+    });
   }
 
-  void _pickEndDate() async {
-    DateTime date = await showDatePicker(
-      context: context,
-      initialDate: _startDate,
-      firstDate: _startDate,
-      lastDate: DateTime(2100),
-    );
+  void _hoursChanged(newValue) {
+    setState(() {
+      _hours = newValue;
+      _endDate = _startDate.add(Duration(hours: _hours, minutes: _minutes));
+    });
+  }
 
-    TimeOfDay time = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 0, minute: 0),
-    );
-
-    _endDate = DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    endDateController.text = _endDate.toString().substring(0, 16);
+  void _minutesChanged(newValue) {
+    setState(() {
+      _minutes = newValue;
+      _endDate = _startDate.add(Duration(hours: _hours, minutes: _minutes));
+    });
   }
 
   void _submitForm() {
     StringBuffer errorMessageBuffer = new StringBuffer();
+    
+    Duration duration = Duration(hours: _hours, minutes: _minutes);
+
+    if (startDateController.text.isEmpty) {
+      errorMessageBuffer.writeln("Start date not entered!");
+    }
+
+    if (duration > maxDuration) {
+      errorMessageBuffer.writeln("Duration can't be longer than 1 day!");
+    }
+
+    if (duration == Duration(hours: 0, minutes: 0)) {
+      errorMessageBuffer.writeln("Duration can't be zero!");
+    }
 
     if (_endDate.isBefore(_startDate)) {
       errorMessageBuffer.writeln("End date is before start date!");
     }
-    
+
     if (_attendanceLimited && (_attendanceLimit == null || _attendanceLimit <= 0)) {
       errorMessageBuffer.writeln("Invalid attendance limit!");
     }
@@ -110,18 +137,48 @@ class _CreateSessionState extends State<CreateSession> {
                 onTap: _pickStartDate,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
-                controller: endDateController,
-                readOnly: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  suffixIcon: const Icon(Icons.calendar_today),
-                  labelText: 'End Date', 
-                ),
-                onTap: _pickEndDate,
+            const Text(
+              'Duration (hours / minutes)',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                NumberPicker.integer(
+                  initialValue: _hours,
+                  maxValue: 24,
+                  minValue: 0,
+                  onChanged: _hoursChanged,
+                ),
+                NumberPicker.integer(
+                  initialValue: _minutes,
+                  maxValue: 55,
+                  minValue: 0,
+                  step: 5,
+                  onChanged: _minutesChanged,
+                  zeroPad: true,
+                ),
+              ],
+            ),
+            Visibility(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text.rich(
+                    TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(text: 'End Date: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: '${dateFormat.format(_endDate)}'),
+                      ],
+                    ),
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+                visible: startDateController.text.isNotEmpty,
             ),
             SwitchListTile(
               title: const Text('Limited attendance'),

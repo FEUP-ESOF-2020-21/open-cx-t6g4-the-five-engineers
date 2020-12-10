@@ -8,6 +8,9 @@ class Event {
   List<String> tags;
   List<Session> sessions;
 
+  static const int maxTags = 50;
+  static const int maxSessions = 100;
+
   Event({
     @required this.name,
     @required this.description,

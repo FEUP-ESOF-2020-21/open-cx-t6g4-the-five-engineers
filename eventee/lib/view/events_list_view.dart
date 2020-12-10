@@ -7,6 +7,8 @@ import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_event.dart';
 import 'package:eventee/view/view_event.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class EventsListView extends StatefulWidget {
@@ -59,7 +61,7 @@ class _EventsListViewState extends State<EventsListView> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewEvent(ref: eventSnapshot.reference)),
+          MaterialPageRoute(builder: (context) => ViewEvent(conferenceRef: widget.conferenceRef, eventRef: eventSnapshot.reference)),
         );
       },
       trailing: IconButton(
@@ -72,11 +74,11 @@ class _EventsListViewState extends State<EventsListView> {
               content: const Text('Do you really wish to delete this event?'),
               actions: [
                 TextButton(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 TextButton(
-                  child: Text('Remove', style: TextStyle(color: Colors.red)),
+                  child: const Text('Remove', style: TextStyle(color: Colors.red)),
                   onPressed: () {
                     eventSnapshot.reference.delete()
                         .then((value) => Navigator.of(context).pop())
@@ -143,18 +145,15 @@ class _EventsListViewState extends State<EventsListView> {
               ListView.separated(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: _buildListItem,
-                separatorBuilder: (content, index) => const Divider(
-                  color: Colors.black54,
-                  thickness: 1.0,
-                ),
+                separatorBuilder: (content, index) => const GenericSeparator(),
                 shrinkWrap: true,
               ),
             ],
           );
         }
         else if (snapshot.hasError) {
-          // TODO: Improve this
-          return Center(child: Text('ERROR'));
+          print(snapshot.error);
+          return const GenericErrorIndicator();
         }
         else {
           return const GenericLoadingIndicator(size: 50);
