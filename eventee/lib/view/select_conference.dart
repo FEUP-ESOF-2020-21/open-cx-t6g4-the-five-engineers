@@ -127,25 +127,14 @@ class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
         appBar: AppBar(
           title: const Text('Select Conference')
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              floating: true,
-              snap: false,
-              title: Text("Search"),
-              actions: <Widget> [
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    showSearch(
-                      context: context,
-                      delegate: ConferenceSearchDelegate(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+              context: context,
+              delegate: ConferenceSearchDelegate(),
+            );
+          },
         ),
     );
   }
