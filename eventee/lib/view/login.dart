@@ -191,8 +191,7 @@ class _LoginPageState extends State<LoginPage> {
     else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ConferenceSelectionOrganizer()),
-        // TODO: CHANGE TO CONFERENCE SELECTION ATTENDEE
+        MaterialPageRoute(builder: (context) => ConferenceSelection(role: role)),
       );
     }
   }
