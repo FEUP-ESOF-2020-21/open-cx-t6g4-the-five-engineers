@@ -251,6 +251,21 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * Must Have
   * XL
 
+*As an organizer I want to be able to view information about an event and its sessions so I can manage it*
+
+**User interface mockup**
+![Organizer View Event Mockup](img/organizer_view_event.png)
+
+**Acceptance tests**.
+* Name, description and tags should be shown
+* A list of sessions from that conference should be shown
+* Can create a new session from this screen
+* Can remove sessions, but a confirmation dialog should be shown
+* 
+**Value and effort**.
+  * Must Have
+  * M
+
 
 ### Domain model
 
