@@ -1,19 +1,19 @@
 
 import 'dart:math';
-import 'package:eventee/model/role.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/view/view_conference.dart';
 import 'package:eventee/view/create_conference.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ConferenceSelection extends StatefulWidget {
   ConferenceSelection({Key key, this.role}) : super(key: key);
 
-  final String title = "Select Conference";
   final Role role;
 
   @override
@@ -78,10 +78,7 @@ class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
 
     return ListView.separated(
       itemBuilder: _buildListItem,
-      separatorBuilder: (context, index) => const Divider(
-        color: Colors.black54,
-        thickness: 1.0,
-      ),
+      separatorBuilder: (context, index) => const GenericSeparator(),
       itemCount: _conferenceSnapshots.length,
     );
   }
@@ -97,10 +94,10 @@ class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
             body = _buildConferenceList(snapshot);
           }
           else if (snapshot.hasError) {
-            print(snapshot.error);
+            body = const GenericErrorIndicator();
           }
           else {
-            body = GenericLoadingIndicator();
+            body = const GenericLoadingIndicator();
           }
 
           return Scaffold(
@@ -128,7 +125,7 @@ class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title)
+          title: const Text('Select Conference')
         ),
         body: CustomScrollView(
           slivers: [
@@ -138,7 +135,7 @@ class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
               title: Text("Search"),
               actions: <Widget> [
                 IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () {
                     showSearch(
                       context: context,
@@ -206,7 +203,7 @@ class ConferenceSearchDelegate extends SearchDelegate {
 
     for (QueryDocumentSnapshot snapshot in snapshots) {
       if (matchingTags(snapshot, tags)) {
-        // One of the Conference Tags corresponds to one of the Query Tags
+        // One of the conference tags corresponds to one of the query tags
         filteredSnapshots.add(snapshot);
       }
     }
@@ -216,11 +213,13 @@ class ConferenceSearchDelegate extends SearchDelegate {
 
   bool matchingTags(QueryDocumentSnapshot snapshot, List<String> tags) {
     final Conference conference = Conference.fromDatabaseFormat(snapshot.data());
+
     for (String tag in tags) {
       if (conference.tags.contains(tag)) {
         return true;
       }
     }
+
     return false;
   }
 
@@ -228,17 +227,14 @@ class ConferenceSearchDelegate extends SearchDelegate {
     _conferenceSnapshots = filterByTags(snapshot.data.docs);
 
     if (_conferenceSnapshots.length == 0) {
-      return Center(
-        child: Text("No Results Found.",),
+      return const Center(
+        child: Text("No results found."),
       );
     }
 
     return ListView.separated(
       itemBuilder: _buildListItem,
-      separatorBuilder: (context, index) => const Divider(
-        color: Colors.black54,
-        thickness: 1.0,
-      ),
+      separatorBuilder: (context, index) => const GenericSeparator(),
       itemCount: _conferenceSnapshots.length,
     );
   }
@@ -247,7 +243,7 @@ class ConferenceSearchDelegate extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -258,7 +254,7 @@ class ConferenceSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -275,19 +271,17 @@ class ConferenceSearchDelegate extends SearchDelegate {
               return _buildConferenceList(snapshot);
             }
             else {
-              return Center(
-                child: Text("No Results Found.",),
+              return const Center(
+                child: Text("No results found."),
               );
             }
           }
           else if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error,),
-            );
+            return const GenericErrorIndicator();
           }
           else {
             return Center(
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             );
           }
         }
