@@ -54,6 +54,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 ![User Case Diagram](img/use_case_diagram.png)
 
+#### Main Description
 * **Actors**
   * **Attendee** - the attendee is the main user of out app. He uses our product to decide which conferences he wants to attend and get the schedule with all the sessions which he revealed some interest.
   * **Event Organizer** - the event organizer is the user that gets our product to create and edit the conferences and events which he is responsible for. Without this user, the attendees don't get much value from the app. 
@@ -65,6 +66,114 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * With *Eventee*, it's possible to get all the important information about a conference which we want to attend and at the same time get the best possible schedule for us, simply by login-in or creating a new acount and provide our availabity and interest in sessions from a certain conference. After this, we can click on our main page and visualize our personalized schedule for the conference that we want to attend. On the other hand, if we want to organize a certain event, we can simply create it with our user-friendly interface, add new sessions to it and make it available for all the users of the app. If we want to edit a conference that we already created, we can do it and then notify all the attendees for that conference of the new changes.
 * **Alternative Flows and Exceptions**
   * TODO
+
+#### Register
+* **Actors** - user of the app
+* **Description** - in order to use the application, the user needs to be registered in the application, either as an attendee or as an organizer
+* **Preconditions and Postconditions**
+  * Preconditions: There are no preconditions
+  * Postconditions: The user will have an account so he will be able to use our application
+* **Normal Flow**
+  1. User wants to use the application but doesn't have an account
+  2. User presses the "Register" button
+  3. User introduces all the information needed to create an account
+  4. User creates an account
+  5. The system registers the new user in the database
+* **Alternative Flows and Exceptions**
+  * If the user doens't type all the information needed, he can't create an account;
+  * If the "confirm password" camp isn't equal to the "password" camp, the register process will fail and the user won't be able to create an account.
+ 
+ #### Login
+* **Actors** - user of the app
+* **Description** - in order to use the application, the user needs to login in his account, either as an attendee or as an organizer
+* **Preconditions and Postconditions**
+  * Preconditions: The user must be registered
+  * Postconditions: The user will be able to use our application
+* **Normal Flow**
+  1. User wants to use the application and has an account
+  2. User presses the "Login" button
+  3. User introduces all the information needed to login into his account
+  4. User logs in
+  5. The system presents all the information available to the user
+* **Alternative Flows and Exceptions**
+  * If the user doens't type all the information needed, he can't login into his account;
+  * If the user doesn't introduce the information for a valid account, he won't be abble to login into his account.
+
+#### Provide Availability and Interest in Conference Events
+* **Actors** - attendee
+* **Description**
+* **Preconditions and Postconditions**
+* **Normal Flow**
+* **Alternative Flows and Exceptions**
+
+#### Create a Conference
+* **Actors** - event organizer
+* **Description** - an organizer creates conferences so attendees have conferences to attend
+* **Preconditions and Postconditions**
+  * Preconditions: the person using the application must be logged in as an organizer
+  * Postconditions: the system will have a new conference created by the user using the application
+* **Normal Flow**
+  1. Event organizer wants to create a new conference
+  2. Event organizer fill all the spaces with the information needed to create a conference
+  3. Event organizer adds events to the conference
+  4. Event organizer creates the conference
+  5. The system creates a new conference.
+* **Alternative Flows and Exceptions**
+  * If the event organizer doens't type all the information needed, he can't create a conference;
+  * If the organizer doesn't want any event, the conference can be created without events, but attendees won't be able to attend the conference.
+
+#### Schedule an Event
+* **Actors** - event organizer
+* **Description** - an organizer, while creating the conference or when editing the conference, wants to add events
+* **Preconditions and Postconditions**
+  * Preconditions: the person using the application must be logged in as an organizer and needs to select the conference or create a new conference
+  * Postconditions: the conference that is being / is gonna be organized by the organizer will have a new event
+* **Normal Flow**
+  1. Event organizer wants to add an event to a conference
+  2. Event organizer types all the information needed to create an event
+  3. Event organizer adds sessions to the events
+  4. Event organizer schedules an event
+  5. The system schedules an event to the conference
+* **Alternative Flows and Exceptions**
+  * If the event organizer doens't type all the information needed, he can't schedule an event;
+  * If the event organizer doesn't add sessions to the event, the event can't be created (needs at least 1 session).
+
+#### Access Conference Data and Statistics
+* **Actors** - event organizer
+* **Description** - 
+* **Preconditions and Postconditions**
+  * Preconditions: 
+  * Postconditions: 
+* **Normal Flow**
+  1. 
+* **Alternative Flows and Exceptions**
+
+#### Select a Conference
+* **Actors** - user of the app
+* **Description** - the user of the app wants select and view the information about a conference
+* **Preconditions and Postconditions**
+  * Preconditions: the user must be logged in in the application
+  * Postconditions: the system will present all the information about the conference selected by the user
+* **Normal Flow**
+  1. User wants to access select a conference
+  2. User presses the conference that wants so select
+  3. The system presents the conference selected
+* **Alternative Flows and Exceptions**
+  * If there's no conferences to select, no conferences will be shown in the "Select Conference" menu
+
+#### Consult the Assigned Personalized Schedule
+* **Actors** - attendee
+* **Description**
+* **Preconditions and Postconditions**
+* **Normal Flow**
+* **Alternative Flows and Exceptions**
+
+#### Notify/Survey Attendees about Events
+* **Actors** - event organizer
+* **Description**
+* **Preconditions and Postconditions**
+* **Normal Flow**
+* **Alternative Flows and Exceptions**
 
 ### User stories
 
