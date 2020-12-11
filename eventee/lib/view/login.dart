@@ -139,9 +139,11 @@ class _LoginPageState extends State<LoginPage> {
       errorMessageBuffer.writeln('Password not entered!');
     }
 
+    UserCredential userCredential;
+
     if (errorMessageBuffer.isEmpty) {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text
         );
@@ -191,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
     else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ConferenceSelection(role: role)),
+        MaterialPageRoute(builder: (context) => ConferenceSelection(userCredential: userCredential, role: role)),
       );
     }
   }

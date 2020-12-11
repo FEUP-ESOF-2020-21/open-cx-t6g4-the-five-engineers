@@ -1,11 +1,14 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eventee/model/conference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eventee/model/conference.dart';
 
 class CreateConference extends StatefulWidget {
-  CreateConference({Key key}) : super(key: key);
+  CreateConference({Key key, @required this.userCredential}) : super(key: key);
+
+  final UserCredential userCredential;
 
   @override
   _CreateConferenceState createState() => _CreateConferenceState();
@@ -49,6 +52,7 @@ class _CreateConferenceState extends State<CreateConference> {
       else {
         final Conference conference = new Conference(
           name: nameController.text,
+          organizerUid: widget.userCredential.user.uid,
           startDate: startDate,
           endDate: endDate,
           location: locationController.text,

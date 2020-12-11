@@ -2,6 +2,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/role.dart';
@@ -12,8 +13,9 @@ import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ConferenceSelection extends StatefulWidget {
-  ConferenceSelection({Key key, this.role}) : super(key: key);
+  ConferenceSelection({Key key, @required this.userCredential, @required this.role}) : super(key: key);
 
+  final UserCredential userCredential;
   final Role role;
 
   @override
@@ -86,7 +88,7 @@ class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: ref.snapshots(),
+        stream: ref.where('organizer_uid', isEqualTo: widget.userCredential.user.uid).snapshots(),
         builder: (context, snapshot) {
           Widget body;
 
@@ -110,7 +112,7 @@ class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
               onPressed: () {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CreateConference())
+                    MaterialPageRoute(builder: (context) => CreateConference(userCredential: widget.userCredential))
                 );
               },
             ),
