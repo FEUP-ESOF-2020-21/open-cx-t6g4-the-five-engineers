@@ -261,7 +261,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * A list of sessions from that conference should be shown
 * Can create a new session from this screen
 * Can remove sessions, but a confirmation dialog should be shown
-* 
+
 **Value and effort**.
   * Must Have
   * M
