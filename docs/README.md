@@ -110,8 +110,8 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * **Actors** - event organizer
 * **Description** - an organizer creates conferences so attendees have conferences to attend
 * **Preconditions and Postconditions**
-  * Preconditions: the person using the application must be loged in as an organizer
-  * Postconditions: the system will have a new conference created my the user using the application
+  * Preconditions: the person using the application must be logged in as an organizer
+  * Postconditions: the system will have a new conference created by the user using the application
 * **Normal Flow**
   1. Event organizer wants to create a new conference
   2. Event organizer fill all the spaces with the information needed to create a conference
@@ -124,10 +124,19 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Schedule an Event
 * **Actors** - event organizer
-* **Description**
+* **Description** - an organizer, while creating the conference or when editing the conference, wants to add events
 * **Preconditions and Postconditions**
+  * Preconditions: the person using the application must be logged in as an organizer and needs to select the conference or create a new conference
+  * Postconditions: the conference that is being / is gonna be organized by the organizer will have a new event
 * **Normal Flow**
+  1. Event organizer wants to add an event to a conference
+  2. Event organizer types all the information needed to create an event
+  3. Event organizer adds sessions to the events
+  4. Event organizer schedules an event
+  5. The system schedules an event to the conference
 * **Alternative Flows and Exceptions**
+  * If the event organizer doens't type all the information needed, he can't schedule an event;
+  * If the event organizer doesn't add sessions to the event, the event can't be created (needs at least 1 session).
 
 #### Access Conference Data
 * **Actors** - user of the app
