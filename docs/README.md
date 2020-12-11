@@ -138,19 +138,28 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * If the event organizer doens't type all the information needed, he can't schedule an event;
   * If the event organizer doesn't add sessions to the event, the event can't be created (needs at least 1 session).
 
-#### Access Conference Data
-* **Actors** - user of the app
-* **Description**
+#### Access Conference Data and Statistics
+* **Actors** - event organizer
+* **Description** - 
 * **Preconditions and Postconditions**
+  * Preconditions: 
+  * Postconditions: 
 * **Normal Flow**
+  1. 
 * **Alternative Flows and Exceptions**
 
 #### Select a Conference
 * **Actors** - user of the app
-* **Description**
+* **Description** - the user of the app wants select and view the information about a conference
 * **Preconditions and Postconditions**
+  * Preconditions: the user must be logged in in the application
+  * Postconditions: the system will present all the information about the conference selected by the user
 * **Normal Flow**
+  1. User wants to access select a conference
+  2. User presses the conference that wants so select
+  3. The system presents the conference selected
 * **Alternative Flows and Exceptions**
+  * If there's no conferences to select, no conferences will be shown in the "Select Conference" menu
 
 #### Consult the Assigned Personalized Schedule
 * **Actors** - attendee
