@@ -80,6 +80,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * Start date must be before or the same as finish date
   * Short description size <= 1000 chars
 
+Given that I have the app,internet connection and I logged as an organizer.  
+When I've figured all the information about the conference I want to arrange.  
+Then the app should register all that data correctly.
+
+
 **Value and effort**.
   * Must Have
   * M
@@ -95,6 +100,12 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * All conferences from the organizer that wants to select a conference have to be shown
 * Can create a new conference from this screen
 * Tapping a conference leads to a screen with more information about it
+
+Given that I have the app and I'm logged in as an organizer.  
+ When I want to access and/or modify all the information about the conference(s) that are already registered.   
+Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly edit them.  
+
+
 
 **Value and effort**.
   * Must Have
@@ -114,6 +125,12 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * Can create a new event from this screen
 * Can remove events, but a confirmation dialog should be shown
 
+Given that I have the app and I'm logged in as an organizer.  
+ When I want to access and/or modify all the information about the conference's events.   
+Then the app should display all the conferences briefly and allow me to tap on them in order to see their events and to possibly add,alter or remove them.
+
+
+
 **Value and effort**.
   * Must Have
   * S
@@ -128,6 +145,13 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * It needs at least 1 speaker
 * Maximum attendance > 0
 
+Given that I have the app and I'm logged in as an organizer.  
+When I want to access and/or modify all the information about each events'sessions.   
+Then the app should display all the events of a conference and,for each event, allow me to tap on them in order to see their sessions and to possibly add,alter or remove them.
+
+
+
+
 **Value and effort**.
   * Must Have
   * S
@@ -136,7 +160,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 **User interface mockup**
 
-**Acceptance tests**.
+**Acceptance tests**  
+
+Given that I have the app and I'm logged in as an organizer.
+When I want to define a session's capacity due to technical or space limitations.  
+Then the app , in each session's information screen , should allow me to alter the session capacity parameter and that should also reflect in the database.
 
 **Value and effort**.
   * Should Have
@@ -159,7 +187,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * Maximum of 50 tags
 * Tag size <= 50 chars
 * Attendance limit, if it exists, must be a positive number
-* Short description size <= 1000 chars
+* Short description size <= 1000 chars  
+
+Given that I have the app and I'm logged in as an organizer.
+When I am in the screen regarding the creation of a new event.
+Then the app should allow me to create a new event and,from that,create a new conference based on it.
 
 **Value and effort**.
   * Must Have
@@ -172,7 +204,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 ![Select Conference as Attendee Mockup](img/select_conference_attendee.png)
 ![Select Conference as Attendee Searched Mockup](img/select_conference_attendee_searched.png)
 
-**Acceptance tests**.
+**Acceptance tests**  
+
+Given that I have the app and I'm logged in as an attendee.  
+ When I want to access all the information about the conferences that I can attend.  
+ Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly participate in them. 
 
 **Value and effort**.
   * Must Have
@@ -183,16 +219,23 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 **User interface mockup**
 
 **Acceptance tests**.
+Given that I have the app, I'm logged in as an attendee and registered in a conference.  
+When that conference's information has been modified.
+Then the app should should generate a notification imediately regarding that specific change.
 
 **Value and effort**.
   * Could Have
   * L
 
-*As an organizer, I want to be able to check conference statistics*
+*As an organizer, I want to be able to check conference statistics* 
 
 **User interface mockup**
 
-**Acceptance tests**.
+**Acceptance tests**  
+
+Given that I have the app, I'm logged in as an organizer and I've already created a conference.
+When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
+Then the app should give me all the possible statistics regarding all the conference par
 
 **Value and effort**.
   * Could Have
@@ -212,7 +255,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * When registering an account as an organizer, attempting to log in as an attendee should display an error
 * After successfully logging in, the user should be redirected to the conference selection screen
 * An error should be displayed when:
-  * Attempting to log in with an incorrect or invalid email / password
+  * Attempting to log in with an incorrect or invalid email / password  
+
+Given that I have the app,an internet conection and I am an organizer of a conference.  
+When I initially open the app and can't still manage or create any conferences.  
+Then the app should display an initial login screen in order to enter and enjoy its many functionalities and also allow me to register if I still don't have an account.
 
 **Value and effort**.
   * Should Have
@@ -237,6 +284,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * Attempting to register an account with a weak password
   * Attempting to register an account and the password and confirm password fields don't match
 
+
+Given that I have the app,an internet conection and I am an attendee of a conference.  
+When I am not able to enter in the app and use all its functionalities.  
+Then the app should display an initial login screen and also allow me to register if I still don't have an account.
+
 **Value and effort**.
   * Should Have
   * M
@@ -245,7 +297,12 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 **User interface mockup**
 
-**Acceptance tests**.
+**Acceptance tests**  
+
+
+Given that I have the app,am an attendee of a conference,have an internet conection,and have given the information about my availability.  
+When I want to have time to go to all the events of the conference without having to worry much about it.  
+Then the app should do all the work for me and provide me with the best possible schedule.
 
 **Value and effort**.
   * Must Have
@@ -261,6 +318,10 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * A list of sessions from that conference should be shown
 * Can create a new session from this screen
 * Can remove sessions, but a confirmation dialog should be shown
+  
+Given that I have the app and I've logged in as an organizer .  
+When I am managing an event.  
+Then the app should allow me to view all the information about it and all its respective sessions providing me with the option to create and remove sessions.
 
 **Value and effort**.
   * Must Have
@@ -278,7 +339,13 @@ To better understand the context of the software system, it is very useful to ha
 ## Architecture and Design
 ### Logical architecture
 
-![Logical Architecture](img/logical_architecture.png)
+![Logical Architecture](img/logical_architecture.png)  
+  
+  We can separate our code into four packages. :
+*  The first one is authentication. This package manages the register, login, and permissions of the users.  
+* The second one is the conference management. This one gathers the creation and edition of a conference.  
+* The third one is similar to the second one, but handling events instead of conferences.  
+* The fourth and last one is the most important, gathering all the unique features of our application. Here we collect the information needed to obtain an adaptive schedule for the conference. This information includes the attendee's availability as well as his preferences. After collecting all this information, the users will be able to obtain their personalized and unique schedules.
 
 ### Physical architecture
 
@@ -287,7 +354,9 @@ To better understand the context of the software system, it is very useful to ha
 ### Prototype
 To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
 
-In this subsection please describe in more detail which, and how, user(s) story(ies) were implemented.
+When creating our application, we thought about user commodity and facility.
+With that in mind, we used flutter app to develop our user application. To synchronize all the data needed for the application to function properly, we needed a server. For that, we decided to use firebase. And, to store all the necessary data, we used a database in firestore.
+All this technology combined allowed us to produce a mobile app, which interacts with the users to provide them a better experience when attending conferences.
 
 ---
 
