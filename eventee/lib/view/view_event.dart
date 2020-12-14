@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/sessions_list_view.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
@@ -9,8 +10,14 @@ import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewEvent extends StatefulWidget {
   final DocumentReference conferenceRef, eventRef;
+  final Role role;
 
-  ViewEvent({Key key, this.conferenceRef, this.eventRef}) : super(key: key);
+  ViewEvent({
+    Key key,
+    @required this.conferenceRef,
+    @required this.eventRef,
+    @required this.role
+  }) : super(key: key);
 
   @override
   _ViewEventState createState() => _ViewEventState();
@@ -74,7 +81,7 @@ class _ViewEventState extends State<ViewEvent> {
                     ),
                   ),
                 ),
-                SessionsListView(conferenceRef: widget.conferenceRef, eventRef: widget.eventRef),
+                SessionsListView(conferenceRef: widget.conferenceRef, eventRef: widget.eventRef, role: widget.role),
               ],
             ),
           );

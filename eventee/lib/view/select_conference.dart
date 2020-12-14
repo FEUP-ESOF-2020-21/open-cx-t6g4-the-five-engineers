@@ -69,7 +69,10 @@ class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
       onTap: () {
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ViewConference(ref: conSnapshot.reference))
+            MaterialPageRoute(builder: (context) => ViewConference(
+              ref: conSnapshot.reference,
+              role: widget.role,
+            ))
         );
       },
     );
@@ -134,7 +137,7 @@ class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
           onPressed: () {
             showSearch(
               context: context,
-              delegate: ConferenceSearchDelegate(),
+              delegate: ConferenceSearchDelegate(role: widget.role),
             );
           },
         ),
@@ -143,6 +146,10 @@ class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
 }
 
 class ConferenceSearchDelegate extends SearchDelegate {
+  final Role role;
+
+  ConferenceSearchDelegate({@required this.role});
+
   final CollectionReference ref = FirebaseFirestore.instance.collection('conferences');
   static const int maxTags = 5;
 
@@ -180,7 +187,10 @@ class ConferenceSearchDelegate extends SearchDelegate {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewConference(ref: conSnapshot.reference))
+          MaterialPageRoute(builder: (context) => ViewConference(
+            ref: conSnapshot.reference,
+            role: role,
+          ))
         );
       },
     );

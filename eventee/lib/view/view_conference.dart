@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/view/events_list_view.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
@@ -9,8 +10,13 @@ import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewConference extends StatefulWidget {
   final DocumentReference ref;
+  final Role role;
 
-  ViewConference({Key key, this.ref}) : super(key: key);
+  ViewConference({
+    Key key, 
+    @required this.ref, 
+    @required this.role
+  }) : super(key: key);
 
   @override
   _ViewConferenceState createState() => _ViewConferenceState();
@@ -106,7 +112,7 @@ class _ViewConferenceState extends State<ViewConference> {
                   ),
                 ),
               ),
-              EventsListView(conferenceRef: widget.ref),
+              EventsListView(conferenceRef: widget.ref, role: widget.role),
             ],
           );
         }

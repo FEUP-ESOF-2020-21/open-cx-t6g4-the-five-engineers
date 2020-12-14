@@ -1,8 +1,9 @@
 
-import 'package:eventee/model/session.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/model/event.dart';
+import 'package:eventee/model/session.dart';
 import 'package:eventee/view/create_session.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
@@ -10,8 +11,14 @@ import 'package:eventee/view/utils/generic_separator.dart';
 
 class SessionsListView extends StatefulWidget {
   final DocumentReference conferenceRef, eventRef;
+  final Role role;
 
-  SessionsListView({Key key, this.conferenceRef, this.eventRef}) : super(key: key);
+  SessionsListView({
+    Key key,
+    @required this.conferenceRef,
+    @required this.eventRef,
+    @required this.role
+  }) : super(key: key);
 
   @override
   _SessionsListViewState createState() => _SessionsListViewState();
