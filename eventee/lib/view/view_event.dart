@@ -97,12 +97,13 @@ class _ViewEventState extends State<ViewEvent> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('View Event'),
-            actions: [
+            actions: widget.role == Role.organizer ? [
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {},
               ),
-            ],
+            ]
+            : [],
           ),
           body: body,
           floatingActionButton: FloatingActionButton(

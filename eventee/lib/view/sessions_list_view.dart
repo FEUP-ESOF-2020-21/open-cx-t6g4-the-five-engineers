@@ -53,7 +53,7 @@ class _SessionsListViewState extends State<SessionsListView> {
       title: Text('Session ${index + 1}'),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: widget.role == Role.organizer ? [
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {}, // TODO
@@ -89,7 +89,8 @@ class _SessionsListViewState extends State<SessionsListView> {
               );
             },
           ),
-        ],
+        ]
+        : [],
       ),
     );
   }
@@ -118,6 +119,7 @@ class _SessionsListViewState extends State<SessionsListView> {
                         ),
                       ),
                     ),
+                    widget.role == Role.organizer ?
                     Visibility(
                       child: IconButton(
                         icon: const Icon(Icons.add),
@@ -133,7 +135,14 @@ class _SessionsListViewState extends State<SessionsListView> {
                           }
                         },
                       ),
-                      visible: _event.sessions.length < Event.maxSessions && true, // TODO: replace with organizer check
+                      visible: _event.sessions.length < Event.maxSessions && true,
+                    )
+                    :
+                    IconButton(
+                      icon: const Icon(Icons.event_available),
+                      onPressed: () {
+                        // TODO
+                      },
                     ),
                   ],
                 ),

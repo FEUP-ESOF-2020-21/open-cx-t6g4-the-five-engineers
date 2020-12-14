@@ -113,6 +113,17 @@ class _ViewConferenceState extends State<ViewConference> {
                 ),
               ),
               EventsListView(conferenceRef: widget.ref, role: widget.role),
+              Visibility(
+                child: snapshot.data.schedulesGenerated ?
+                  const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
+                  :
+                  RaisedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.event_available),
+                    label: const Text('Generate Schedules'),
+                  ),
+                visible: widget.role == Role.organizer,
+              ),
             ],
           );
         }
@@ -127,12 +138,13 @@ class _ViewConferenceState extends State<ViewConference> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('View Conference'),
-            actions: [
+            actions: widget.role == Role.organizer ? [
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {},
               ),
-            ],
+            ]
+            : [],
           ),
           body: body,
           floatingActionButton: FloatingActionButton(
