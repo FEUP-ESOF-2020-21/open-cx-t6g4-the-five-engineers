@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/view/create_session.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -27,17 +28,25 @@ class _CreateEventState extends State<CreateEvent> {
   Widget _buildListItem(BuildContext context, int index) {
     final Session session = _sessions[index];
 
-    // TODO: Improve how sessions are displayed (user interface)
-    StringBuffer buf = new StringBuffer();
-    buf.writeln('From ${session.startDate.toString().substring(0, 16)}'
-        ' to ${session.endDate.toString().substring(0, 16)}');
+    const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
 
+    List<InlineSpan> richText = [
+      const TextSpan(text: 'From: ', style: bold),
+      TextSpan(text: '${session.startDate.toString().substring(0, 16)}\n'),
+      const TextSpan(text: 'To: ', style: bold),
+      TextSpan(text: '${session.endDate.toString().substring(0, 16)}\n'),
+    ];
+    
     if (session.isAttendanceLimited()) {
-      buf.write('Attendance limited to ${session.attendanceLimit} people');
+      richText.addAll([
+        const TextSpan(text: 'Attendance limited to '),
+        TextSpan(text: '${session.attendanceLimit}', style: bold),
+        const TextSpan(text: ' people'),
+      ]);
     }
 
     return ListTile(
-      subtitle: Text(buf.toString()),
+      subtitle: Text.rich(TextSpan(children: richText)),
       title: Text('Session ${index + 1}'),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -242,10 +251,7 @@ class _CreateEventState extends State<CreateEvent> {
             ListView.separated(
               itemCount: _sessions.length,
               itemBuilder: _buildListItem,
-              separatorBuilder: (context, index) => const Divider(
-                color: Colors.black54,
-                thickness: 1.0,
-              ),
+              separatorBuilder: (context, index) => const GenericSeparator(),
               shrinkWrap: true,
             ),
             RaisedButton(
