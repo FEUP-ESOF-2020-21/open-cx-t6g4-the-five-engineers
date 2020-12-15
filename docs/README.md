@@ -189,10 +189,11 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   * Start date must be before or the same as finish date
   * Short description size <= 1000 chars
 
+```gherkin
 Given that I have the app,internet connection and I logged as an organizer.  
 When I've figured all the information about the conference I want to arrange.  
 Then the app should register all that data correctly.
-
+```
 
 **Value and effort**.
   * Must Have
@@ -210,10 +211,11 @@ Then the app should register all that data correctly.
 * Can create a new conference from this screen
 * Tapping a conference leads to a screen with more information about it
 
+```gherkin
 Given that I have the app and I'm logged in as an organizer.  
  When I want to access and/or modify all the information about the conference(s) that are already registered.   
 Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly edit them.  
-
+```
 
 
 **Value and effort**.
@@ -234,10 +236,11 @@ Then the app should display all the conferences briefly and allow me to tap on t
 * Can create a new event from this screen
 * Can remove events, but a confirmation dialog should be shown
 
+```gherkin
 Given that I have the app and I'm logged in as an organizer.  
  When I want to access and/or modify all the information about the conference's events.   
 Then the app should display all the conferences briefly and allow me to tap on them in order to see their events and to possibly add, modify or remove them.
-
+```
 
 
 **Value and effort**.
@@ -254,10 +257,11 @@ Then the app should display all the conferences briefly and allow me to tap on t
 * It needs at least 1 speaker
 * Maximum attendance > 0
 
+```gherkin
 Given that I have the app and I'm logged in as an organizer.  
 When I want to access and/or modify all the information about each events' sessions.   
 Then the app should display all the events of a conference and,for each event, allow me to tap on them in order to see their sessions and to possibly add,alter or remove them.
-
+```
 
 
 
@@ -271,9 +275,11 @@ Then the app should display all the events of a conference and,for each event, a
 
 **Acceptance tests**  
 
+```gherkin
 Given that I have the app and I'm logged in as an organizer.
 When I want to define a session's capacity due to technical or space limitations.  
 Then the app , in each session's information screen , should allow me to alter the session capacity parameter and that should also reflect in the database.
+```
 
 **Value and effort**.
   * Should Have
@@ -298,9 +304,11 @@ Then the app , in each session's information screen , should allow me to alter t
 * Attendance limit, if it exists, must be a positive number
 * Short description size <= 1000 chars  
 
+```gherkin
 Given that I have the app and I'm logged in as an organizer.
 When I am in the screen regarding the creation of a new event.
 Then the app should allow me to create a new event and,from that,create a new conference based on it.
+```
 
 **Value and effort**.
   * Must Have
@@ -315,9 +323,11 @@ Then the app should allow me to create a new event and,from that,create a new co
 
 **Acceptance tests**  
 
+```gherkin
 Given that I have the app and I'm logged in as an attendee.  
  When I want to access all the information about the conferences that I can attend.  
  Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly participate in them. 
+```
 
 **Value and effort**.
   * Must Have
@@ -327,10 +337,13 @@ Given that I have the app and I'm logged in as an attendee.
 
 **User interface mockup**
 
-**Acceptance tests**.
+**Acceptance tests**
+
+```gherkin
 Given that I have the app, I'm logged in as an attendee and registered in a conference.  
 When that conference's information has been modified.
 Then the app should should generate a notification imediately regarding that specific change.
+```
 
 **Value and effort**.
   * Could Have
@@ -342,9 +355,11 @@ Then the app should should generate a notification imediately regarding that spe
 
 **Acceptance tests**  
 
+```gherkin
 Given that I have the app, I'm logged in as an organizer and I've already created a conference.
 When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
 Then the app should give me all the possible statistics regarding all the conference par
+```
 
 **Value and effort**.
   * Could Have
@@ -366,9 +381,11 @@ Then the app should give me all the possible statistics regarding all the confer
 * An error should be displayed when:
   * Attempting to log in with an incorrect or invalid email / password  
 
+```gherkin
 Given that I have the app, an internet conection and I am a conference organizer.  
 When I initially open the app and can't still manage or create any conferences.
 Then the app should display an initial login screen in order to enter and enjoy its many functionalities and also allow me to register if I still don't have an account.
+```
 
 **Value and effort**.
   * Should Have
@@ -393,10 +410,11 @@ Then the app should display an initial login screen in order to enter and enjoy 
   * Attempting to register an account with a weak password
   * Attempting to register an account and the password and confirm password fields don't match
 
-
+```gherkin
 Given that I have the app,an internet conection and I am an attendee of a conference.  
 When I am not able to enter in the app and use all its functionalities.  
 Then the app should display an initial login screen and also allow me to register if I still don't have an account.
+```
 
 **Value and effort**.
   * Should Have
@@ -408,10 +426,11 @@ Then the app should display an initial login screen and also allow me to registe
 
 **Acceptance tests**  
 
-
+```gherkin
 Given that I have the app, I am an attendee of a conference,have an internet conection, and have given the information about my availability.  
 When I want to have time to go to all the events of the conference without having to worry much about it.  
 Then the app should do all the work for me and provide me with the best possible schedule.
+```
 
 **Value and effort**.
   * Must Have
@@ -428,9 +447,11 @@ Then the app should do all the work for me and provide me with the best possible
 * Can create a new session from this screen
 * Can remove sessions, but a confirmation dialog should be shown
   
+```gherkin
 Given that I have the app and I've logged in as an organizer .  
 When I am managing an event.  
 Then the app should allow me to view all the information about it and all its respective sessions providing me with the option to create and remove sessions.
+```
 
 **Value and effort**.
   * Must Have
