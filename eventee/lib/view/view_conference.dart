@@ -1,10 +1,13 @@
 
+import 'package:eventee/scheduling_algorithm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/role.dart';
 import 'package:eventee/model/conference.dart';
+import 'package:eventee/model/event.dart';
 import 'package:eventee/view/events_list_view.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
@@ -29,6 +32,54 @@ class _ViewConferenceState extends State<ViewConference> {
   Future<Conference> _refreshConference() {
     Future<DocumentSnapshot> snapshot = widget.ref.get();
     return snapshot.then((value) => Conference.fromDatabaseFormat(value.data()));
+  }
+
+  void _generateSchedules() {
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      transaction.update(widget.ref, {'schedules_generated': true});
+      return await transaction.get(widget.ref);
+    })
+    .then(
+      (conferenceSnapshot) async {
+        Conference conference = Conference.fromDatabaseFormat(conferenceSnapshot.data());
+        QuerySnapshot eventsSnapshot = await conferenceSnapshot.reference.collection('events').get();
+
+        for (var eventSnapshot in eventsSnapshot.docs) {
+          conference.events.add(Event.fromDatabaseFormat(eventSnapshot.data()));
+        }
+
+        generateSchedules(conference);
+
+        for (int i = 0; i < eventsSnapshot.docs.length; ++i) {
+          await eventsSnapshot.docs[i].reference.update({
+            'sessions': conference.events[i].sessions.map((session) => session.toDatabaseFormat()).toList()
+          })
+          .catchError((error) => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Error'),
+              content: Text(error.toString()),
+            )
+          ));
+        }
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Success'),
+          )
+        );
+      }
+    )
+    .catchError(
+      (error) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(error.toString()),
+        )
+      )
+    );
   }
 
   @override
@@ -135,7 +186,7 @@ class _ViewConferenceState extends State<ViewConference> {
                               ),
                               TextButton(
                                 child: const Text('Generate'),
-                                onPressed: () {},
+                                onPressed: _generateSchedules,
                               ),
                             ],
                           )
