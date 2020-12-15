@@ -460,12 +460,12 @@ To better understand the context of the software system, it is very useful to ha
 
 ![Physical Architecture](img/physical_architecture.png)
 
-### Prototype
-To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
-
 When creating our application, we thought about user commodity and facility.
 With that in mind, we used flutter app to develop our user application. To synchronize all the data needed for the application to function properly, we needed a server. For that, we decided to use firebase. And, to store all the necessary data, we used a database in firestore.
 All this technology combined allowed us to produce a mobile app, which interacts with the users to provide them a better experience when attending conferences.
+
+### Prototype
+To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
 
 ---
 
