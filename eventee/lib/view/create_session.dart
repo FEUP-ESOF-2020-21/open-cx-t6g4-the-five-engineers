@@ -19,7 +19,6 @@ class _CreateSessionState extends State<CreateSession> {
   static final DateFormat dateFormat = DateFormat('dd MMM, yyyy - HH:mm');
 
   final startDateController = TextEditingController();
-  final durationController = TextEditingController();
 
   bool _attendanceLimited = false;
   int _attendanceLimit;
