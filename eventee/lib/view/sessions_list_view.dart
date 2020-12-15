@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/model/role.dart';
 import 'package:eventee/model/event.dart';
@@ -25,19 +26,18 @@ class SessionsListView extends StatefulWidget {
 }
 
 class _SessionsListViewState extends State<SessionsListView> {
+  static final DateFormat dateFormat = DateFormat('dd MMM, yyyy - HH:mm');
+  static const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
   Event _event;
 
   Widget _buildListItem(BuildContext context, int index) {
     Session session = _event.sessions[index];
-    
-    // TODO: Replace with proper date formatting
-    const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
 
     List<InlineSpan> richText = [
       const TextSpan(text: 'From: ', style: bold),
-      TextSpan(text: '${session.startDate.toString().substring(0, 16)}\n'),
+      TextSpan(text: '${dateFormat.format(session.startDate)}\n'),
       const TextSpan(text: 'To: ', style: bold),
-      TextSpan(text: '${session.endDate.toString().substring(0, 16)}\n'),
+      TextSpan(text: '${dateFormat.format(session.startDate)}\n'),
     ];
 
     if (session.isAttendanceLimited()) {
