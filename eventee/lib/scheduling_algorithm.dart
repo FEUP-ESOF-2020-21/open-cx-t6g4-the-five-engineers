@@ -1,4 +1,5 @@
 
+import 'dart:collection';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:eventee/model/session.dart';
@@ -22,6 +23,8 @@ Map<String, List<SchedulingAvailability>> getUserAvailabilityMap(Conference conf
 
   for (Event event in conference.events) {
     for (Session session in event.sessions) {
+      session.assignedUsers = LinkedHashSet.from(session.availabilities);
+
       for (String uid in session.availabilities) {
         if (map[uid] == null) {
           map[uid] = [SchedulingAvailability(uid: uid, event: event, session: session)];
@@ -36,7 +39,7 @@ Map<String, List<SchedulingAvailability>> getUserAvailabilityMap(Conference conf
   return map;
 }
 
-Map<String, Map<Event, Session>> generateSchedules(Conference conference) {
+void generateSchedules(Conference conference) {
   final rng = new Random();
   final map = getUserAvailabilityMap(conference);
 
@@ -60,12 +63,12 @@ Map<String, Map<Event, Session>> generateSchedules(Conference conference) {
         }
 
         if (sessionCollides) {
-          sch.session.availabilities.remove(sch.uid);
+          sch.session.assignedUsers.remove(sch.uid);
           continue;
         }
 
         if (sch.session.isAttendanceLimited()) {
-          int position = sch.session.availabilities.toList().indexOf(sch.uid);
+          int position = sch.session.assignedUsers.toList().indexOf(sch.uid);
       
           if (position < sch.session.attendanceLimit) {
             assignedSessions[uid][sch.event] = sch.session;
@@ -73,12 +76,10 @@ Map<String, Map<Event, Session>> generateSchedules(Conference conference) {
         }
       }
       else {
-        sch.session.availabilities.remove(sch.uid);
+        sch.session.assignedUsers.remove(sch.uid);
       }
     }
 
     map.remove(uid);
   }
-
-  return assignedSessions;
 }

@@ -77,10 +77,13 @@ void main() {
   );
 
   test('Scheduling algorithm test', () {
-    final result = generateSchedules(conference);
+    generateSchedules(conference);
 
-    for (MapEntry e in result.entries) {
-      print(e.key.toString() + ' ---- ' + e.value.toString());
+    for (Event event in conference.events) {
+      print(event.name);
+      for (Session session in event.sessions) {
+        print(session.assignedUsers);
+      }
     }
   });
 
