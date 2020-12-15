@@ -92,7 +92,7 @@ class _CreateSessionState extends State<CreateSession> {
 
     if (errorMessageBuffer.isEmpty) {
       // Build session object
-      Session session = Session(startDate: _startDate, endDate: _endDate, location: null);
+      Session session = Session(startDate: _startDate, endDate: _endDate, location: null, availabilities: []);
       if (_attendanceLimited) {
         session.attendanceLimit = _attendanceLimit;
       }

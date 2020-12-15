@@ -1,6 +1,7 @@
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
@@ -14,9 +15,15 @@ import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class EventsListView extends StatefulWidget {
   final DocumentReference conferenceRef;
+  final UserCredential userCredential;
   final Role role;
 
-  EventsListView({Key key, @required this.conferenceRef, @required this.role}) : super(key: key);
+  EventsListView({
+    Key key, 
+    @required this.conferenceRef, 
+    @required this.userCredential,
+    @required this.role
+  }) : super(key: key);
 
   @override
   _EventsListViewState createState() => _EventsListViewState();
@@ -66,6 +73,7 @@ class _EventsListViewState extends State<EventsListView> {
           MaterialPageRoute(builder: (context) => ViewEvent(
             conferenceRef: widget.conferenceRef, 
             eventRef: eventSnapshot.reference,
+            userCredential: widget.userCredential,
             role: widget.role,
           )),
         );

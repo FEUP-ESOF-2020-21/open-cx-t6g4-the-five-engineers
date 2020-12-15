@@ -20,7 +20,7 @@ class Session {
     endDate = DateTime.fromMillisecondsSinceEpoch(map['end_date'].millisecondsSinceEpoch);
     location = map['location'];
     attendanceLimit = map['attendance_limit'];
-    availabilities = map['availabilities'];
+    availabilities = List.castFrom(map['availabilities']);
   }
 
   Map<String, dynamic> toDatabaseFormat() {

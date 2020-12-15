@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
 import 'package:eventee/model/role.dart';
@@ -10,12 +11,14 @@ import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewEvent extends StatefulWidget {
   final DocumentReference conferenceRef, eventRef;
+  final UserCredential userCredential;
   final Role role;
 
   ViewEvent({
     Key key,
     @required this.conferenceRef,
     @required this.eventRef,
+    @required this.userCredential,
     @required this.role
   }) : super(key: key);
 
@@ -81,7 +84,12 @@ class _ViewEventState extends State<ViewEvent> {
                     ),
                   ),
                 ),
-                SessionsListView(conferenceRef: widget.conferenceRef, eventRef: widget.eventRef, role: widget.role),
+                SessionsListView(
+                  conferenceRef: widget.conferenceRef,
+                  eventRef: widget.eventRef,
+                  userCredential: widget.userCredential,
+                  role: widget.role
+                ),
               ],
             ),
           );
