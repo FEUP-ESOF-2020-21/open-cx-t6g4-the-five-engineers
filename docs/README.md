@@ -39,7 +39,7 @@ To provide conference attendees with an automatic, personalized schedule to redu
 
 ---
 ## Elevator Pitch
-Have you ever been to a conference only to find yourself running from one workshop to another and having to leave in the middle of the most interesting part just so you could see a little bit of another one? Or even failed to enter a workshop because the session was full? Then Eventee is the app for you. List your favorite workshops and it will give you a schedule without having to deal with partial sessions or full rooms.
+Have you ever been to a conference only to find yourself running from one workshop to another and having to leave in the middle of the most interesting part just so you could see a little bit of another one? Or even failed to enter a workshop because the session was full? Then, Eventee is the app for you. List your favorite workshops and it will give you a schedule without having to deal with partial sessions or full rooms.
 
 ---
 ## Requirements
@@ -56,23 +56,23 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Main Description
 * **Actors**
-  * **Attendee** - the attendee is the main user of out app. He uses our product to decide which conferences he wants to attend and get the schedule with all the sessions which he revealed some interest.
-  * **Event Organizer** - the event organizer is the user that gets our product to create and edit the conferences and events which he is responsible for. Without this user, the attendees don't get much value from the app. 
+  * **Attendee** - the attendee is the main user of our app. He uses our product to decide which conferences he wants to attend and get the schedule with all the sessions which they revealed some interest.
+  * **Event Organizer** - the event organizer is the user that gets our product to create and edit the conferences and events which they is responsible for. Without this user, the attendees don't get any value whatsoever from the app. 
 * **Description**
   * With this use case, the attendee can select a conference to attend and get his personalized schedule for that same conference. On the other hand, the event organizer can create new conferences with diferent sessions, which the attendees will be able to choose from all the available conferences.
 * **Preconditions and Postconditions**
-  * If we want to be able to use the final product, we need to create an account or login to ours, otherwise we can't get the personalized schedule for a conference or create a new one. At the conclusion of the use case execution, if we're the attendee, we will have a personalized schedule for a certain conference, while if we're the organizer, we can edit a conference that we created before.
+  * If we want to be able to use the final product, we need to create an account or login to it, otherwise we can't get the personalized schedule for a conference or create a new one. At the conclusion of the use case execution, if we're the attendee, we will have a personalized schedule for a certain conference, otherwise, if we're the organizer, we can edit a conference that we created before.
 * **Normal Flow**
-  * With *Eventee*, it's possible to get all the important information about a conference which we want to attend and at the same time get the best possible schedule for us, simply by login-in or creating a new acount and provide our availabity and interest in sessions from a certain conference. After this, we can click on our main page and visualize our personalized schedule for the conference that we want to attend. On the other hand, if we want to organize a certain event, we can simply create it with our user-friendly interface, add new sessions to it and make it available for all the users of the app. If we want to edit a conference that we already created, we can do it and then notify all the attendees for that conference of the new changes.
+  * With *Eventee*, it's possible to get all the important information about a conference which we want to attend and at the same time get the best possible schedule for us, simply by logging in or creating a new acount and provide our availabity and interest in sessions from a certain conference. After this, we can click on our main page and visualize our personalized schedule for the conference that we want to attend. On the other hand, if we want to organize a certain event, we can simply create it with our user-friendly interface, add new sessions to it and make it available for all the users of the app. If we want to edit a conference that we already created, we can do it and then notify all the attendees for that conference of the new changes.
 * **Alternative Flows and Exceptions**
   * TODO
 
 #### Register
-* **Actors** - user of the app
+* **Actors** - users of the app
 * **Description** - in order to use the application, the user needs to be registered in the application, either as an attendee or as an organizer
 * **Preconditions and Postconditions**
   * Preconditions: There are no preconditions
-  * Postconditions: The user will have an account so he will be able to use our application
+  * Postconditions: The user will have an account so they will be able to use our application
 * **Normal Flow**
   1. User wants to use the application but doesn't have an account
   2. User presses the "Register" button
@@ -80,7 +80,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   4. User creates an account
   5. The system registers the new user in the database
 * **Alternative Flows and Exceptions**
-  * If the user doens't type all the information needed, he can't create an account;
+  * If the user doens't type all the information needed, they can't create an account;
   * If the "confirm password" camp isn't equal to the "password" camp, the register process will fail and the user won't be able to create an account.
  
  #### Login
@@ -96,7 +96,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   4. User logs in
   5. The system presents all the information available to the user
 * **Alternative Flows and Exceptions**
-  * If the user doens't type all the information needed, he can't login into his account;
+  * If the user doesn't type all the information needed, he can't login into his account;
   * If the user doesn't introduce the information for a valid account, he won't be abble to login into his account.
 
 #### Provide Availability and Interest in Conference Events
@@ -127,7 +127,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 * **Description** - an organizer, while creating the conference or when editing the conference, wants to add events
 * **Preconditions and Postconditions**
   * Preconditions: the person using the application must be logged in as an organizer and needs to select the conference or create a new conference
-  * Postconditions: the conference that is being / is gonna be organized by the organizer will have a new event
+  * Postconditions: the conference that is being / is going to be organized by the organizer will have a new event
 * **Normal Flow**
   1. Event organizer wants to add an event to a conference
   2. Event organizer types all the information needed to create an event
@@ -135,7 +135,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   4. Event organizer schedules an event
   5. The system schedules an event to the conference
 * **Alternative Flows and Exceptions**
-  * If the event organizer doens't type all the information needed, he can't schedule an event;
+  * If the event organizer doesn't type all the information needed, he can't schedule an event;
   * If the event organizer doesn't add sessions to the event, the event can't be created (needs at least 1 session).
 
 #### Access Conference Data and Statistics
@@ -159,7 +159,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   2. User presses the conference that wants so select
   3. The system presents the conference selected
 * **Alternative Flows and Exceptions**
-  * If there's no conferences to select, no conferences will be shown in the "Select Conference" menu
+  * If there is no conference to select, no conferences will be shown in the "Select Conference" menu
 
 #### Consult the Assigned Personalized Schedule
 * **Actors** - attendee
@@ -236,7 +236,7 @@ Then the app should display all the conferences briefly and allow me to tap on t
 
 Given that I have the app and I'm logged in as an organizer.  
  When I want to access and/or modify all the information about the conference's events.   
-Then the app should display all the conferences briefly and allow me to tap on them in order to see their events and to possibly add,alter or remove them.
+Then the app should display all the conferences briefly and allow me to tap on them in order to see their events and to possibly add, modify or remove them.
 
 
 
@@ -255,7 +255,7 @@ Then the app should display all the conferences briefly and allow me to tap on t
 * Maximum attendance > 0
 
 Given that I have the app and I'm logged in as an organizer.  
-When I want to access and/or modify all the information about each events'sessions.   
+When I want to access and/or modify all the information about each events' sessions.   
 Then the app should display all the events of a conference and,for each event, allow me to tap on them in order to see their sessions and to possibly add,alter or remove them.
 
 
@@ -366,8 +366,8 @@ Then the app should give me all the possible statistics regarding all the confer
 * An error should be displayed when:
   * Attempting to log in with an incorrect or invalid email / password  
 
-Given that I have the app,an internet conection and I am an organizer of a conference.  
-When I initially open the app and can't still manage or create any conferences.  
+Given that I have the app, an internet conection and I am a conference organizer.  
+When I initially open the app and can't still manage or create any conferences.
 Then the app should display an initial login screen in order to enter and enjoy its many functionalities and also allow me to register if I still don't have an account.
 
 **Value and effort**.
@@ -409,7 +409,7 @@ Then the app should display an initial login screen and also allow me to registe
 **Acceptance tests**  
 
 
-Given that I have the app,am an attendee of a conference,have an internet conection,and have given the information about my availability.  
+Given that I have the app, I am an attendee of a conference,have an internet conection, and have given the information about my availability.  
 When I want to have time to go to all the events of the conference without having to worry much about it.  
 Then the app should do all the work for me and provide me with the best possible schedule.
 
@@ -450,7 +450,7 @@ To better understand the context of the software system, it is very useful to ha
 
 ![Logical Architecture](img/logical_architecture.png)  
   
-  We can separate our code into four packages. :
+  We can separate our code into four packages:
 *  The first one is authentication. This package manages the register, login, and permissions of the users.  
 * The second one is the conference management. This one gathers the creation and edition of a conference.  
 * The third one is similar to the second one, but handling events instead of conferences.  
