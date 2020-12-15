@@ -65,7 +65,7 @@ Map<String, Map<Event, Session>> generateSchedules(Conference conference) {
         }
 
         if (sch.session.isAttendanceLimited()) {
-          int position = sch.session.availabilities.indexOf(sch.uid);
+          int position = sch.session.availabilities.toList().indexOf(sch.uid);
       
           if (position < sch.session.attendanceLimit) {
             assignedSessions[uid][sch.event] = sch.session;

@@ -1,11 +1,12 @@
 
+import 'dart:collection';
 import 'package:flutter/foundation.dart';
 
 class Session {
   DateTime startDate, endDate;
   String location; // May be changed after Google Places integration
   int attendanceLimit;
-  List<String> availabilities;
+  LinkedHashSet<String> availabilities, assignedUsers;
 
   Session({
     @required this.startDate,
@@ -13,14 +14,17 @@ class Session {
     @required this.location,
     this.attendanceLimit = 0,
     this.availabilities,
-  });
+  }) {
+    assignedUsers = LinkedHashSet();
+  }
 
   Session.fromDatabaseFormat(Map<String, dynamic> map) {
     startDate = DateTime.fromMillisecondsSinceEpoch(map['start_date'].millisecondsSinceEpoch);
     endDate = DateTime.fromMillisecondsSinceEpoch(map['end_date'].millisecondsSinceEpoch);
     location = map['location'];
     attendanceLimit = map['attendance_limit'];
-    availabilities = List.castFrom(map['availabilities']);
+    availabilities = LinkedHashSet.from(map['availabilities']);
+    assignedUsers = LinkedHashSet.from(map['assigned_users']);
   }
 
   Map<String, dynamic> toDatabaseFormat() {
@@ -29,7 +33,8 @@ class Session {
       'end_date': endDate,
       'location': location,
       'attendance_limit': attendanceLimit,
-      'availabilities': availabilities,
+      'availabilities': availabilities.toList(),
+      'assignedUsers': assignedUsers.toList(),
     };
   }
   

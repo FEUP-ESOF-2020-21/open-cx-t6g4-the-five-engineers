@@ -1,5 +1,6 @@
 
 
+import 'dart:collection';
 import 'package:eventee/scheduling_algorithm.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/session.dart';
@@ -26,21 +27,21 @@ void main() {
             endDate: DateTime.utc(2020, 12, 20, 10, 30),
             location: '',
             attendanceLimit: 2,
-            availabilities: ['1', '2', '3'],
+            availabilities: LinkedHashSet.from(['1', '2', '3']),
           ),
           Session(
             startDate: DateTime.utc(2020, 12, 20, 10, 30),
             endDate: DateTime.utc(2020, 12, 20, 12, 30),
             location: '',
             attendanceLimit: 2,
-            availabilities: ['1', '2', '3', '4'],
+            availabilities: LinkedHashSet.from(['1', '2', '3', '4']),
           ),
           Session(
             startDate: DateTime.utc(2020, 12, 20, 12, 30),
             endDate: DateTime.utc(2020, 12, 20, 14, 30),
             location: '',
             attendanceLimit: 2,
-            availabilities: ['1', '2'],
+            availabilities: LinkedHashSet.from(['1', '2']),
           ),
         ]
       ),
@@ -54,21 +55,21 @@ void main() {
             endDate: DateTime.utc(2020, 12, 20, 9, 30),
             location: '',
             attendanceLimit: 3,
-            availabilities: ['1', '4', '5'],
+            availabilities: LinkedHashSet.from(['1', '4', '5']),
           ),
           Session(
             startDate: DateTime.utc(2020, 12, 20, 9, 30),
             endDate: DateTime.utc(2020, 12, 20, 11, 30),
             location: '',
             attendanceLimit: 3,
-            availabilities: ['3', '5'],
+            availabilities: LinkedHashSet.from(['3', '5']),
           ),
           Session(
             startDate: DateTime.utc(2020, 12, 20, 11, 30),
             endDate: DateTime.utc(2020, 12, 20, 13, 30),
             location: '',
             attendanceLimit: 3,
-            availabilities: ['1', '5'],
+            availabilities: LinkedHashSet.from(['1', '5']),
           ),
         ]
       ),

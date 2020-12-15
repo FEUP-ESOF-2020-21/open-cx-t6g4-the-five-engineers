@@ -1,4 +1,5 @@
 
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -92,7 +93,7 @@ class _CreateSessionState extends State<CreateSession> {
 
     if (errorMessageBuffer.isEmpty) {
       // Build session object
-      Session session = Session(startDate: _startDate, endDate: _endDate, location: null, availabilities: []);
+      Session session = Session(startDate: _startDate, endDate: _endDate, location: null, availabilities: LinkedHashSet());
       if (_attendanceLimited) {
         session.attendanceLimit = _attendanceLimit;
       }
