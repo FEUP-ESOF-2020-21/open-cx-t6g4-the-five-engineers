@@ -486,16 +486,18 @@ With that in mind, we used flutter app to develop our user application. To synch
 All this technology combined allowed us to produce a mobile app, which interacts with the users to provide them a better experience when attending conferences.
 
 ### Prototype
-To help on validating all the architectural, design and technological decisions made, we usually implement a vertical prototype, a thin vertical slice of the system.
+
+In the initial prototype of our app we began to decide the main technologies we would use: Flutter and Firebase. After this decision, we started studying the technologies and began creating user stories with the main features of our app, complementing them with some mockups.
 
 ---
 
 ## Implementation
-Regular product increments are a good practice of product management. 
 
-While not necessary, sometimes it might be useful to explain a few aspects of the code that have the greatest potential to confuse software engineers about how it works. Since the code should speak by itself, try to keep this section as short and simple as possible.
-
-Use cross-links to the code repository and only embed real fragments of code when strictly needed, since they tend to become outdated very soon.
++ **Iteration 0**: decided technologies to use; learned the basics of Flutter; created user stories and mockups
++ **Iteration 1**: implemented the "create conference" menu for the organizer; learned more details about Flutter
++ **Iteration 2**: Firebase setup; started to implement other user stories fundamental for the app; updated some mockups
++ **Iteration 3**: implementation of more user stories; updated some mockups; connection to the Firebase
++ **Iteration 4**:
 
 ---
 ## Test
