@@ -1,5 +1,6 @@
 
 import 'package:eventee/scheduling_algorithm.dart';
+import 'package:eventee/view/schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -168,35 +169,51 @@ class _ViewConferenceState extends State<ViewConference> {
               ),
               EventsListView(conferenceRef: widget.ref, userCredential: widget.userCredential, role: widget.role),
               Center(
-                child: Visibility(
-                  child: snapshot.data.schedulesGenerated ?
-                    const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
-                    :
-                    RaisedButton.icon(
+                child: widget.role == Role.organizer ? 
+                  snapshot.data.schedulesGenerated ?
+                  const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
+                  :
+                  RaisedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Warning'),
+                          content: const Text('Do you really wish to generate schedules for this conference?'),
+                          actions: [
+                            TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                            TextButton(
+                              child: const Text('Generate'),
+                              onPressed: _generateSchedules,
+                            ),
+                          ],
+                        )
+                      );
+                    },
+                    icon: const Icon(Icons.event_available),
+                    label: const Text('Generate Schedules'),
+                  )
+                  :
+                  Visibility(
+                    child: RaisedButton.icon(
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Warning'),
-                            content: const Text('Do you really wish to generate schedules for this conference?'),
-                            actions: [
-                              TextButton(
-                                child: const Text('Cancel'),
-                                onPressed: () => Navigator.of(context).pop(),
-                              ),
-                              TextButton(
-                                child: const Text('Generate'),
-                                onPressed: _generateSchedules,
-                              ),
-                            ],
-                          )
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => Schedule(
+                            conferenceRef: widget.ref,
+                            userCredential: widget.userCredential,
+                            role: widget.role,
+                          ))
                         );
                       },
                       icon: const Icon(Icons.event_available),
-                      label: const Text('Generate Schedules'),
+                      label: const Text('View your Schedule'),
                     ),
-                  visible: widget.role == Role.organizer,
-                ),
+                    visible: snapshot.data.schedulesGenerated,
+                  )
               ),
             ],
           );

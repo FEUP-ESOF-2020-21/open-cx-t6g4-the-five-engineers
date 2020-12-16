@@ -1,5 +1,6 @@
 
 import 'dart:collection';
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/event.dart';
@@ -13,167 +14,107 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Schedule extends StatefulWidget {
+  final DocumentReference conferenceRef;
+  final UserCredential userCredential;
+  final Role role;
+
   Schedule({Key key,
     @required this.conferenceRef,
     @required this.userCredential,
     @required this.role
   }) : super(key: key);
 
-  final DocumentReference conferenceRef;
-  final UserCredential userCredential;
-  final Role role;
-
-  final Conference conference = Conference(
-      name: 'Conference',
-      organizerUid: '1234',
-      description: 'Description',
-      startDate: DateTime.utc(2020, 12, 20),
-      endDate: DateTime.utc(2020, 12, 23),
-      location: 'Somewheresville',
-      tags: [],
-      events: [
-        Event(
-            name: 'Event 1',
-            description: 'Description',
-            tags: [],
-            sessions: [
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 8, 30),
-                endDate: DateTime.utc(2020, 12, 20, 10, 30),
-                location: '',
-                attendanceLimit: 2,
-                availabilities: LinkedHashSet.from(['1', '2', '3']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 10, 30),
-                endDate: DateTime.utc(2020, 12, 20, 12, 30),
-                location: '',
-                attendanceLimit: 2,
-                availabilities: LinkedHashSet.from(['1', '2', '3', '4']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 12, 30),
-                endDate: DateTime.utc(2020, 12, 20, 14, 30),
-                location: '',
-                attendanceLimit: 2,
-                availabilities: LinkedHashSet.from(['1', '2']),
-              ),
-            ]
-        ),
-        Event(
-            name: 'Event 2',
-            description: 'Description',
-            tags: [],
-            sessions: [
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 7, 30),
-                endDate: DateTime.utc(2020, 12, 20, 9, 30),
-                location: '',
-                attendanceLimit: 3,
-                availabilities: LinkedHashSet.from(['1', '4', '5']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 9, 30),
-                endDate: DateTime.utc(2020, 12, 20, 11, 30),
-                location: '',
-                attendanceLimit: 3,
-                availabilities: LinkedHashSet.from(['3', '5']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 11, 30),
-                endDate: DateTime.utc(2020, 12, 20, 13, 30),
-                location: '',
-                attendanceLimit: 3,
-                availabilities: LinkedHashSet.from(['1', '5']),
-              ),
-            ]
-        ),
-      ]
-  );
-
   @override
   _ScheduleState createState() => _ScheduleState();
 }
 
 class _ScheduleState extends State<Schedule> {
-  List<QueryDocumentSnapshot> _eventSnapshots;
-  List<int> _sessions;
+  static final DateFormat dateFormat = DateFormat('dd MMM, yyyy - HH:mm');
+  static const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
 
-  void filterEvents(List<QueryDocumentSnapshot> events) {
-    // Filter the Events
-    // Keep the ones where the user will be participating in a session
-    this._eventSnapshots = [];
-    this._sessions = [];
-
-    for (QueryDocumentSnapshot event in events) {
-      //
-    }
-
-    // Order by Starting Date
-  }
+  SplayTreeMap<Session, Event> _map;
 
   Widget _buildListItem(BuildContext context, int index) {
-    final QueryDocumentSnapshot eventSnapshot = _eventSnapshots[index];
-    final Event event = Event.fromDatabaseFormat(eventSnapshot.data());
-    final Session session = event.getSession(_sessions[index]);
+    final Session session = _map.keys.skip(index).first;
+    final Event event = _map[session];
+
+    List<InlineSpan> richText = [
+      const TextSpan(text: 'From: ', style: bold),
+      TextSpan(text: '${dateFormat.format(session.startDate)}\n'),
+      const TextSpan(text: 'To: ', style: bold),
+      TextSpan(text: '${dateFormat.format(session.endDate)}'),
+    ];
 
     return ListTile(
-      title: Text(event.name),
+      title: Text(event.name, style: bold),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            session.startDate.toString() + ' - ' + session.endDate.toString(),
-          ),
-          Text(
-            'Location: ' + session.location,
-          )
+          Text.rich(TextSpan(children: richText)),
         ],
       ),
     );
   }
 
-  Widget _buildEvent(AsyncSnapshot<QuerySnapshot> eventSnapshot) {
+  Widget _buildSchedule() {
     Widget body;
-    filterEvents(eventSnapshot.data.docs);
 
-    if (_eventSnapshots.length == 0) {
-      body = Center(
-        child: Text("No Schedule Defined."),
+    if (_map.length == 0) {
+      body = const Center(
+        child: Text(
+          'No schedule defined.',
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold
+          ),
+        ),
       );
     }
     else {
       body = ListView.separated(
         itemBuilder: _buildListItem,
         separatorBuilder: (context, index) => const GenericSeparator(),
-        itemCount: _eventSnapshots.length,
+        itemCount: _map.length,
       );
     }
+
     return body;
+  }
+
+  Future<SplayTreeMap<Session, Event>> _getSchedule() {
+    Future<QuerySnapshot> snapshot = widget.conferenceRef.collection('events').get();
+    return snapshot.then((value) {
+      SplayTreeMap<Session, Event> map = SplayTreeMap((a, b) => a.startDate.compareTo(b.startDate));
+
+      for (DocumentSnapshot doc in value.docs) {
+        Event event = Event.fromDatabaseFormat(doc.data());
+        
+        for (Session session in event.sessions) {
+          if (session.assignedUsers.contains(widget.userCredential.user.uid)) {
+            map[session] = event;
+            break;
+          }
+        }
+      }
+
+      return map;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget body = StreamBuilder<QuerySnapshot> (
-      stream: widget.conferenceRef.collection('events').snapshots(),
+    Widget body = FutureBuilder<SplayTreeMap<Session, Event>>(
+      future: _getSchedule(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if (snapshot.data.size != 0) {
-            return _buildEvent(snapshot);
-          }
-          else {
-            return const Center(
-              child: Text("No Schedule Defined."),
-            );
-          }
+          _map = snapshot.data;
+          return _buildSchedule();
         }
         else if (snapshot.hasError) {
           return const GenericErrorIndicator();
         }
         else {
-          return Center(
-            child: const CircularProgressIndicator(),
-          );
+          return const GenericLoadingIndicator();
         }
       }
     );
