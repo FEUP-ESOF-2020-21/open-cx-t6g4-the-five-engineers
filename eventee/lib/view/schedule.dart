@@ -77,47 +77,16 @@ class _ScheduleState extends State<Schedule> {
           )),
         );
       },
-      trailing: Visibility(
-        child: IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Warning'),
-                  content: const Text('Do you really wish to delete this event?'),
-                  actions: [
-                    TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    TextButton(
-                      child: const Text('Remove', style: TextStyle(color: Colors.red)),
-                      onPressed: () {
-                        eventSnapshot.reference.delete()
-                            .then((value) => Navigator.of(context).pop())
-                            .catchError((error) {
-                          print(error);
-                          Navigator.of(context).pop();
-                        });
-                      },
-                    )
-                  ],
-                ),
-              );
-            }
-        ),
-        visible: widget.role == Role.organizer,
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
 
+    Stream<QuerySnapshot> events = widget.conferenceRef.collection('events').where("assignedUsers", arrayContains: widget.userCredential.user.uid).snapshots();
+
     return StreamBuilder<QuerySnapshot>(
-      // future: _refreshConference(),
-      stream: widget.conferenceRef.collection('events').where("assignedUsers", arrayContains: widget.userCredential.user.uid).snapshots(),
+      stream: events,
       builder: (context, snapshot) {
         Widget body;
 
