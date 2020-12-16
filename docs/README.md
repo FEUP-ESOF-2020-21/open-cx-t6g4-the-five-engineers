@@ -101,10 +101,17 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Provide Availability and Interest in Conference Events
 * **Actors** - attendee
-* **Description**
+* **Description** - an attendee provides his avalability and interest in conference events
 * **Preconditions and Postconditions**
+  * Preconditions: the person using the application must be logged in as an attendee and he must have selected a conference
+  * Postconditions: the availability and interests for the user will be set for this conference
 * **Normal Flow**
+  1. Attendee wants to frequent a conference
+  2. Attendee selects the events he would want to attend
+  3. Attendee selects his availability for those events
+  4. The system registers the attendee's interest and availability
 * **Alternative Flows and Exceptions**
+  * TODO
 
 #### Create a Conference
 * **Actors** - event organizer
@@ -117,7 +124,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   2. Event organizer fill all the spaces with the information needed to create a conference
   3. Event organizer adds events to the conference
   4. Event organizer creates the conference
-  5. The system creates a new conference.
+  5. The system creates a new conference
 * **Alternative Flows and Exceptions**
   * If the event organizer doens't type all the information needed, he can't create a conference;
   * If the organizer doesn't want any event, the conference can be created without events, but attendees won't be able to attend the conference.
