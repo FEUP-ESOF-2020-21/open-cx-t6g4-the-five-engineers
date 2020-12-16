@@ -2,7 +2,7 @@
 
 Welcome to the documentation pages of the *Eventee* of **openCX**!
 
-You can find here detailed about the (sub)product, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
+You can find here detailed about the Eventee, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
 
 * Business modeling 
   * [Product Vision](#Product-Vision)
@@ -172,7 +172,7 @@ Have you ever been to a conference only to find yourself running from one worksh
   * Postconditions: the system will present the personalized schedule
 * **Normal Flow**
   1. Attendee wants to check his schedule
-  2. TODO
+  2. Attendee selects the option to check his personalized schedule
   3. The system presents the personalized schedule
 * **Alternative Flows and Exceptions**
   * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
@@ -368,7 +368,7 @@ Then the app should should generate a notification imediately regarding that spe
 ```gherkin
 Given that I have the app, I'm logged in as an organizer and I've already created a conference.
 When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
-Then the app should give me all the possible statistics regarding all the conference par
+Then the app should give me all the possible statistics regarding all the conference par (TODO)
 ```
 
 **Value and effort**.
@@ -458,7 +458,7 @@ Then the app should do all the work for me and provide me with the best possible
 * Can remove sessions, but a confirmation dialog should be shown
   
 ```gherkin
-Given that I have the app and I've logged in as an organizer .  
+Given that I have the app and I've logged in as an organizer.  
 When I am managing an event.  
 Then the app should allow me to view all the information about it and all its respective sessions providing me with the option to create and remove sessions.
 ```
