@@ -31,7 +31,9 @@ class SessionsListView extends StatefulWidget {
 
 class _SessionsListViewState extends State<SessionsListView> {
   static final DateFormat dateFormat = DateFormat('dd MMM, yyyy - HH:mm');
-  static const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
+  static const TextStyle bold = TextStyle(fontWeight: FontWeight.bold),
+      blue = TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent),
+      green = TextStyle(fontWeight: FontWeight.bold, color: Colors.green);
   
   Conference _conference;
   Event _event;
@@ -42,16 +44,36 @@ class _SessionsListViewState extends State<SessionsListView> {
   Widget _buildListItem(BuildContext context, int index) {
     Session session = _event.sessions[index];
 
+    List<InlineSpan> richTextTitle = [
+      TextSpan(text: 'Session ${index + 1}')
+    ];
+
+    if (!_givingAvailability) {
+      if (session.availabilities.contains(widget.userCredential.user.uid)) {
+        richTextTitle.addAll([
+          const TextSpan(text: ' | '),
+          const TextSpan(text: 'Available', style: blue),
+        ]);
+      }
+
+      if (session.assignedUsers.contains(widget.userCredential.user.uid)) {
+        richTextTitle.addAll([
+          const TextSpan(text: ' | '),
+          const TextSpan(text: ' Assigned', style: green),
+        ]);
+      }
+    }
+
     List<InlineSpan> richText = [
       const TextSpan(text: 'From: ', style: bold),
-      TextSpan(text: '${dateFormat.format(session.startDate)}\n'),
-      const TextSpan(text: 'To: ', style: bold),
-      TextSpan(text: '${dateFormat.format(session.endDate)}\n'),
+      TextSpan(text: '${dateFormat.format(session.startDate)}'),
+      const TextSpan(text: '\nTo: ', style: bold),
+      TextSpan(text: '${dateFormat.format(session.endDate)}'),
     ];
 
     if (session.isAttendanceLimited()) {
       richText.addAll([
-        const TextSpan(text: 'Attendance limited to '),
+        const TextSpan(text: '\nAttendance limited to '),
         TextSpan(text: '${session.attendanceLimit}', style: bold),
         const TextSpan(text: ' people'),
       ]);
@@ -121,8 +143,8 @@ class _SessionsListViewState extends State<SessionsListView> {
     }
 
     return ListTile(
+      title: Text.rich(TextSpan(children: richTextTitle)),
       subtitle: Text.rich(TextSpan(children: richText)),
-      title: Text('Session ${index + 1}'),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: rowChildren
