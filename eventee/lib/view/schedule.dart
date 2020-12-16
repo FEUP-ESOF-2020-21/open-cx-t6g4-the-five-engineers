@@ -1,18 +1,16 @@
 
-import 'dart:math';
+import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eventee/model/conference.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/model/role.dart';
+import 'package:eventee/model/session.dart';
 import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 import 'package:eventee/view/utils/generic_separator.dart';
-import 'package:eventee/view/view_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tags/flutter_tags.dart';
-
-import 'create_event.dart';
 
 class Schedule extends StatefulWidget {
   Schedule({Key key,
@@ -25,17 +23,99 @@ class Schedule extends StatefulWidget {
   final UserCredential userCredential;
   final Role role;
 
+  final Conference conference = Conference(
+      name: 'Conference',
+      organizerUid: '1234',
+      description: 'Description',
+      startDate: DateTime.utc(2020, 12, 20),
+      endDate: DateTime.utc(2020, 12, 23),
+      location: 'Somewheresville',
+      tags: [],
+      events: [
+        Event(
+            name: 'Event 1',
+            description: 'Description',
+            tags: [],
+            sessions: [
+              Session(
+                startDate: DateTime.utc(2020, 12, 20, 8, 30),
+                endDate: DateTime.utc(2020, 12, 20, 10, 30),
+                location: '',
+                attendanceLimit: 2,
+                availabilities: LinkedHashSet.from(['1', '2', '3']),
+              ),
+              Session(
+                startDate: DateTime.utc(2020, 12, 20, 10, 30),
+                endDate: DateTime.utc(2020, 12, 20, 12, 30),
+                location: '',
+                attendanceLimit: 2,
+                availabilities: LinkedHashSet.from(['1', '2', '3', '4']),
+              ),
+              Session(
+                startDate: DateTime.utc(2020, 12, 20, 12, 30),
+                endDate: DateTime.utc(2020, 12, 20, 14, 30),
+                location: '',
+                attendanceLimit: 2,
+                availabilities: LinkedHashSet.from(['1', '2']),
+              ),
+            ]
+        ),
+        Event(
+            name: 'Event 2',
+            description: 'Description',
+            tags: [],
+            sessions: [
+              Session(
+                startDate: DateTime.utc(2020, 12, 20, 7, 30),
+                endDate: DateTime.utc(2020, 12, 20, 9, 30),
+                location: '',
+                attendanceLimit: 3,
+                availabilities: LinkedHashSet.from(['1', '4', '5']),
+              ),
+              Session(
+                startDate: DateTime.utc(2020, 12, 20, 9, 30),
+                endDate: DateTime.utc(2020, 12, 20, 11, 30),
+                location: '',
+                attendanceLimit: 3,
+                availabilities: LinkedHashSet.from(['3', '5']),
+              ),
+              Session(
+                startDate: DateTime.utc(2020, 12, 20, 11, 30),
+                endDate: DateTime.utc(2020, 12, 20, 13, 30),
+                location: '',
+                attendanceLimit: 3,
+                availabilities: LinkedHashSet.from(['1', '5']),
+              ),
+            ]
+        ),
+      ]
+  );
+
   @override
   _ScheduleState createState() => _ScheduleState();
 }
 
 class _ScheduleState extends State<Schedule> {
   List<QueryDocumentSnapshot> _eventSnapshots;
-  static final int _maxDescriptionChars = 100, _maxTags = 3;
+  List<int> _sessions;
+
+  void filterEvents(List<QueryDocumentSnapshot> events) {
+    // Filter the Events
+    // Keep the ones where the user will be participating in a session
+    this._eventSnapshots = [];
+    this._sessions = [];
+
+    for (QueryDocumentSnapshot event in events) {
+      //
+    }
+
+    // Order by Starting Date
+  }
 
   Widget _buildListItem(BuildContext context, int index) {
     final QueryDocumentSnapshot eventSnapshot = _eventSnapshots[index];
     final Event event = Event.fromDatabaseFormat(eventSnapshot.data());
+    final Session session = event.getSession(_sessions[index]);
 
     return ListTile(
       title: Text(event.name),
@@ -43,118 +123,65 @@ class _ScheduleState extends State<Schedule> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              event.description.length > _maxDescriptionChars ?
-              '${event.description.substring(0, _maxDescriptionChars)}...' :
-              event.description
+            session.startDate.toString() + ' - ' + session.endDate.toString(),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Tags(
-              itemCount: min(_maxTags, event.tags.length),
-              itemBuilder: (int index) {
-                final item = event.tags[index];
-
-                return ItemTags(
-                  key: Key(index.toString()),
-                  index: index,
-                  title: item,
-                  active: true,
-                  pressEnabled: false,
-                );
-              },
-            ),
-          ),
+          Text(
+            'Location: ' + session.location,
+          )
         ],
       ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ViewEvent(
-            conferenceRef: widget.conferenceRef,
-            eventRef: eventSnapshot.reference,
-            userCredential: widget.userCredential,
-            role: widget.role,
-          )),
-        );
-      },
     );
+  }
+
+  Widget _buildEvent(AsyncSnapshot<QuerySnapshot> eventSnapshot) {
+    Widget body;
+    filterEvents(eventSnapshot.data.docs);
+
+    if (_eventSnapshots.length == 0) {
+      body = Center(
+        child: Text("No Schedule Defined."),
+      );
+    }
+    else {
+      body = ListView.separated(
+        itemBuilder: _buildListItem,
+        separatorBuilder: (context, index) => const GenericSeparator(),
+        itemCount: _eventSnapshots.length,
+      );
+    }
+    return body;
   }
 
   @override
   Widget build(BuildContext context) {
-
-    Stream<QuerySnapshot> events = widget.conferenceRef.collection('events').where("assignedUsers", arrayContains: widget.userCredential.user.uid).snapshots();
-
-    return StreamBuilder<QuerySnapshot>(
-      stream: events,
+    Widget body = StreamBuilder<QuerySnapshot> (
+      stream: widget.conferenceRef.collection('events').snapshots(),
       builder: (context, snapshot) {
-        Widget body;
-
         if (snapshot.hasData) {
-          _eventSnapshots = snapshot.data.docs;
-
-          return Column(
-            children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Text(
-                        'Events',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      child: IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => CreateEvent(conferenceRef: widget.conferenceRef))
-                          );
-                        },
-                      ),
-                      visible: widget.role == Role.organizer,
-                    )
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blue[200],
-                  border: Border.all(
-                    color: Colors.blueAccent,
-                    width: 3.0,
-                  ),
-                ),
-              ),
-              ListView.separated(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: _buildListItem,
-                separatorBuilder: (content, index) => const GenericSeparator(),
-                shrinkWrap: true,
-              ),
-            ],
-          );
+          if (snapshot.data.size != 0) {
+            return _buildEvent(snapshot);
+          }
+          else {
+            return const Center(
+              child: Text("No Schedule Defined."),
+            );
+          }
         }
         else if (snapshot.hasError) {
-          print(snapshot.error);
-          body = const GenericErrorIndicator();
+          return const GenericErrorIndicator();
         }
         else {
-          body = const GenericLoadingIndicator();
+          return Center(
+            child: const CircularProgressIndicator(),
+          );
         }
-
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('View Schedule'),
-          ),
-          body: body,
-        );
-      },
+      }
+    );
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('View Schedule'),
+      ),
+      body: body,
     );
   }
 }

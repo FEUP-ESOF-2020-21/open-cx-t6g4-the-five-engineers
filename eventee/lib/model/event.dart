@@ -33,4 +33,8 @@ class Event {
       'sessions': sessions.map((session) => session.toDatabaseFormat()).toList(),
     };
   }
+
+  Session getSession(int index) {
+    return this.sessions[index];
+  }
 }
