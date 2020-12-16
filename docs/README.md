@@ -175,7 +175,7 @@ Have you ever been to a conference only to find yourself running from one worksh
   3. The system presents the personalized schedule
 * **Alternative Flows and Exceptions**
   * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
-  * If all the sessions are full, no schedule will appear
+  * If the user didn't obtain a schedule, no schedule will appear
 
 #### Notify/Survey Attendees about Events
 * **Actors** - event organizer
