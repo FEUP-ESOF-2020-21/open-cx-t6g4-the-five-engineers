@@ -101,7 +101,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Provide Availability and Interest in Conference Events
 * **Actors** - attendee
-* **Description** - an attendee provides his avalability and interest in conference events
+* **Description** - an attendee provides his availability and interest in conference events so that he can obtain a personalized schedule
 * **Preconditions and Postconditions**
   * Preconditions: the person using the application must be logged in as an attendee and he must have selected a conference
   * Postconditions: the availability and interests for the user will be set for this conference
@@ -170,10 +170,17 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Consult the Assigned Personalized Schedule
 * **Actors** - attendee
-* **Description**
+* **Description** - an attendee wants to see his personalized schedule to know which sessions he will be attending
 * **Preconditions and Postconditions**
+  * Preconditions: the user must be logged in in the application as an attendee, he must have filled his availability and interests for this conference and the conference organizer must have generated the schedules for the conference
+  * Postconditions: the system will present the personalized schedule
 * **Normal Flow**
+  1. Attendee wants to check his schedule
+  2. TODO
+  3. The system presents the personalized schedule
 * **Alternative Flows and Exceptions**
+  * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
+  * If all the sessions are full, no schedule will appear
 
 #### Notify/Survey Attendees about Events
 * **Actors** - event organizer
