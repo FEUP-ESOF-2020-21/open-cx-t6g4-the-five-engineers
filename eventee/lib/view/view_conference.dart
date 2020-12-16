@@ -165,52 +165,55 @@ class _ViewConferenceState extends State<ViewConference> {
                 ),
               ),
               EventsListView(conferenceRef: widget.ref, userCredential: widget.userCredential, role: widget.role),
-              Center(
-                child: widget.role == Role.organizer ? 
-                  conference.schedulesGenerated ?
-                  const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
-                  :
-                  RaisedButton.icon(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Warning'),
-                          content: const Text('Do you really wish to generate schedules for this conference?'),
-                          actions: [
-                            TextButton(
-                              child: const Text('Cancel'),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                            TextButton(
-                              child: const Text('Generate'),
-                              onPressed: _generateSchedules,
-                            ),
-                          ],
-                        )
-                      );
-                    },
-                    icon: const Icon(Icons.event_available),
-                    label: const Text('Generate Schedules'),
-                  )
-                  :
-                  Visibility(
-                    child: RaisedButton.icon(
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: widget.role == Role.organizer ? 
+                    conference.schedulesGenerated ?
+                    const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
+                    :
+                    RaisedButton.icon(
                       onPressed: () {
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(builder: (context) => Schedule(
-                            conferenceRef: widget.ref,
-                            userCredential: widget.userCredential,
-                            role: widget.role,
-                          ))
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Warning'),
+                            content: const Text('Do you really wish to generate schedules for this conference?'),
+                            actions: [
+                              TextButton(
+                                child: const Text('Cancel'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              TextButton(
+                                child: const Text('Generate'),
+                                onPressed: _generateSchedules,
+                              ),
+                            ],
+                          )
                         );
                       },
                       icon: const Icon(Icons.event_available),
-                      label: const Text('View your Schedule'),
-                    ),
-                    visible: conference.schedulesGenerated,
-                  )
+                      label: const Text('Generate Schedules'),
+                    )
+                    :
+                    Visibility(
+                      child: RaisedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => Schedule(
+                              conferenceRef: widget.ref,
+                              userCredential: widget.userCredential,
+                              role: widget.role,
+                            ))
+                          );
+                        },
+                        icon: const Icon(Icons.event_available),
+                        label: const Text('View your Schedule'),
+                      ),
+                      visible: conference.schedulesGenerated,
+                    )
+                ),
               ),
             ],
           );
