@@ -37,4 +37,8 @@ class Event {
   Session getSession(int index) {
     return this.sessions[index];
   }
+
+  int getNumberOfSessions() {
+    return this.sessions.length;
+  }
 }

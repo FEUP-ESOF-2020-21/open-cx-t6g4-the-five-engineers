@@ -23,99 +23,38 @@ class Schedule extends StatefulWidget {
   final UserCredential userCredential;
   final Role role;
 
-  final Conference conference = Conference(
-      name: 'Conference',
-      organizerUid: '1234',
-      description: 'Description',
-      startDate: DateTime.utc(2020, 12, 20),
-      endDate: DateTime.utc(2020, 12, 23),
-      location: 'Somewheresville',
-      tags: [],
-      events: [
-        Event(
-            name: 'Event 1',
-            description: 'Description',
-            tags: [],
-            sessions: [
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 8, 30),
-                endDate: DateTime.utc(2020, 12, 20, 10, 30),
-                location: '',
-                attendanceLimit: 2,
-                availabilities: LinkedHashSet.from(['1', '2', '3']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 10, 30),
-                endDate: DateTime.utc(2020, 12, 20, 12, 30),
-                location: '',
-                attendanceLimit: 2,
-                availabilities: LinkedHashSet.from(['1', '2', '3', '4']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 12, 30),
-                endDate: DateTime.utc(2020, 12, 20, 14, 30),
-                location: '',
-                attendanceLimit: 2,
-                availabilities: LinkedHashSet.from(['1', '2']),
-              ),
-            ]
-        ),
-        Event(
-            name: 'Event 2',
-            description: 'Description',
-            tags: [],
-            sessions: [
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 7, 30),
-                endDate: DateTime.utc(2020, 12, 20, 9, 30),
-                location: '',
-                attendanceLimit: 3,
-                availabilities: LinkedHashSet.from(['1', '4', '5']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 9, 30),
-                endDate: DateTime.utc(2020, 12, 20, 11, 30),
-                location: '',
-                attendanceLimit: 3,
-                availabilities: LinkedHashSet.from(['3', '5']),
-              ),
-              Session(
-                startDate: DateTime.utc(2020, 12, 20, 11, 30),
-                endDate: DateTime.utc(2020, 12, 20, 13, 30),
-                location: '',
-                attendanceLimit: 3,
-                availabilities: LinkedHashSet.from(['1', '5']),
-              ),
-            ]
-        ),
-      ]
-  );
-
   @override
   _ScheduleState createState() => _ScheduleState();
 }
 
 class _ScheduleState extends State<Schedule> {
-  List<QueryDocumentSnapshot> _eventSnapshots;
-  List<int> _sessions;
+  List<Event> _events;
+  List<Session> _sessions;
 
-  void filterEvents(List<QueryDocumentSnapshot> events) {
+  void filterEvents(List<QueryDocumentSnapshot> snapshots) {
     // Filter the Events
     // Keep the ones where the user will be participating in a session
-    this._eventSnapshots = [];
+    this._events = [];
     this._sessions = [];
 
-    for (QueryDocumentSnapshot event in events) {
-      //
+    for (QueryDocumentSnapshot eventSnapshot in snapshots) {
+      final Event event = Event.fromDatabaseFormat(eventSnapshot.data());
+      final numberOfSessions = event.getNumberOfSessions();
+      for (int index = 0; index < numberOfSessions; index ++) {
+        final session = event.getSession(index);
+        if (session.assignedUsers.contains(widget.userCredential.user.uid)) {
+          this._events.add(event);
+          this._sessions.add(session);
+        }
+      }
     }
 
     // Order by Starting Date
   }
 
   Widget _buildListItem(BuildContext context, int index) {
-    final QueryDocumentSnapshot eventSnapshot = _eventSnapshots[index];
-    final Event event = Event.fromDatabaseFormat(eventSnapshot.data());
-    final Session session = event.getSession(_sessions[index]);
+    final Event event = _events[index];
+    final Session session = _sessions[index];
 
     return ListTile(
       title: Text(event.name),
@@ -137,7 +76,7 @@ class _ScheduleState extends State<Schedule> {
     Widget body;
     filterEvents(eventSnapshot.data.docs);
 
-    if (_eventSnapshots.length == 0) {
+    if (_events.length == 0) {
       body = Center(
         child: Text("No Schedule Defined."),
       );
@@ -146,7 +85,7 @@ class _ScheduleState extends State<Schedule> {
       body = ListView.separated(
         itemBuilder: _buildListItem,
         separatorBuilder: (context, index) => const GenericSeparator(),
-        itemCount: _eventSnapshots.length,
+        itemCount: _events.length,
       );
     }
     return body;
