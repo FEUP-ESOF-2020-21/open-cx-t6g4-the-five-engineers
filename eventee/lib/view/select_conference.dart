@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +12,9 @@ import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ConferenceSelection extends StatefulWidget {
-  ConferenceSelection({Key key, @required this.userCredential, @required this.role}) : super(key: key);
+  ConferenceSelection(
+      {Key key, @required this.userCredential, @required this.role})
+      : super(key: key);
 
   final UserCredential userCredential;
   final Role role;
@@ -22,8 +23,7 @@ class ConferenceSelection extends StatefulWidget {
   _ConferenceSelectionState createState() {
     if (this.role == Role.organizer) {
       return _ConferenceSelectionOrganizerState();
-    }
-    else {
+    } else {
       return _ConferenceSelectionAttendeeState();
     }
   }
@@ -32,14 +32,141 @@ class ConferenceSelection extends StatefulWidget {
 abstract class _ConferenceSelectionState extends State<ConferenceSelection> {}
 
 class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
-  final CollectionReference ref = FirebaseFirestore.instance.collection('conferences');
+  final CollectionReference ref =
+      FirebaseFirestore.instance.collection('conferences');
+  static const int maxTags = 5;
+  static final int _maxDescriptionChars = 100;
+
+  List<QueryDocumentSnapshot> _conferenceSnapshots;
+
+  Widget _buildListItem(BuildContext context, int index) {
+    final QueryDocumentSnapshot conSnapshot = _conferenceSnapshots[index];
+    final Conference conference =
+        Conference.fromDatabaseFormat(conSnapshot.data());
+
+    return ListTile(
+      title: Text(conference.name),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(conference.description.length > _maxDescriptionChars
+              ? '${conference.description.substring(0, _maxDescriptionChars)}...'
+              : conference.description),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Tags(
+              itemCount: min(maxTags, conference.tags.length),
+              itemBuilder: (int index) {
+                final String item = conference.tags[index];
+
+                return ItemTags(
+                  key: Key(index.toString()),
+                  index: index,
+                  title: item,
+                  active: true,
+                  pressEnabled: false,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewConference(
+                      ref: conSnapshot.reference,
+                      userCredential: widget.userCredential,
+                      role: widget.role,
+                    )));
+      },
+    );
+  }
+
+  ListView _buildConferenceList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _conferenceSnapshots = snapshot.data.docs;
+
+    return ListView.separated(
+      itemBuilder: _buildListItem,
+      separatorBuilder: (context, index) => const GenericSeparator(),
+      itemCount: _conferenceSnapshots.length,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: ref
+            .where('organizer_uid', isEqualTo: widget.userCredential.user.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          Widget body;
+
+          if (snapshot.hasData) {
+            body = _buildConferenceList(snapshot);
+          } else if (snapshot.hasError) {
+            body = const GenericErrorIndicator();
+          } else {
+            body = const GenericLoadingIndicator();
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Select Conference'),
+            ),
+            body: body,
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CreateConference(
+                            userCredential: widget.userCredential)));
+              },
+            ),
+          );
+        });
+  }
+}
+
+class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Select Conference')),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.search),
+        onPressed: () {
+          showSearch(
+            context: context,
+            delegate: ConferenceSearchDelegate(
+                role: widget.role, userCredential: widget.userCredential),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ConferenceSearchDelegate extends SearchDelegate {
+  final Role role;
+  final UserCredential userCredential;
+
+  ConferenceSearchDelegate(
+      {@required this.role, @required this.userCredential});
+
+  final CollectionReference ref =
+      FirebaseFirestore.instance.collection('conferences');
   static const int maxTags = 5;
 
   List<QueryDocumentSnapshot> _conferenceSnapshots;
 
   Widget _buildListItem(BuildContext context, int index) {
     final QueryDocumentSnapshot conSnapshot = _conferenceSnapshots[index];
-    final Conference conference = Conference.fromDatabaseFormat(conSnapshot.data());
+    final Conference conference =
+        Conference.fromDatabaseFormat(conSnapshot.data());
 
     return ListTile(
       title: Text(conference.name),
@@ -69,126 +196,22 @@ class _ConferenceSelectionOrganizerState extends _ConferenceSelectionState {
       onTap: () {
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ViewConference(ref: conSnapshot.reference))
-        );
+            MaterialPageRoute(
+                builder: (context) => ViewConference(
+                      ref: conSnapshot.reference,
+                      userCredential: userCredential,
+                      role: role,
+                    )));
       },
     );
   }
 
-  ListView _buildConferenceList(AsyncSnapshot<QuerySnapshot> snapshot) {
-    _conferenceSnapshots = snapshot.data.docs;
-
-    return ListView.separated(
-      itemBuilder: _buildListItem,
-      separatorBuilder: (context, index) => const GenericSeparator(),
-      itemCount: _conferenceSnapshots.length,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: ref.where('organizer_uid', isEqualTo: widget.userCredential.user.uid).snapshots(),
-        builder: (context, snapshot) {
-          Widget body;
-
-          if (snapshot.hasData) {
-            body = _buildConferenceList(snapshot);
-          }
-          else if (snapshot.hasError) {
-            body = const GenericErrorIndicator();
-          }
-          else {
-            body = const GenericLoadingIndicator();
-          }
-
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Select Conference'),
-            ),
-            body: body,
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateConference(userCredential: widget.userCredential))
-                );
-              },
-            ),
-          );
-        }
-    );
-  }
-}
-
-class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Select Conference')
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.search),
-          onPressed: () {
-            showSearch(
-              context: context,
-              delegate: ConferenceSearchDelegate(),
-            );
-          },
-        ),
-    );
-  }
-}
-
-class ConferenceSearchDelegate extends SearchDelegate {
-  final CollectionReference ref = FirebaseFirestore.instance.collection('conferences');
-  static const int maxTags = 5;
-
-  List<QueryDocumentSnapshot> _conferenceSnapshots;
-
-  Widget _buildListItem(BuildContext context, int index) {
-    final QueryDocumentSnapshot conSnapshot = _conferenceSnapshots[index];
-    final Conference conference = Conference.fromDatabaseFormat(conSnapshot.data());
-
-    return ListTile(
-      title: Text(conference.name),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(conference.description),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Tags(
-              itemCount: min(maxTags, conference.tags.length),
-              itemBuilder: (int index) {
-                final String item = conference.tags[index];
-
-                return ItemTags(
-                  key: Key(index.toString()),
-                  index: index,
-                  title: item,
-                  active: true,
-                  pressEnabled: false,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ViewConference(ref: conSnapshot.reference))
-        );
-      },
-    );
-  }
-
-  List<QueryDocumentSnapshot> filterByTags(List<QueryDocumentSnapshot> snapshots) {
+  List<QueryDocumentSnapshot> filterByTags(
+      List<QueryDocumentSnapshot> snapshots) {
     List<String> tags = query.split(',');
-    for (String tag in tags) { tag.trim(); }
+    for (String tag in tags) {
+      tag.trim();
+    }
 
     List<QueryDocumentSnapshot> filteredSnapshots = [];
 
@@ -203,7 +226,8 @@ class ConferenceSearchDelegate extends SearchDelegate {
   }
 
   bool matchingTags(QueryDocumentSnapshot snapshot, List<String> tags) {
-    final Conference conference = Conference.fromDatabaseFormat(snapshot.data());
+    final Conference conference =
+        Conference.fromDatabaseFormat(snapshot.data());
 
     for (String tag in tags) {
       if (conference.tags.contains(tag)) {
@@ -260,23 +284,19 @@ class ConferenceSearchDelegate extends SearchDelegate {
           if (snapshot.hasData) {
             if (snapshot.data.size != 0) {
               return _buildConferenceList(snapshot);
-            }
-            else {
+            } else {
               return const Center(
                 child: Text("No results found."),
               );
             }
-          }
-          else if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             return const GenericErrorIndicator();
-          }
-          else {
+          } else {
             return Center(
               child: const CircularProgressIndicator(),
             );
           }
-        }
-    );
+        });
   }
 
   @override
