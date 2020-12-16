@@ -220,7 +220,7 @@ class _ViewConferenceState extends State<ViewConference> {
             ]
             : [],
           ),
-          body: body,
+          body: SingleChildScrollView(child: body),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.refresh),
             onPressed: () {
