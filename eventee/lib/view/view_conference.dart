@@ -35,15 +35,15 @@ class _ViewConferenceState extends State<ViewConference> {
     return snapshot.then((value) => Conference.fromDatabaseFormat(value.data()));
   }
 
-  void _generateSchedules() {
-    FirebaseFirestore.instance.runTransaction((transaction) async {
-      transaction.update(widget.ref, {'schedules_generated': true});
-      return await transaction.get(widget.ref);
-    })
-    .then(
+  void _generateSchedules() async {
+    await widget.ref.update({'schedules_generated': true});
+    
+    widget.ref.get().then(
       (conferenceSnapshot) async {
         Conference conference = Conference.fromDatabaseFormat(conferenceSnapshot.data());
         QuerySnapshot eventsSnapshot = await conferenceSnapshot.reference.collection('events').get();
+
+        conference.events = [];
 
         for (var eventSnapshot in eventsSnapshot.docs) {
           conference.events.add(Event.fromDatabaseFormat(eventSnapshot.data()));
