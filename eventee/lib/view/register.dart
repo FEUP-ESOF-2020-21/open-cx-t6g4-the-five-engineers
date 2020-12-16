@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.email,
               color: Colors.blue,
             ),
@@ -72,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
         controller: _confirmPasswordController,
         obscureText: true,
         decoration: const InputDecoration(
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.lock,
             color: Colors.blue,
           ),

@@ -12,6 +12,8 @@ class Conference {
   List<String> tags;
   List<Event> events;
 
+  bool schedulesGenerated;
+
   static const int maxTags = 50;
 
   Conference({
@@ -23,6 +25,7 @@ class Conference {
     @required this.description,
     @required this.tags,
     @required this.events,
+    this.schedulesGenerated = false,
   });
 
   Conference.fromDatabaseFormat(Map<String, dynamic> map) {
@@ -33,6 +36,7 @@ class Conference {
     location = map['location'];
     description = map['description'];
     tags = List.castFrom(map['tags']);
+    schedulesGenerated = map['schedules_generated'];
   }
 
   Map<String, dynamic> toDatabaseFormat() {
@@ -44,6 +48,7 @@ class Conference {
       'location': location,
       'description': description,
       'tags': tags,
+      'schedules_generated': schedulesGenerated,
     };
   }
 }
