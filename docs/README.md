@@ -1,8 +1,8 @@
 # openCX-T6G4-The-Five-Engineers Development Report
 
-Welcome to the documentation pages of the *your (sub)product name* of **openCX**!
+Welcome to the documentation pages of the *Eventee* of **openCX**!
 
-You can find here detailed about the (sub)product, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
+You can find here detailed about the Eventee, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
 
 * Business modeling 
   * [Product Vision](#Product-Vision)
@@ -14,7 +14,6 @@ You can find here detailed about the (sub)product, hereby mentioned as module, f
 * Architecture and Design
   * [Logical architecture](#Logical-architecture)
   * [Physical architecture](#Physical-architecture)
-  * [Prototype](#Prototype)
 * [Implementation](#Implementation)
 * [Test](#Test)
 * [Configuration and change management](#Configuration-and-change-management)
@@ -43,10 +42,6 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 ---
 ## Requirements
-
-In this section, you should describe all kinds of requirements for your module: functional and non-functional requirements.
-
-Start by contextualizing your module, describing the main concepts, terms, roles, scope and boundaries of the application domain addressed by the project.
 
 ### Use case diagram 
 
@@ -101,10 +96,17 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Provide Availability and Interest in Conference Events
 * **Actors** - attendee
-* **Description**
+* **Description** - an attendee provides his availability and interest in conference events so that he can obtain a personalized schedule
 * **Preconditions and Postconditions**
+  * Preconditions: the person using the application must be logged in as an attendee and he must have selected a conference
+  * Postconditions: the availability and interests for the user will be set for this conference
 * **Normal Flow**
+  1. Attendee wants to frequent a conference
+  2. Attendee selects the events he would want to attend
+  3. Attendee selects his availability for those events
+  4. The system registers the attendee's interest and availability
 * **Alternative Flows and Exceptions**
+  * If the user cancels, the availability and interests won't be registered
 
 #### Create a Conference
 * **Actors** - event organizer
@@ -117,7 +119,7 @@ Start by contextualizing your module, describing the main concepts, terms, roles
   2. Event organizer fill all the spaces with the information needed to create a conference
   3. Event organizer adds events to the conference
   4. Event organizer creates the conference
-  5. The system creates a new conference.
+  5. The system creates a new conference
 * **Alternative Flows and Exceptions**
   * If the event organizer doens't type all the information needed, he can't create a conference;
   * If the organizer doesn't want any event, the conference can be created without events, but attendees won't be able to attend the conference.
@@ -163,10 +165,17 @@ Start by contextualizing your module, describing the main concepts, terms, roles
 
 #### Consult the Assigned Personalized Schedule
 * **Actors** - attendee
-* **Description**
+* **Description** - an attendee wants to see his personalized schedule to know which sessions he will be attending
 * **Preconditions and Postconditions**
+  * Preconditions: the user must be logged in in the application as an attendee, he must have filled his availability and interests for this conference and the conference organizer must have generated the schedules for the conference
+  * Postconditions: the system will present the personalized schedule
 * **Normal Flow**
+  1. Attendee wants to check his schedule
+  2. Attendee selects the option to check his personalized schedule
+  3. The system presents the personalized schedule
 * **Alternative Flows and Exceptions**
+  * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
+  * If all the sessions are full, no schedule will appear
 
 #### Notify/Survey Attendees about Events
 * **Actors** - event organizer
@@ -358,7 +367,7 @@ Then the app should should generate a notification imediately regarding that spe
 ```gherkin
 Given that I have the app, I'm logged in as an organizer and I've already created a conference.
 When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
-Then the app should give me all the possible statistics regarding all the conference par
+Then the app should give me all the possible statistics regarding all the conference participants.
 ```
 
 **Value and effort**.
@@ -448,7 +457,7 @@ Then the app should do all the work for me and provide me with the best possible
 * Can remove sessions, but a confirmation dialog should be shown
   
 ```gherkin
-Given that I have the app and I've logged in as an organizer .  
+Given that I have the app and I've logged in as an organizer.  
 When I am managing an event.  
 Then the app should allow me to view all the information about it and all its respective sessions providing me with the option to create and remove sessions.
 ```
@@ -485,10 +494,6 @@ When creating our application, we thought about user commodity and facility.
 With that in mind, we used flutter app to develop our user application. To synchronize all the data needed for the application to function properly, we needed a server. For that, we decided to use firebase. And, to store all the necessary data, we used a database in firestore.
 All this technology combined allowed us to produce a mobile app, which interacts with the users to provide them a better experience when attending conferences.
 
-### Prototype
-
-In the initial prototype of our app we began to decide the main technologies we would use: Flutter and Firebase. After this decision, we started studying the technologies and began creating user stories with the main features of our app, complementing them with some mockups.
-
 ---
 
 ## Implementation
@@ -497,7 +502,7 @@ In the initial prototype of our app we began to decide the main technologies we 
 + **Iteration 1**: implemented the "create conference" menu for the organizer; learned more details about Flutter
 + **Iteration 2**: Firebase setup; started to implement other user stories fundamental for the app; updated some mockups
 + **Iteration 3**: implementation of more user stories; updated some mockups; connection to the Firebase
-+ **Iteration 4**:
++ **Iteration 4**: implementation of core user stories; scheduling algorithm; updated some mockups; gherkin test automation
 
 ---
 ## Test
