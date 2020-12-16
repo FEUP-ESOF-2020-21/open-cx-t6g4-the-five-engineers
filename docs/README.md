@@ -14,7 +14,6 @@ You can find here detailed about the Eventee, hereby mentioned as module, from a
 * Architecture and Design
   * [Logical architecture](#Logical-architecture)
   * [Physical architecture](#Physical-architecture)
-  * [Prototype](#Prototype)
 * [Implementation](#Implementation)
 * [Test](#Test)
 * [Configuration and change management](#Configuration-and-change-management)
@@ -107,7 +106,7 @@ Have you ever been to a conference only to find yourself running from one worksh
   3. Attendee selects his availability for those events
   4. The system registers the attendee's interest and availability
 * **Alternative Flows and Exceptions**
-  * TODO
+  * If the user cancels, the availability and interests won't be registered
 
 #### Create a Conference
 * **Actors** - event organizer
