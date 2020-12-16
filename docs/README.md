@@ -199,7 +199,7 @@ Have you ever been to a conference only to find yourself running from one worksh
   * Short description size <= 1000 chars
 
 ```gherkin
-Given that I have the app,internet connection and I logged as an organizer.  
+Given that I have the app, internet connection and I logged in as an organizer.  
 When I've figured all the information about the conference I want to arrange.  
 Then the app should register all that data correctly.
 ```
@@ -269,7 +269,7 @@ Then the app should display all the conferences briefly and allow me to tap on t
 ```gherkin
 Given that I have the app and I'm logged in as an organizer.  
 When I want to access and/or modify all the information about each events' sessions.   
-Then the app should display all the events of a conference and,for each event, allow me to tap on them in order to see their sessions and to possibly add,alter or remove them.
+Then the app should display all the events of a conference and, for each event, allow me to tap on them in order to see their sessions and to possibly add, alter or remove them.
 ```
 
 
@@ -287,7 +287,7 @@ Then the app should display all the events of a conference and,for each event, a
 ```gherkin
 Given that I have the app and I'm logged in as an organizer.
 When I want to define a session's capacity due to technical or space limitations.  
-Then the app , in each session's information screen , should allow me to alter the session capacity parameter and that should also reflect in the database.
+Then the app, in each session's information screen, should allow me to alter the session capacity parameter and that should also reflect in the database.
 ```
 
 **Value and effort**.
@@ -316,7 +316,7 @@ Then the app , in each session's information screen , should allow me to alter t
 ```gherkin
 Given that I have the app and I'm logged in as an organizer.
 When I am in the screen regarding the creation of a new event.
-Then the app should allow me to create a new event and,from that,create a new conference based on it.
+Then the app should allow me to create a new event and, from that, create a new conference based on it.
 ```
 
 **Value and effort**.
@@ -388,7 +388,10 @@ Then the app should give me all the possible statistics regarding all the confer
 * When registering an account as an organizer, attempting to log in as an attendee should display an error
 * After successfully logging in, the user should be redirected to the conference selection screen
 * An error should be displayed when:
-  * Attempting to log in with an incorrect or invalid email / password  
+  * Attempting to log in with an incorrect or invalid email / password
+  * Attempting to register a new account with an email that is already in use
+  * Attempting to register an account with a weak password
+  * Attempting to register an account and the password and confirm password fields don't match  
 
 ```gherkin
 Given that I have the app, an internet conection and I am a conference organizer.  
@@ -420,7 +423,7 @@ Then the app should display an initial login screen in order to enter and enjoy 
   * Attempting to register an account and the password and confirm password fields don't match
 
 ```gherkin
-Given that I have the app,an internet conection and I am an attendee of a conference.  
+Given that I have the app, an internet conection and I am an attendee of a conference.  
 When I am not able to enter in the app and use all its functionalities.  
 Then the app should display an initial login screen and also allow me to register if I still don't have an account.
 ```
@@ -436,7 +439,7 @@ Then the app should display an initial login screen and also allow me to registe
 **Acceptance tests**  
 
 ```gherkin
-Given that I have the app, I am an attendee of a conference,have an internet conection, and have given the information about my availability.  
+Given that I have the app, I am an attendee of a conference, have an internet conection, and have given the information about my availability.  
 When I want to have time to go to all the events of the conference without having to worry much about it.  
 Then the app should do all the work for me and provide me with the best possible schedule.
 ```
@@ -448,6 +451,7 @@ Then the app should do all the work for me and provide me with the best possible
 *As an organizer I want to be able to view information about an event and its sessions so I can manage it*
 
 **User interface mockup**
+
 ![Organizer View Event Mockup](img/organizer_view_event.png)
 
 **Acceptance tests**.
@@ -471,7 +475,7 @@ Then the app should allow me to view all the information about it and all its re
 
 To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module.
 
-![Logical Architecture](img/eventee.png)
+![Domain Model](img/eventee.png)
 
 ---
 
