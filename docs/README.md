@@ -367,7 +367,7 @@ Then the app should should generate a notification imediately regarding that spe
 ```gherkin
 Given that I have the app, I'm logged in as an organizer and I've already created a conference.
 When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
-Then the app should give me all the possible statistics regarding all the conference par (TODO)
+Then the app should give me all the possible statistics regarding all the conference participants.
 ```
 
 **Value and effort**.
@@ -502,7 +502,7 @@ All this technology combined allowed us to produce a mobile app, which interacts
 + **Iteration 1**: implemented the "create conference" menu for the organizer; learned more details about Flutter
 + **Iteration 2**: Firebase setup; started to implement other user stories fundamental for the app; updated some mockups
 + **Iteration 3**: implementation of more user stories; updated some mockups; connection to the Firebase
-+ **Iteration 4**: implementation of core user stories; TODO
++ **Iteration 4**: implementation of core user stories; scheduling algorithm; updated some mockups; gherkin test automation
 
 ---
 ## Test
