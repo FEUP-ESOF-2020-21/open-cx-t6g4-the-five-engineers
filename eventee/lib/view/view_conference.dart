@@ -30,11 +30,6 @@ class ViewConference extends StatefulWidget {
 }
 
 class _ViewConferenceState extends State<ViewConference> {
-  Future<Conference> _refreshConference() {
-    Future<DocumentSnapshot> snapshot = widget.ref.get();
-    return snapshot.then((value) => Conference.fromDatabaseFormat(value.data()));
-  }
-
   void _generateSchedules() async {
     await widget.ref.update({'schedules_generated': true});
     
@@ -85,12 +80,14 @@ class _ViewConferenceState extends State<ViewConference> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Conference>(
-      future: _refreshConference(),
+    return StreamBuilder<DocumentSnapshot>(
+      stream: widget.ref.snapshots(),
       builder: (context, snapshot) {
         Widget body;
 
         if (snapshot.hasData) {
+          Conference conference = Conference.fromDatabaseFormat(snapshot.data.data());
+
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -98,7 +95,7 @@ class _ViewConferenceState extends State<ViewConference> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 7.5),
                   child: Text(
-                    '${snapshot.data.name}',
+                    '${conference.name}',
                     style: const TextStyle(
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold,
@@ -119,7 +116,7 @@ class _ViewConferenceState extends State<ViewConference> {
                         borderRadius: const BorderRadius.all(Radius.circular(15.0))
                       ),
                       child: Text(
-                        '${snapshot.data.startDate.toString().substring(0, 10)}',
+                        '${conference.startDate.toString().substring(0, 10)}',
                         style: TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -131,7 +128,7 @@ class _ViewConferenceState extends State<ViewConference> {
                         borderRadius: const BorderRadius.all(Radius.circular(15.0))
                       ),
                       child: Text(
-                        '${snapshot.data.endDate.toString().substring(0, 10)}',
+                        '${conference.endDate.toString().substring(0, 10)}',
                         style: TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -142,9 +139,9 @@ class _ViewConferenceState extends State<ViewConference> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                   child: Tags(
-                    itemCount: snapshot.data.tags.length,
+                    itemCount: conference.tags.length,
                     itemBuilder: (int index) {
-                      List<String> tags = snapshot.data.tags;
+                      List<String> tags = conference.tags;
                       final item = tags[index];
 
                       return ItemTags(
@@ -161,7 +158,7 @@ class _ViewConferenceState extends State<ViewConference> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                 child: Text(
-                  '${snapshot.data.description}',
+                  '${conference.description}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),
@@ -170,7 +167,7 @@ class _ViewConferenceState extends State<ViewConference> {
               EventsListView(conferenceRef: widget.ref, userCredential: widget.userCredential, role: widget.role),
               Center(
                 child: widget.role == Role.organizer ? 
-                  snapshot.data.schedulesGenerated ?
+                  conference.schedulesGenerated ?
                   const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
                   :
                   RaisedButton.icon(
@@ -212,7 +209,7 @@ class _ViewConferenceState extends State<ViewConference> {
                       icon: const Icon(Icons.event_available),
                       label: const Text('View your Schedule'),
                     ),
-                    visible: snapshot.data.schedulesGenerated,
+                    visible: conference.schedulesGenerated,
                   )
               ),
             ],
@@ -238,12 +235,6 @@ class _ViewConferenceState extends State<ViewConference> {
             : [],
           ),
           body: SingleChildScrollView(child: body),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {});
-            },
-          ),
         );
       },
     );
