@@ -341,6 +341,7 @@ Then the app should display all the events of a conference and, for each event, 
 #### *As an organizer, I want to be able to control the session capacity*
 
 **User interface mockup**
+
 ![Add Session Mockup](img/create_session.png)
 
 **Acceptance tests** 
