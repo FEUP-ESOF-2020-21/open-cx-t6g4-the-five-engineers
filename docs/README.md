@@ -142,17 +142,21 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 #### Access Conference Data and Statistics
 * **Actors** - event organizer
-* **Description** - 
+* **Description** - an organizer wants to see which events/sessions have more attendance
 * **Preconditions and Postconditions**
-  * Preconditions: 
-  * Postconditions: 
+  * Preconditions: the schedules for this conference must be already generated
+  * Postconditions: the organizer will be able to the see attendance rates for the conference events and sessions
 * **Normal Flow**
-  1. 
+  1. Event organizer wants to acess statistics for a conference
+  2. Event organizer selects the option to see statistics for the conference
+  3. The system presents the statistics for the conferences
 * **Alternative Flows and Exceptions**
+  * If the schedules haven't been generated, the statistics will be empty.
+  * TODO
 
 #### Select a Conference
 * **Actors** - user of the app
-* **Description** - the user of the app wants select and view the information about a conference
+* **Description** - the user of the app wants to select and view the information about a conference
 * **Preconditions and Postconditions**
   * Preconditions: the user must be logged in in the application
   * Postconditions: the system will present all the information about the conference selected by the user
@@ -177,12 +181,17 @@ Have you ever been to a conference only to find yourself running from one worksh
   * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
   * If the user didn't obtain a schedule, no schedule will appear
 
-#### Notify/Survey Attendees about Events
-* **Actors** - event organizer
-* **Description**
+#### Notify Attendees about Events
+* **Actors** - attendee
+* **Description** - the attendee wants to be notified for eventual changes in the events and conferences he will be attanding 
 * **Preconditions and Postconditions**
+  * Preconditions: the attendee must have filled his availability and interests for that conference; the conference organizer must had altered the conference
 * **Normal Flow**
+  1. The attendee wants to be notified about changes in a conference
+  2. The conference organizer modifies that conference
+  3. The attendee receives a notification containing the changes
 * **Alternative Flows and Exceptions**
+  * If the conference organizer doesn't modify the conference, the attendee won't be notified
 
 ### User stories
 
