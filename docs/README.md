@@ -45,8 +45,6 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 ### Use case diagram 
 
-**Version 2 - Third Sprint**
-
 ![User Case Diagram](img/use_case_diagram.png)
 
 #### Main Description
@@ -59,8 +57,6 @@ Have you ever been to a conference only to find yourself running from one worksh
   * If we want to be able to use the final product, we need to create an account or login to it, otherwise we can't get the personalized schedule for a conference or create a new one. At the conclusion of the use case execution, if we're the attendee, we will have a personalized schedule for a certain conference, otherwise, if we're the organizer, we can edit a conference that we created before.
 * **Normal Flow**
   * With *Eventee*, it's possible to get all the important information about a conference which we want to attend and at the same time get the best possible schedule for us, simply by logging in or creating a new acount and provide our availabity and interest in sessions from a certain conference. After this, we can click on our main page and visualize our personalized schedule for the conference that we want to attend. On the other hand, if we want to organize a certain event, we can simply create it with our user-friendly interface, add new sessions to it and make it available for all the users of the app. If we want to edit a conference that we already created, we can do it and then notify all the attendees for that conference of the new changes.
-* **Alternative Flows and Exceptions**
-  * TODO
 
 #### Register
 * **Actors** - users of the app
