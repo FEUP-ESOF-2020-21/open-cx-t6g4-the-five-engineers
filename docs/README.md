@@ -1,8 +1,8 @@
 # openCX-T6G4-The-Five-Engineers Development Report
 
-Welcome to the documentation pages of the *Eventee* of **openCX**!
+Welcome to the documentation pages of *Eventee* of **openCX**!
 
-You can find here detailed about the Eventee, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
+You can find here detailed about Eventee, hereby mentioned as module, from a high-level vision to low-level implementation decisions, a kind of Software Development Report (see [template](https://github.com/softeng-feup/open-cx/blob/master/docs/templates/Development-Report.md)), organized by discipline (as of RUP): 
 
 * Business modeling 
   * [Product Vision](#Product-Vision)
@@ -199,7 +199,7 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 **User interface mockup**
 
-![SplashScreen Mockup](img/splashscreen.png)
+![Splashscreen Mockup](img/splashscreen.png)
 ![Login Organizer Mockup](img/login_organizer.png)
 ![Register Organizer Mockup](img/register_organizer.png)
 
@@ -274,6 +274,7 @@ Then the app should register all that data correctly.
 **Value and effort**.
   * Must Have
   * M
+
 #### *As an organizer, I want to be able to select a conference so that I can view it and edit it*
 
 **User interface mockup**
@@ -295,6 +296,7 @@ Then the app should display all the conferences briefly and allow me to tap on t
 **Value and effort**.
   * Must Have
   * M
+
 #### *As an organizer, I want to be able to view information about a conference so that I can edit it and manage its events*
 
 **User interface mockup**
@@ -318,9 +320,11 @@ Then the app should display all the conferences briefly and allow me to tap on t
 **Value and effort**.
   * Must Have
   * S
+
 ####  *As an organizer, I want to be able to define sessions for an event*
 
 **User interface mockup**
+
 ![Add Session Mockup](img/create_session.png)
 
 **Acceptance tests**
@@ -429,7 +433,7 @@ Given that I have the app and I'm logged in as an attendee.
   * Must Have
   * M
 
-### *As an attendee, I want to be able to give my availability for events so that I can be provided with an automatic, personalized schedule*
+#### *As an attendee, I want to be able to give my availability for events so that I can be provided with an automatic, personalized schedule*
 
 **User interface mockup**
 
@@ -470,7 +474,7 @@ Then the app should do all the work for me and provide me with the best possible
   * Must Have
   * XL
 
-### *As an attendee, I want to be notified when the sessions from the conference that I'm going to attend are added/removed/edited*
+#### *As an attendee, I want to be notified when the sessions from the conference that I'm going to attend are added/removed/edited*
 
 **User interface mockup**
 
@@ -516,6 +520,8 @@ To better understand the context of the software system, it is very useful to ha
 
 ![Domain Model](img/eventee.png)
 
+This UML diagram displays some of the main concepts involved in our project. We considered that a **Conference** is composed of several **Events**. **Event** is a broad concept that describes any interesting activity that could be part of a conference, that is: talks, workshops, keynotes, panels, etc. Each **Event** would then have a variable amount of **Sessions**, which describe the date(s) when the event will take place. Our app is focused on providing an automatic schedule, therefore conference attendees are able to give their availability for the various **Sessions** of an **Event** and be assigned to one of these sessions by the scheduling algorithm. These interactions are represented in the diagram by the *available* and *assigned* relations.
+
 ---
 
 ## Architecture and Design
@@ -523,29 +529,30 @@ To better understand the context of the software system, it is very useful to ha
 
 ![Logical Architecture](img/logical_architecture.png)  
   
-  We can separate our code into four packages:
-*  The first one is authentication. This package manages the register, login, and permissions of the users.  
-* The second one is the conference management. This one gathers the creation and edition of a conference.  
-* The third one is similar to the second one, but handling events instead of conferences.  
-* The fourth and last one is the most important, gathering all the unique features of our application. Here we collect the information needed to obtain an adaptive schedule for the conference. This information includes the attendee's availability as well as his preferences. After collecting all this information, the users will be able to obtain their personalized and unique schedules.
+We can separate our code into four main packages:
+*  The first one is authentication. This package manages the register, login, and permissions of the different users, relying on role-based access control.  
+* The second one is the conference management. This one gathers the creation and management of a conference.  
+* The third one is similar to the second one, but is focused on events (talks / workshops) instead of conferences.  
+* The fourth and last one is the most important, containing all the unique features of our application. Here we collect the information needed to generate automatic and personalized schedules for the conference. This information includes the attendee's availability as well as his preferences. After collecting this information, our scheduling algorithm will be able to generate personalized schedules that conference attendees can then consult.
 
 ### Physical architecture
 
 ![Physical Architecture](img/physical_architecture.png)
 
-When creating our application, we thought about user commodity and facility.
-With that in mind, we used flutter app to develop our user application. To synchronize all the data needed for the application to function properly, we needed a server. For that, we decided to use firebase. And, to store all the necessary data, we used a database in firestore.
-All this technology combined allowed us to produce a mobile app, which interacts with the users to provide them a better experience when attending conferences.
+When developing our application, we thought about user commodity and usability.
+With that in mind, we used the Flutter SDK to develop our application.  
+To synchronize all the data required for the application to function properly, we needed a server. For that, we decided to use Firebase, a Google platform with an extensive set of features. To store all the necessary data, we used a NoSQL database provided by Firebase, named Cloud Firestore.  
+Using all these technologies allowed us to produce a mobile app, which interacts with the users to provide them a better experience when attending conferences.
 
 ---
 
 ## Implementation
 
-+ **Iteration 0**: decided technologies to use; learned the basics of Flutter; created user stories and mockups
-+ **Iteration 1**: implemented the "create conference" menu for the organizer; learned more details about Flutter
-+ **Iteration 2**: Firebase setup; started to implement other user stories fundamental for the app; updated some mockups
-+ **Iteration 3**: implementation of more user stories; updated some mockups; connection to the Firebase
-+ **Iteration 4**: implementation of core user stories; scheduling algorithm; updated some mockups; gherkin test automation
+* **Iteration 0**: decided technologies to use; learned the basics of Flutter; created user stories and mockups
+* **Iteration 1**: implemented the "create conference" menu for the organizer; learned more details about Flutter
+* **Iteration 2**: Firebase setup; started to implement other user stories fundamental for the app; updated some mockups
+* **Iteration 3**: implementation of more user stories; updated some mockups; connection to the Firebase
+* **Iteration 4**: implementation of core user stories; scheduling algorithm; updated some mockups; gherkin test automation
 
 ---
 ## Test
@@ -570,9 +577,9 @@ For the purpose of ESOF, we will use a very simple approach, just to manage feat
 
 ## Project management
 
-Software project management is an art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and controlled.
+Software project management is an art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and evaluated.
 
-In the context of ESOF, our team decided to use [Github Projects](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/projects). This way we were able to order to register tasks, assign tasks to people, add estimations to tasks, monitor tasks progress, and keep track of our project.
+In the context of ESOF, our team decided to use [Github Projects](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/projects). This way we were able to create and categorize tasks, assign them to team members, add estimations to tasks, monitor their progress, and keep track of the general development of our project.
 
 ---
 
