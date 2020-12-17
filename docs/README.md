@@ -572,7 +572,7 @@ For the purpose of ESOF, we will use a very simple approach, just to manage feat
 
 Software project management is an art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and controlled.
 
-In the context of ESOF, our team decided to use Github Projects: [Github Projects](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/projects). This way we were able to order to register tasks, assign tasks to people, add estimations to tasks, monitor tasks progress, and keep track of our project.
+In the context of ESOF, our team decided to use [Github Projects](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/projects). This way we were able to order to register tasks, assign tasks to people, add estimations to tasks, monitor tasks progress, and keep track of our project.
 
 ---
 
