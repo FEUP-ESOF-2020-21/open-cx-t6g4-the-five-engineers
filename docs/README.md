@@ -195,195 +195,7 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 ### User stories
 
-*As an organizer I want to be able to create a conference*
-
-**User interface mockup**
-
-![Create Conference Mockup](img/create_conference.png)
-
-**Acceptance tests**.
-  * Name size <= 50 chars
-  * Start date and finish date must be valid dates
-  * Start date must be before or the same as finish date
-  * Short description size <= 1000 chars
-
-```gherkin
-Given that I have the app, internet connection and I logged in as an organizer.  
-When I've figured all the information about the conference I want to arrange.  
-Then the app should register all that data correctly.
-```
-
-**Value and effort**.
-  * Must Have
-  * M
-
-*As an organizer, I want to be able to select a conference so that I can view it, edit it or see its statistics*
-
-**User interface mockup**
-
-![Select Conference Mockup](img/select_conference_organizer.png)
-
-**Acceptance tests**
-
-* All conferences from the organizer that wants to select a conference have to be shown
-* Can create a new conference from this screen
-* Tapping a conference leads to a screen with more information about it
-
-```gherkin
-Given that I have the app and I'm logged in as an organizer.  
- When I want to access and/or modify all the information about the conference(s) that are already registered.   
-Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly edit them.  
-```
-
-
-**Value and effort**.
-  * Must Have
-  * M
-
-*As an organizer, I want to be able to view information about a conference so that I can edit it and manage its events*
-
-**User interface mockup**
-
-![View Conference Organizer Mockup](img/organizer_view_conference.png)
-
-**Acceptance tests**.
-
-* Name, start and end dates, tags and description should be shown
-* A list of all events from that conference should be shown
-* Tapping an event leads to a screen with more information about it
-* Can create a new event from this screen
-* Can remove events, but a confirmation dialog should be shown
-
-```gherkin
-Given that I have the app and I'm logged in as an organizer.  
- When I want to access and/or modify all the information about the conference's events.   
-Then the app should display all the conferences briefly and allow me to tap on them in order to see their events and to possibly add, modify or remove them.
-```
-
-
-**Value and effort**.
-  * Must Have
-  * S
-
-*As an organizer, I want to be able to define sessions for an event*
-
-**User interface mockup**
-
-**Acceptance tests**.
-
-* Session duration > 0
-* It needs at least 1 speaker
-* Maximum attendance > 0
-
-```gherkin
-Given that I have the app and I'm logged in as an organizer.  
-When I want to access and/or modify all the information about each events' sessions.   
-Then the app should display all the events of a conference and, for each event, allow me to tap on them in order to see their sessions and to possibly add, alter or remove them.
-```
-
-
-
-**Value and effort**.
-  * Must Have
-  * S
-
-*As an organizer, I want to be able to control the session capacity*
-
-**User interface mockup**
-
-**Acceptance tests**  
-
-```gherkin
-Given that I have the app and I'm logged in as an organizer.
-When I want to define a session's capacity due to technical or space limitations.  
-Then the app, in each session's information screen, should allow me to alter the session capacity parameter and that should also reflect in the database.
-```
-
-**Value and effort**.
-  * Should Have
-  * XS
-
-*As an organizer, I want to be able to register a new event so that I can manage a new conference*
-
-**User interface mockup**
-
-![Create Event Mockup](img/create_event.png)
-
-**Acceptance tests**.
-
-* Name size <= 50 chars
-* Start date and finish date of each session must be valid dates
-* Start date of each session must be before or same as the finish date
-* Start date of each session must be same or after conference start date
-* Finish date of each session must be same or before conference finish date
-* Maximum of 100 sessions (may change later)
-* Maximum of 50 tags
-* Tag size <= 50 chars
-* Attendance limit, if it exists, must be a positive number
-* Short description size <= 1000 chars  
-
-```gherkin
-Given that I have the app and I'm logged in as an organizer.
-When I am in the screen regarding the creation of a new event.
-Then the app should allow me to create a new event and, from that, create a new conference based on it.
-```
-
-**Value and effort**.
-  * Must Have
-  * L
-
-*As an attendee, I want to be able to select a conference so I can see details about it or participate in it*
-
-**User interface mockup**
-
-![Select Conference as Attendee Mockup](img/select_conference_attendee.png)
-![Select Conference as Attendee Searched Mockup](img/select_conference_attendee_searched.png)
-
-**Acceptance tests**  
-
-```gherkin
-Given that I have the app and I'm logged in as an attendee.  
- When I want to access all the information about the conferences that I can attend.  
- Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly participate in them. 
-```
-
-**Value and effort**.
-  * Must Have
-  * M
-
-*As an attendee, I want to be notified when the sessions from the conference that I'm going to attend are added/removed/edited*
-
-**User interface mockup**
-
-**Acceptance tests**
-
-```gherkin
-Given that I have the app, I'm logged in as an attendee and registered in a conference.  
-When that conference's information has been modified.
-Then the app should should generate a notification imediately regarding that specific change.
-```
-
-**Value and effort**.
-  * Could Have
-  * L
-
-*As an organizer, I want to be able to check conference statistics* 
-
-**User interface mockup**
-
-**Acceptance tests**  
-
-```gherkin
-Given that I have the app, I'm logged in as an organizer and I've already created a conference.
-When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
-Then the app should give me all the possible statistics regarding all the conference participants.
-```
-
-**Value and effort**.
-  * Could Have
-  * L
-
-*As an organizer, I want to be able to login or register in the app*
+#### *As an organizer, I want to be able to login or register in the app*
 
 **User interface mockup**
 
@@ -412,7 +224,7 @@ Then the app should display an initial login screen in order to enter and enjoy 
   * Should Have
   * M
 
-*As an attendee, I want to be able to login or register in the app*
+#### *As an attendee, I want to be able to login or register in the app*
 
 **User interface mockup**
 
@@ -441,23 +253,140 @@ Then the app should display an initial login screen and also allow me to registe
   * Should Have
   * M
 
-*As an attendee, I want to be given the best schedule matching my availability so that I can participate in the most events possible*
+#### *As an organizer I want to be able to create a conference*
 
 **User interface mockup**
 
-**Acceptance tests**  
+![Create Conference Mockup](img/create_conference.png)
+
+**Acceptance tests**.
+  * Name size <= 50 chars
+  * Start date and finish date must be valid dates
+  * Start date must be before or the same as finish date
+  * Short description size <= 1000 chars
 
 ```gherkin
-Given that I have the app, I am an attendee of a conference, have an internet conection, and have given the information about my availability.  
-When I want to have time to go to all the events of the conference without having to worry much about it.  
-Then the app should do all the work for me and provide me with the best possible schedule.
+Given that I have the app, internet connection and I logged in as an organizer.  
+When I've figured all the information about the conference I want to arrange.  
+Then the app should register all that data correctly.
 ```
 
 **Value and effort**.
   * Must Have
-  * XL
+  * M
+#### *As an organizer, I want to be able to select a conference so that I can view it and edit it*
 
-*As an organizer I want to be able to view information about an event and its sessions so I can manage it*
+**User interface mockup**
+
+![Select Conference Mockup](img/select_conference_organizer.png)
+
+**Acceptance tests**
+
+* All conferences from the organizer that wants to select a conference have to be shown
+* Can create a new conference from this screen
+* Tapping a conference leads to a screen with more information about it
+
+```gherkin
+Given that I have the app and I'm logged in as an organizer.  
+ When I want to access and/or modify all the information about the conference(s) that are already registered.   
+Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly edit them.  
+```
+
+**Value and effort**.
+  * Must Have
+  * M
+#### *As an organizer, I want to be able to view information about a conference so that I can edit it and manage its events*
+
+**User interface mockup**
+
+![View Conference Organizer Mockup](img/organizer_view_conference.png)
+
+**Acceptance tests**.
+
+* Name, start and end dates, tags and description should be shown
+* A list of all events from that conference should be shown
+* Tapping an event leads to a screen with more information about it
+* Can create a new event from this screen
+* Can remove events, but a confirmation dialog should be shown
+
+```gherkin
+Given that I have the app and I'm logged in as an organizer.  
+ When I want to access and/or modify all the information about the conference's events.   
+Then the app should display all the conferences briefly and allow me to tap on them in order to see their events and to possibly add, modify or remove them.
+```
+
+**Value and effort**.
+  * Must Have
+  * S
+####  *As an organizer, I want to be able to define sessions for an event*
+
+**User interface mockup**
+![Add Session Mockup](img/create_session.png)
+
+**Acceptance tests**
+* Session duration > 0
+* It needs at least 1 speaker
+* Maximum attendance > 0
+
+```gherkin
+Given that I have the app and I'm logged in as an organizer.  
+When I want to access and/or modify all the information about each events' sessions.   
+Then the app should display all the events of a conference and, for each event, allow me to tap on them in order to see their sessions and to possibly add, alter or remove them.
+```
+
+**Value and effort**.
+  * Must Have
+  * S
+
+#### *As an organizer, I want to be able to control the session capacity*
+
+**User interface mockup**
+![Add Session Mockup](img/create_session.png)
+
+**Acceptance tests** 
+* Maximum attendance > 0
+
+```gherkin
+Given that I have the app and I'm logged in as an organizer.
+When I want to define a session's capacity due to technical or space limitations.  
+Then the app, in each session's information screen, should allow me to alter the session capacity parameter and that should also reflect in the database.
+```
+
+**Value and effort**
+  * Should Have
+  * XS
+
+#### *As an organizer, I want to be able to register a new event so that I can manage a new conference*
+
+**User interface mockup**
+
+![Create Event Mockup](img/create_event.png)
+
+**Acceptance tests**.
+
+* Name size <= 50 chars
+* Start date and finish date of each session must be valid dates
+* Start date of each session must be before or same as the finish date
+* Start date of each session must be same or after conference start date
+* Finish date of each session must be same or before conference finish date
+* Maximum of 100 sessions (may change later)
+* Maximum of 50 tags
+* Tag size <= 50 chars
+* Attendance limit, if it exists, must be a positive number
+* Short description size <= 1000 chars  
+
+```gherkin
+Given that I have the app and I'm logged in as an organizer.
+When I am in the screen regarding the creation of a new event.
+Then the app should allow me to create a new event and, from that, create a new conference based on it.
+```
+
+**Value and effort**.
+  * Must Have
+  * L
+
+
+#### *As an organizer I want to be able to view information about an event and its sessions so I can manage it*
 
 **User interface mockup**
 
@@ -479,6 +408,106 @@ Then the app should allow me to view all the information about it and all its re
   * Must Have
   * M
 
+
+#### *As an attendee, I want to be able to select a conference so I can see details about it or participate in it*
+
+**User interface mockup**
+
+![Select Conference as Attendee Mockup](img/select_conference_attendee.png)
+![Select Conference as Attendee Searched Mockup](img/select_conference_attendee_searched.png)
+
+**Acceptance tests**  
+
+```gherkin
+Given that I have the app and I'm logged in as an attendee.  
+ When I want to access all the information about the conferences that I can attend.  
+ Then the app should display all the conferences briefly and allow me to tap on them in order to see further informations and possibly participate in them. 
+```
+
+**Value and effort**.
+  * Must Have
+  * M
+
+### *As an attendee, I want to be able to give my availability for events so that I can be provided with an automatic, personalized schedule*
+
+**User interface mockup**
+
+![View Event](img/attendee_view_event.png)
+
+**Acceptance tests**  
+* A checkbox should be shown near each session to provide availability for that session
+* The cancel button (cross) should let the user return to the normal event view
+* Results should be submitted to the database only after the confirm button (checkmark) is pressed
+
+```gherkin
+
+
+
+```
+
+**Value and effort**.
+  * Must Have
+  * L
+
+#### *As an attendee, I want to be given the best schedule matching my availability so that I can participate in the most events possible*
+
+**User interface mockup**
+
+![Schedule Mockup](img/view_schedule.png)
+
+**Acceptance tests**  
+* The sessions assigned to the attendee by the algorithm should be shown in chronological order
+* Each entry in the schedule should show the event name, and the start and end dates of the assigned session
+
+```gherkin
+Given that I have the app, I am an attendee of a conference, have an internet conection, and have given the information about my availability.  
+When I want to have time to go to all the events of the conference without having to worry much about it.  
+Then the app should do all the work for me and provide me with the best possible schedule.
+```
+
+**Value and effort**.
+  * Must Have
+  * XL
+
+### *As an attendee, I want to be notified when the sessions from the conference that I'm going to attend are added/removed/edited*
+
+**User interface mockup**
+
+(Not Implemented)
+
+**Acceptance tests**
+
+(Not Implemented)
+
+```gherkin
+Given that I have the app, I'm logged in as an attendee and registered in a conference.  
+When that conference's information has been modified.
+Then the app should should generate a notification imediately regarding that specific change.
+```
+
+**Value and effort**.
+  * Could Have
+  * L
+
+#### *As an organizer, I want to be able to check conference statistics* 
+
+**User interface mockup**
+
+(Not Implemented)
+
+**Acceptance tests**  
+
+(Not Implemented)
+
+```gherkin
+Given that I have the app, I'm logged in as an organizer and I've already created a conference.
+When a conference has ocurred, I want to know which events and respective sessions had more interest for the attendee's and I also want to know which age group was more prevalent.  
+Then the app should give me all the possible statistics regarding all the conference participants.
+```
+
+**Value and effort**.
+  * Could Have
+  * L
 
 ### Domain model
 
