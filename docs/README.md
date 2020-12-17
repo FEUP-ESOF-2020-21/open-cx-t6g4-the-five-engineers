@@ -140,7 +140,7 @@ Have you ever been to a conference only to find yourself running from one worksh
   * If the event organizer doesn't type all the information needed, he can't schedule an event;
   * If the event organizer doesn't add sessions to the event, the event can't be created (needs at least 1 session).
 
-#### Access Conference Data and Statistics
+#### Access Conference Data and Statistics (Not Implemented)
 * **Actors** - event organizer
 * **Description** - an organizer wants to see which events/sessions have more attendance
 * **Preconditions and Postconditions**
@@ -152,7 +152,6 @@ Have you ever been to a conference only to find yourself running from one worksh
   3. The system presents the statistics for the conferences
 * **Alternative Flows and Exceptions**
   * If the schedules haven't been generated, the statistics will be empty.
-  * TODO
 
 #### Select a Conference
 * **Actors** - user of the app
@@ -181,11 +180,12 @@ Have you ever been to a conference only to find yourself running from one worksh
   * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
   * If the user didn't obtain a schedule, no schedule will appear
 
-#### Notify Attendees about Events
+#### Notify Attendees about Events (Not Implemented)
 * **Actors** - attendee
-* **Description** - the attendee wants to be notified for eventual changes in the events and conferences he will be attanding 
+* **Description** - the attendee wants to be notified for eventual changes in the events and conferences he will be attending 
 * **Preconditions and Postconditions**
   * Preconditions: the attendee must have filled his availability and interests for that conference; the conference organizer must had altered the conference
+  * Postconditions: the attendee will be notified about the  changes
 * **Normal Flow**
   1. The attendee wants to be notified about changes in a conference
   2. The conference organizer modifies that conference
