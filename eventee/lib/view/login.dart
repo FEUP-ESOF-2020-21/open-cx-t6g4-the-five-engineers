@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        key: Key('email'),
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
@@ -37,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        key: Key('password'),
         controller: _passwordController,
         obscureText: true,
         decoration: const InputDecoration(
@@ -54,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: RaisedButton(
+        key: Key(text),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
         elevation: 5.0,
         color: Colors.blue,
@@ -97,34 +100,32 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildContainer() {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20.0),
-      ),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20.0),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Login",
-                style: TextStyle(
-                  fontSize: 22.0,
-                ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Login",
+              style: TextStyle(
+                fontSize: 22.0,
               ),
             ),
-            _buildEmailRow(),
-            _buildPasswordRow(),
-            _buildLoginButton(text: "Login as Attendee", onPressed: _submitAttendeeForm),
-            _buildLoginButton(text: "Login as Organizer", onPressed: _submitOrganizerForm),
-            _buildBackButton(),
-          ],
-        ),
+          ),
+          _buildEmailRow(),
+          _buildPasswordRow(),
+          _buildLoginButton(text: 'Login as Attendee', onPressed: _submitAttendeeForm),
+          _buildLoginButton(text: 'Login as Organizer', onPressed: _submitOrganizerForm),
+          _buildBackButton(),
+        ],
       ),
     );
   }
@@ -185,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          key: Key('error dialog'),
           title: const Text('Error'),
           content: Text(errorMessageBuffer.toString()),
         )

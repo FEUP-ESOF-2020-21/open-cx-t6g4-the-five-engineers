@@ -135,7 +135,7 @@ class _ConferenceSelectionAttendeeState extends _ConferenceSelectionState {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Conference')),
+      appBar: AppBar(title: const Text('Select Conference', key: Key('Select Conference'))),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.search),
         onPressed: () {
