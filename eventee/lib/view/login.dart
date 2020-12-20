@@ -186,6 +186,7 @@ class _LoginPageState extends State<LoginPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          key: Key('error dialog'),
           title: const Text('Error'),
           content: Text(errorMessageBuffer.toString()),
         )
