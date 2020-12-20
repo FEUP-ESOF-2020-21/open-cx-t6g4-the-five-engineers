@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:gherkin/gherkin.dart';
 import 'package:glob/glob.dart';
-import 'steps/increment_step.dart';
 
 Future<void> main() {
   final config = FlutterTestConfiguration()
@@ -13,7 +12,7 @@ Future<void> main() {
       JsonReporter(path: './report.json')
     ] // you can include the "StdoutReporter()" without the message level parameter for verbose log information
     ..hooks = []
-    ..stepDefinitions = [TapButtonNTimesStep()]
+    ..stepDefinitions = []
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true
     ..targetAppPath = "test_driver/app.dart"

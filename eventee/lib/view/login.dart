@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        key: Key('email'),
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
@@ -37,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        key: Key('password'),
         controller: _passwordController,
         obscureText: true,
         decoration: const InputDecoration(
@@ -54,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: RaisedButton(
+        key: Key(text),
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
         elevation: 5.0,
         color: Colors.blue,
