@@ -1,18 +1,29 @@
 
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/model/event.dart';
 import 'package:eventee/view/create_event.dart';
 import 'package:eventee/view/view_event.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class EventsListView extends StatefulWidget {
-  EventsListView({Key key, this.conferenceRef}) : super(key: key);
-
   final DocumentReference conferenceRef;
+  final UserCredential userCredential;
+  final Role role;
+
+  EventsListView({
+    Key key, 
+    @required this.conferenceRef, 
+    @required this.userCredential,
+    @required this.role
+  }) : super(key: key);
 
   @override
   _EventsListViewState createState() => _EventsListViewState();
@@ -59,37 +70,45 @@ class _EventsListViewState extends State<EventsListView> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ViewEvent(ref: eventSnapshot.reference)),
+          MaterialPageRoute(builder: (context) => ViewEvent(
+            conferenceRef: widget.conferenceRef, 
+            eventRef: eventSnapshot.reference,
+            userCredential: widget.userCredential,
+            role: widget.role,
+          )),
         );
       },
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () {
-          showDialog(
-            context: context, 
-            builder: (context) => AlertDialog(
-              title: const Text('Warning'),
-              content: const Text('Do you really wish to delete this event?'),
-              actions: [
-                TextButton(
-                  child: Text('Cancel'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                TextButton(
-                  child: Text('Remove', style: TextStyle(color: Colors.red)),
-                  onPressed: () {
-                    eventSnapshot.reference.delete()
-                        .then((value) => Navigator.of(context).pop())
-                        .catchError((error) {
-                          print(error);
-                          Navigator.of(context).pop();
-                        });
-                  },
-                )
-              ],
-            ),
-          );
-        }
+      trailing: Visibility(
+        child: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () {
+            showDialog(
+              context: context, 
+              builder: (context) => AlertDialog(
+                title: const Text('Warning'),
+                content: const Text('Do you really wish to delete this event?'),
+                actions: [
+                  TextButton(
+                    child: const Text('Cancel'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  TextButton(
+                    child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                    onPressed: () {
+                      eventSnapshot.reference.delete()
+                          .then((value) => Navigator.of(context).pop())
+                          .catchError((error) {
+                            print(error);
+                            Navigator.of(context).pop();
+                          });
+                    },
+                  )
+                ],
+              ),
+            );
+          }
+        ),
+        visible: widget.role == Role.organizer,
       ),
     );
   }
@@ -128,7 +147,7 @@ class _EventsListViewState extends State<EventsListView> {
                           );
                         },
                       ),
-                      visible: true, // TODO (replace with organizer check)
+                      visible: widget.role == Role.organizer,
                     )
                   ],
                 ),
@@ -143,18 +162,15 @@ class _EventsListViewState extends State<EventsListView> {
               ListView.separated(
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: _buildListItem,
-                separatorBuilder: (content, index) => const Divider(
-                  color: Colors.black54,
-                  thickness: 1.0,
-                ),
+                separatorBuilder: (content, index) => const GenericSeparator(),
                 shrinkWrap: true,
               ),
             ],
           );
         }
         else if (snapshot.hasError) {
-          // TODO: Improve this
-          return Center(child: Text('ERROR'));
+          print(snapshot.error);
+          return const GenericErrorIndicator();
         }
         else {
           return const GenericLoadingIndicator(size: 50);

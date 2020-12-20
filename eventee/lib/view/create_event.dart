@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventee/view/create_session.dart';
+import 'package:eventee/view/utils/generic_separator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -18,9 +19,6 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
-  static const int maxSessions = 100;
-  static const int maxTags = 50;
-
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
@@ -30,17 +28,25 @@ class _CreateEventState extends State<CreateEvent> {
   Widget _buildListItem(BuildContext context, int index) {
     final Session session = _sessions[index];
 
-    // TODO: Improve how sessions are displayed (user interface)
-    StringBuffer buf = new StringBuffer();
-    buf.writeln('From ${session.startDate.toString().substring(0, 16)}'
-        ' to ${session.endDate.toString().substring(0, 16)}');
+    const TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
 
+    List<InlineSpan> richText = [
+      const TextSpan(text: 'From: ', style: bold),
+      TextSpan(text: '${session.startDate.toString().substring(0, 16)}\n'),
+      const TextSpan(text: 'To: ', style: bold),
+      TextSpan(text: '${session.endDate.toString().substring(0, 16)}\n'),
+    ];
+    
     if (session.isAttendanceLimited()) {
-      buf.write('Attendance limited to ${session.attendanceLimit} people');
+      richText.addAll([
+        const TextSpan(text: 'Attendance limited to '),
+        TextSpan(text: '${session.attendanceLimit}', style: bold),
+        const TextSpan(text: ' people'),
+      ]);
     }
 
     return ListTile(
-      subtitle: Text(buf.toString()),
+      subtitle: Text.rich(TextSpan(children: richText)),
       title: Text('Session ${index + 1}'),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -59,7 +65,6 @@ class _CreateEventState extends State<CreateEvent> {
           ),
         ],
       ),
-
     );
   }
 
@@ -157,7 +162,7 @@ class _CreateEventState extends State<CreateEvent> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 7.5, horizontal: 15.0),
               child: Text(
-                'Tags (${_tags.length} / $maxTags)',
+                'Tags (${_tags.length} / ${Event.maxTags})',
                 style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -179,7 +184,7 @@ class _CreateEventState extends State<CreateEvent> {
                     _tags.add(str);
                   });
                 },
-                enabled: _tags.length < maxTags,
+                enabled: _tags.length < Event.maxTags,
               ),
               itemCount: _tags.length,
               itemBuilder: (int index) {
@@ -208,7 +213,7 @@ class _CreateEventState extends State<CreateEvent> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
-                      'Sessions (${_sessions.length} / $maxSessions)',
+                      'Sessions (${_sessions.length} / ${Event.maxSessions})',
                       style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -231,7 +236,7 @@ class _CreateEventState extends State<CreateEvent> {
                         }
                       },
                     ),
-                    visible: _sessions.length < maxSessions,
+                    visible: _sessions.length < Event.maxSessions,
                   ),
                 ],
               ),
@@ -246,10 +251,7 @@ class _CreateEventState extends State<CreateEvent> {
             ListView.separated(
               itemCount: _sessions.length,
               itemBuilder: _buildListItem,
-              separatorBuilder: (context, index) => const Divider(
-                color: Colors.black54,
-                thickness: 1.0,
-              ),
+              separatorBuilder: (context, index) => const GenericSeparator(),
               shrinkWrap: true,
             ),
             RaisedButton(

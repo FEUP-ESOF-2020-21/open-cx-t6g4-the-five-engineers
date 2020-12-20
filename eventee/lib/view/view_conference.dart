@@ -1,34 +1,93 @@
 
+import 'package:eventee/scheduling_algorithm.dart';
+import 'package:eventee/view/schedule.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_tags/flutter_tags.dart';
+import 'package:eventee/model/role.dart';
 import 'package:eventee/model/conference.dart';
+import 'package:eventee/model/event.dart';
 import 'package:eventee/view/events_list_view.dart';
+import 'package:eventee/view/utils/generic_error_indicator.dart';
 import 'package:eventee/view/utils/generic_loading_indicator.dart';
 
 class ViewConference extends StatefulWidget {
   final DocumentReference ref;
+  final UserCredential userCredential;
+  final Role role;
 
-  ViewConference({Key key, this.ref}) : super(key: key);
+  ViewConference({
+    Key key, 
+    @required this.ref,
+    @required this.userCredential,
+    @required this.role
+  }) : super(key: key);
 
   @override
   _ViewConferenceState createState() => _ViewConferenceState();
 }
 
 class _ViewConferenceState extends State<ViewConference> {
-  Future<Conference> _refreshConference() {
-    Future<DocumentSnapshot> snapshot = widget.ref.get();
-    return snapshot.then((value) => Conference.fromDatabaseFormat(value.data()));
+  void _generateSchedules() async {
+    await widget.ref.update({'schedules_generated': true});
+    
+    widget.ref.get().then(
+      (conferenceSnapshot) async {
+        Conference conference = Conference.fromDatabaseFormat(conferenceSnapshot.data());
+        QuerySnapshot eventsSnapshot = await conferenceSnapshot.reference.collection('events').get();
+
+        conference.events = [];
+
+        for (var eventSnapshot in eventsSnapshot.docs) {
+          conference.events.add(Event.fromDatabaseFormat(eventSnapshot.data()));
+        }
+
+        generateSchedules(conference);
+
+        for (int i = 0; i < eventsSnapshot.docs.length; ++i) {
+          await eventsSnapshot.docs[i].reference.update({
+            'sessions': conference.events[i].sessions.map((session) => session.toDatabaseFormat()).toList()
+          })
+          .catchError((error) => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Error'),
+              content: Text(error.toString()),
+            )
+          ));
+        }
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Success'),
+          )
+        );
+      }
+    )
+    .catchError(
+      (error) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(error.toString()),
+        )
+      )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Conference>(
-      future: _refreshConference(),
+    return StreamBuilder<DocumentSnapshot>(
+      stream: widget.ref.snapshots(),
       builder: (context, snapshot) {
         Widget body;
 
         if (snapshot.hasData) {
+          Conference conference = Conference.fromDatabaseFormat(snapshot.data.data());
+
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -36,7 +95,7 @@ class _ViewConferenceState extends State<ViewConference> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 7.5),
                   child: Text(
-                    '${snapshot.data.name}',
+                    '${conference.name}',
                     style: const TextStyle(
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold,
@@ -57,7 +116,7 @@ class _ViewConferenceState extends State<ViewConference> {
                         borderRadius: const BorderRadius.all(Radius.circular(15.0))
                       ),
                       child: Text(
-                        '${snapshot.data.startDate.toString().substring(0, 10)}',
+                        '${conference.startDate.toString().substring(0, 10)}',
                         style: TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -69,7 +128,7 @@ class _ViewConferenceState extends State<ViewConference> {
                         borderRadius: const BorderRadius.all(Radius.circular(15.0))
                       ),
                       child: Text(
-                        '${snapshot.data.endDate.toString().substring(0, 10)}',
+                        '${conference.endDate.toString().substring(0, 10)}',
                         style: TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -78,11 +137,11 @@ class _ViewConferenceState extends State<ViewConference> {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                   child: Tags(
-                    itemCount: snapshot.data.tags.length,
+                    itemCount: conference.tags.length,
                     itemBuilder: (int index) {
-                      List<String> tags = snapshot.data.tags;
+                      List<String> tags = conference.tags;
                       final item = tags[index];
 
                       return ItemTags(
@@ -99,25 +158,69 @@ class _ViewConferenceState extends State<ViewConference> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
                 child: Text(
-                  '${snapshot.data.description}',
+                  '${conference.description}',
                   style: const TextStyle(
                     fontSize: 15.0,
                   ),
                 ),
               ),
-              EventsListView(conferenceRef: widget.ref),
+              EventsListView(conferenceRef: widget.ref, userCredential: widget.userCredential, role: widget.role),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: widget.role == Role.organizer ? 
+                    conference.schedulesGenerated ?
+                    const Text('Schedules already generated', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0))
+                    :
+                    RaisedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Warning'),
+                            content: const Text('Do you really wish to generate schedules for this conference?'),
+                            actions: [
+                              TextButton(
+                                child: const Text('Cancel'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                              TextButton(
+                                child: const Text('Generate'),
+                                onPressed: _generateSchedules,
+                              ),
+                            ],
+                          )
+                        );
+                      },
+                      icon: const Icon(Icons.event_available),
+                      label: const Text('Generate Schedules'),
+                    )
+                    :
+                    Visibility(
+                      child: RaisedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => Schedule(
+                              conferenceRef: widget.ref,
+                              userCredential: widget.userCredential,
+                              role: widget.role,
+                            ))
+                          );
+                        },
+                        icon: const Icon(Icons.event_available),
+                        label: const Text('View your Schedule'),
+                      ),
+                      visible: conference.schedulesGenerated,
+                    )
+                ),
+              ),
             ],
           );
         }
         else if (snapshot.hasError) {
           print(snapshot.error);
-          body = const Center(
-            child: Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 80,
-            ),
-          );
+          body = const GenericErrorIndicator();
         }
         else {
           body = const GenericLoadingIndicator();
@@ -126,20 +229,15 @@ class _ViewConferenceState extends State<ViewConference> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('View Conference'),
-            actions: [
+            actions: widget.role == Role.organizer ? [
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {},
               ),
-            ],
+            ]
+            : [],
           ),
-          body: body,
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {});
-            },
-          ),
+          body: SingleChildScrollView(child: body),
         );
       },
     );
