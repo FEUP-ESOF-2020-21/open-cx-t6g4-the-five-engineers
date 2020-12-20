@@ -128,38 +128,36 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildContainer() {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20.0),
-      ),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20.0),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20.0),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                "Register",
-                style: TextStyle(
-                  fontSize: 22.0,
-                ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Register",
+              style: TextStyle(
+                fontSize: 22.0,
               ),
             ),
-            _buildFullNameRow(),
-            _buildEmailRow(),
-            _buildPasswordRow(),
-            _buildConfirmPasswordRow(),
-            _buildRegisterButton(
-                text: 'Register as Attendee', onPressed: _submitAttendeeForm),
-            _buildRegisterButton(
-                text: 'Register as Organizer', onPressed: _submitOrganizerForm),
-            _buildBackButton(),
-          ],
-        ),
+          ),
+          _buildFullNameRow(),
+          _buildEmailRow(),
+          _buildPasswordRow(),
+          _buildConfirmPasswordRow(),
+          _buildRegisterButton(
+              text: 'Register as Attendee', onPressed: _submitAttendeeForm),
+          _buildRegisterButton(
+              text: 'Register as Organizer', onPressed: _submitOrganizerForm),
+          _buildBackButton(),
+        ],
       ),
     );
   }

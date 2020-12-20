@@ -5,17 +5,17 @@ import 'package:glob/glob.dart';
 
 Future<void> main() {
   final config = FlutterTestConfiguration()
-    ..features = [Glob(r"test_driver/features/**.feature")]
+    ..features = [Glob(r"test/features/login.feature")]
     ..reporters = [
       ProgressReporter(),
       TestRunSummaryReporter(),
-      JsonReporter(path: './report.json')
+      StdoutReporter()
     ] // you can include the "StdoutReporter()" without the message level parameter for verbose log information
     ..hooks = []
     ..stepDefinitions = []
     ..customStepParameterDefinitions = []
     ..restartAppBetweenScenarios = true
-    ..targetAppPath = "test_driver/app.dart"
+    ..targetAppPath = "test/login_app.dart"
     // ..tagExpression = "@smoke" // uncomment to see an example of running scenarios based on tag expressions
     ..exitAfterTestRun = true; // set to false if debugging to exit cleanly
   return GherkinRunner().execute(config);
