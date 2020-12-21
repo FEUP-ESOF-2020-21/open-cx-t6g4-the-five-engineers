@@ -590,6 +590,8 @@ For the purpose of ESOF, we used a simple but effective approach to manage featu
 * Controlled merging of branches to the `dev` branch, so that everything that is added to the `dev` branch has undergone some degree of testing;
 * Ensured that the only commits made directly to the `master` branch were changes to the documentation (in our case, the project report). However, we did use branches for more complex changes to the report to avoid conflicts.
 
+Check our Network Graph [here](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/network).
+
 ---
 
 ## Project management
