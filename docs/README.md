@@ -591,10 +591,14 @@ The first scenario expects the **Select a Conference** screen to be present afte
 ---
 ## Configuration and change management
 
-Configuration and change management are key activities to control change to, and maintain the integrity of, a project’s artifacts (code, models, documents).
-
 For the purpose of ESOF, we will use a very simple approach, just to manage feature requests, bug fixes, and improvements, using GitHub issues and following the [GitHub flow](https://guides.github.com/introduction/flow/).
 
+* Use of **branches** for every new feature and enhancements, using easy-to-understand names;
+* Use of **pull requests** when a branch was ready to be added to the ``dev`` branch, requesting review of the other developers;
+* Use of **releases** for every product iteration;
+* Controlled merge of branches to the ``dev`` branch, so that everything that is implemented in
+the ``dev`` branch is working correctly;
+* The only commits made directly in the ``master`` branch consist in changes to the documentation.
 
 ---
 
