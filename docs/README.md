@@ -600,6 +600,8 @@ For the purpose of ESOF, we will use a very simple approach, just to manage feat
 the ``dev`` branch is working correctly;
 * The only commits made directly in the ``master`` branch consist in changes to the documentation.
 
+Check our Network Graph [here](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/network).
+
 ---
 
 ## Project management
