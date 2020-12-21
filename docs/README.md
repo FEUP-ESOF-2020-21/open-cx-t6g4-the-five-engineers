@@ -38,7 +38,7 @@ To provide conference attendees with an automatic, personalized schedule to redu
 
 ---
 ## Elevator Pitch
-Have you ever been to a conference only to find yourself running from one workshop to another and having to leave in the middle of the most interesting part just so you could see a little bit of another one? Or even failed to enter a workshop because the session was full? Then, Eventee is the app for you. List your favorite workshops and it will give you a schedule without having to deal with partial sessions or full rooms.
+Have you ever been to a conference only to find yourself running from one workshop to another and having to leave in the middle of the most interesting part, just so you could see a little bit of another one? Or even failed to enter a workshop because the session was full? Then, Eventee is the app for you. List your favorite events and preferred sessions and it will automatically provide you with a schedule without overlapping sessions.
 
 ---
 ## Requirements
@@ -47,147 +47,137 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 ![User Case Diagram](img/use_case_diagram.png)
 
-#### Main Description
-* **Actors**
-  * **Attendee** - the attendee is the main user of our app. He uses our product to decide which conferences he wants to attend and get the schedule with all the sessions which they revealed some interest.
-  * **Event Organizer** - the event organizer is the user that gets our product to create and edit the conferences and events which they is responsible for. Without this user, the attendees don't get any value whatsoever from the app. 
-* **Description**
-  * With this use case, the attendee can select a conference to attend and get his personalized schedule for that same conference. On the other hand, the event organizer can create new conferences with diferent sessions, which the attendees will be able to choose from all the available conferences.
-* **Preconditions and Postconditions**
-  * If we want to be able to use the final product, we need to create an account or login to it, otherwise we can't get the personalized schedule for a conference or create a new one. At the conclusion of the use case execution, if we're the attendee, we will have a personalized schedule for a certain conference, otherwise, if we're the organizer, we can edit a conference that we created before.
-* **Normal Flow**
-  * With *Eventee*, it's possible to get all the important information about a conference which we want to attend and at the same time get the best possible schedule for us, simply by logging in or creating a new acount and provide our availabity and interest in sessions from a certain conference. After this, we can click on our main page and visualize our personalized schedule for the conference that we want to attend. On the other hand, if we want to organize a certain event, we can simply create it with our user-friendly interface, add new sessions to it and make it available for all the users of the app. If we want to edit a conference that we already created, we can do it and then notify all the attendees for that conference of the new changes.
-
 #### Register
 * **Actors** - users of the app
-* **Description** - in order to use the application, the user needs to be registered in the application, either as an attendee or as an organizer
+* **Description** - in order to use the application, the user needs to be registered either as an attendee or as an organizer
 * **Preconditions and Postconditions**
-  * Preconditions: There are no preconditions
-  * Postconditions: The user will have an account so they will be able to use our application
+  * Preconditions: none
+  * Postconditions: the user will have an account so they will be able to use the other functionalities of our app
 * **Normal Flow**
   1. User wants to use the application but doesn't have an account
   2. User presses the "Register" button
   3. User introduces all the information needed to create an account
-  4. User creates an account
-  5. The system registers the new user in the database
+  4. User creates an account (either as an attendee or as an organizer)
+  5. The user's information is added to the database
 * **Alternative Flows and Exceptions**
-  * If the user doens't type all the information needed, they can't create an account;
-  * If the "confirm password" camp isn't equal to the "password" camp, the register process will fail and the user won't be able to create an account.
+  * The register process will fail and an error message will be displayed if:
+    * The user doesn't enter all the required information;
+    * The "confirm password" field isn't equal to the "password" field;
+    * The provided email is already in use.
  
  #### Login
-* **Actors** - user of the app
-* **Description** - in order to use the application, the user needs to login in his account, either as an attendee or as an organizer
+* **Actors** - users of the app
+* **Description** - in order to use the application, the user needs to login to their account, either as an attendee or as an organizer
 * **Preconditions and Postconditions**
-  * Preconditions: The user must be registered
-  * Postconditions: The user will be able to use our application
+  * Preconditions: the user must be registered
+  * Postconditions: the user will be able to use our application
 * **Normal Flow**
   1. User wants to use the application and has an account
   2. User presses the "Login" button
-  3. User introduces all the information needed to login into his account
-  4. User logs in
-  5. The system presents all the information available to the user
+  3. User introduces their email and password
+  4. User logs in (either as an attendee or as an organizer)
+  5. The app presents all the information available to the user
 * **Alternative Flows and Exceptions**
-  * If the user doesn't type all the information needed, he can't login into his account;
-  * If the user doesn't introduce the information for a valid account, he won't be abble to login into his account.
+  * The login process will fail and an error message will be displayed if:
+    * The user doesn't enter all the required information;
+    * The user enters a wrong email or password;
+    * The user logs in with the wrong role (for example, an attendee attempts to log in as an organizer).
 
 #### Provide Availability and Interest in Conference Events
-* **Actors** - attendee
-* **Description** - an attendee provides his availability and interest in conference events so that he can obtain a personalized schedule
+* **Actors** - conference attendee
+* **Description** - an attendee provides their availability and interest in conference events so that he can obtain a personalized schedule
 * **Preconditions and Postconditions**
-  * Preconditions: the person using the application must be logged in as an attendee and he must have selected a conference
+  * Preconditions: the user must be logged in as an attendee and he must have selected a conference
   * Postconditions: the availability and interests for the user will be set for this conference
 * **Normal Flow**
-  1. Attendee wants to frequent a conference
-  2. Attendee selects the events he would want to attend
-  3. Attendee selects his availability for those events
-  4. The system registers the attendee's interest and availability
+  1. Attendee wants to participate in a conference
+  2. Attendee selects the events he would like to attend
+  3. Attendee selects their availability for those events
+  4. The attendee's interests and availability are stored in the database
 * **Alternative Flows and Exceptions**
-  * If the user cancels, the availability and interests won't be registered
+  * If the user cancels, their availability and interests won't be registered
 
 #### Create a Conference
-* **Actors** - event organizer
-* **Description** - an organizer creates conferences so attendees have conferences to attend
+* **Actors** - conference organizer
+* **Description** - an organizer creates a conference and provides information about it so that it can be discovered by other users of the app
 * **Preconditions and Postconditions**
-  * Preconditions: the person using the application must be logged in as an organizer
-  * Postconditions: the system will have a new conference created by the user using the application
+  * Preconditions: the user must be logged in as an organizer
+  * Postconditions: a new conference organized by the user will be created
 * **Normal Flow**
   1. Event organizer wants to create a new conference
-  2. Event organizer fill all the spaces with the information needed to create a conference
-  3. Event organizer adds events to the conference
-  4. Event organizer creates the conference
-  5. The system creates a new conference
+  2. Event organizer fills all the required information to create a conference (name, description, start and end dates, location, etc.)
+  3. Event organizer creates the conference
+  4. The conference data is added to the database
 * **Alternative Flows and Exceptions**
-  * If the event organizer doens't type all the information needed, he can't create a conference;
-  * If the organizer doesn't want any event, the conference can be created without events, but attendees won't be able to attend the conference.
+  * If the event organizer doesn't enter all the required information, he can't create a conference;
 
 #### Schedule an Event
-* **Actors** - event organizer
-* **Description** - an organizer, while creating the conference or when editing the conference, wants to add events
+* **Actors** - conference organizer
+* **Description** - an organizer, while managing a conference, adds events like talks and workshops in which conference attendees can participate
 * **Preconditions and Postconditions**
-  * Preconditions: the person using the application must be logged in as an organizer and needs to select the conference or create a new conference
-  * Postconditions: the conference that is being / is going to be organized by the organizer will have a new event
+  * Preconditions: the user must be logged in as an organizer and have a conference selected
+  * Postconditions: the conference that is organized by the user will have a new event
 * **Normal Flow**
   1. Event organizer wants to add an event to a conference
-  2. Event organizer types all the information needed to create an event
+  2. Event organizer enters all the required information to create an event
   3. Event organizer adds sessions to the events
   4. Event organizer schedules an event
-  5. The system schedules an event to the conference
+  5. The event's data is addded to the database
 * **Alternative Flows and Exceptions**
-  * If the event organizer doesn't type all the information needed, he can't schedule an event;
-  * If the event organizer doesn't add sessions to the event, the event can't be created (needs at least 1 session).
+  * The event won't be created and an error message will be displayed if:
+    * The event organizer doesn't enter all the required information;
+    * The event organizer doesn't add at least one session to the event.
 
 #### Access Conference Data and Statistics (Not Implemented)
-* **Actors** - event organizer
-* **Description** - an organizer wants to see which events/sessions have more attendance
+* **Actors** - conference organizer
+* **Description** - an organizer wants to see which events / sessions are more popular so he checks the conference statistics
 * **Preconditions and Postconditions**
-  * Preconditions: the schedules for this conference must be already generated
+  * Preconditions: the user must be logged in as an organizer, have a conference selected and the schedules for it must already be generated
   * Postconditions: the organizer will be able to the see attendance rates for the conference events and sessions
 * **Normal Flow**
   1. Event organizer wants to acess statistics for a conference
   2. Event organizer selects the option to see statistics for the conference
-  3. The system presents the statistics for the conferences
+  3. The app presents the statistics for the conferences
 * **Alternative Flows and Exceptions**
   * If the schedules haven't been generated, the statistics will be empty.
 
 #### Select a Conference
 * **Actors** - user of the app
-* **Description** - the user of the app wants to select and view the information about a conference
+* **Description** - the user of the app wants to select and view information about a conference
 * **Preconditions and Postconditions**
-  * Preconditions: the user must be logged in in the application
-  * Postconditions: the system will present all the information about the conference selected by the user
+  * Preconditions: the user must be logged in
+  * Postconditions: the app will present all the information about the conference selected by the user
 * **Normal Flow**
-  1. User wants to access select a conference
-  2. User presses the conference that wants so select
-  3. The system presents the conference selected
-* **Alternative Flows and Exceptions**
-  * If there is no conference to select, no conferences will be shown in the "Select Conference" menu
+  1. User wants to access information about a conference
+  2. User presses the conference they want to view
+  3. The app presents information about the selected the conference
+* **Alternative Flows and Exceptions**: none
 
-#### Consult the Assigned Personalized Schedule
-* **Actors** - attendee
-* **Description** - an attendee wants to see his personalized schedule to know which sessions he will be attending
+#### Consult their Assigned Personalized Schedule
+* **Actors** - conference attendee
+* **Description** - an attendee wants to see their personalized schedule to know which sessions the app has assigned to him
 * **Preconditions and Postconditions**
-  * Preconditions: the user must be logged in in the application as an attendee, he must have filled his availability and interests for this conference and the conference organizer must have generated the schedules for the conference
-  * Postconditions: the system will present the personalized schedule
+  * Preconditions: the user must be logged in as an attendee, have filled their availability and interests for this conference and the conference organizer must have generated the schedules for the conference
+  * Postconditions: the app will present the personalized schedule
 * **Normal Flow**
-  1. Attendee wants to check his schedule
-  2. Attendee selects the option to check his personalized schedule
-  3. The system presents the personalized schedule
+  1. Attendee wants to check their schedule
+  2. Attendee selects the option to check their personalized schedule
+  3. The app presents the user's personalized schedule
 * **Alternative Flows and Exceptions**
-  * If the conference organizer hasn't generated the schedules, the attendee won't be able to consult the schedule
-  * If the user didn't obtain a schedule, no schedule will appear
+  * If the conference organizer hasn't generated the schedules, the option for checking them won't be shown;
+  * If the user didn't provide their availability or interests, no schedule will be shown.
 
 #### Notify Attendees about Events (Not Implemented)
-* **Actors** - attendee
+* **Actors** - conference attendee
 * **Description** - the attendee wants to be notified for eventual changes in the events and conferences he will be attending 
 * **Preconditions and Postconditions**
-  * Preconditions: the attendee must have filled his availability and interests for that conference; the conference organizer must had altered the conference
-  * Postconditions: the attendee will be notified about the  changes
+  * Preconditions: the attendee must have filled their availability and interests for that conference and the conference organizer must have altered the conference data
+  * Postconditions: the attendee will receive a notification about the changes
 * **Normal Flow**
-  1. The attendee wants to be notified about changes in a conference
+  1. The attendee decides they want to be notified about changes in a conference
   2. The conference organizer modifies that conference
-  3. The attendee receives a notification containing the changes
-* **Alternative Flows and Exceptions**
-  * If the conference organizer doesn't modify the conference, the attendee won't be notified
+  3. The attendee receives a notification about the changes
+* **Alternative Flows and Exceptions**: none
 
 ### User stories
 
@@ -591,22 +581,20 @@ The first scenario expects the **Select a Conference** screen to be present afte
 ---
 ## Configuration and change management
 
-For the purpose of ESOF, we will use a very simple approach, just to manage feature requests, bug fixes, and improvements, using GitHub issues and following the [GitHub flow](https://guides.github.com/introduction/flow/).
+For the purpose of ESOF, we used a simple but effective approach to manage features, bug fixes, and improvements by following [GitHub flow](https://guides.github.com/introduction/flow/). To follow this strategy, we:
 
-* Use of **branches** for every new feature and enhancements, using easy-to-understand names;
-* Use of **pull requests** when a branch was ready to be added to the ``dev`` branch, requesting review of the other developers;
-* Use of **releases** for every product iteration;
-* Controlled merge of branches to the ``dev`` branch, so that everything that is implemented in
-the ``dev`` branch is working correctly;
-* The only commits made directly in the ``master`` branch consist in changes to the documentation.
+* Used a **development branch** in order to avoid pollution of the master branch
+* Used **branches** for every new feature and enhancement, using easy-to-understand names (`feature-name` for feature branches, `enhancement-name` for enhancements);
+* Used **pull requests** when a branch was ready to be added to the `dev` branch, requesting review of the other developers;
+* Used **release branches** and **tags** for every product iteration;
+* Controlled merging of branches to the `dev` branch, so that everything that is added to the `dev` branch has undergone some degree of testing;
+* Ensured that the only commits made directly to the `master` branch were changes to the documentation (in our case, the project report). However, we did use branches for more complex changes to the report to avoid conflicts.
 
 ---
 
 ## Project management
 
-Software project management is an art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and evaluated.
-
-In the context of ESOF, our team decided to use [Github Projects](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/projects). This way we were able to create and categorize tasks, assign them to team members, add estimations to tasks, monitor their progress, and keep track of the general development of our project.
+For project management, in the context of ESOF, our team decided to use [Github Projects](https://github.com/FEUP-ESOF-2020-21/open-cx-t6g4-the-five-engineers/projects). This way we were able to create and categorize tasks, assign them to team members, add estimations to tasks, monitor their progress, and keep track of the general development of our project.
 
 ---
 
