@@ -191,6 +191,14 @@ Have you ever been to a conference only to find yourself running from one worksh
 
 ### User stories
 
+#### User Story Map - Attendee
+
+![Attendee User Story Map](img/user_story_map_attendee.png)
+
+#### User Story Map - Organizer
+
+![Attendee User Story Map](img/user_story_map_organizer.png)
+
 #### *As an organizer, I want to be able to login or register in the app*
 
 **User interface mockup**
@@ -511,8 +519,6 @@ Then the app should give me all the possible statistics regarding all the confer
   * L
 
 ### Domain model
-
-To better understand the context of the software system, it is very useful to have a simple UML class diagram with all the key concepts (names, attributes) and relationships involved of the problem domain addressed by your module.
 
 ![Domain Model](img/eventee.png)
 
