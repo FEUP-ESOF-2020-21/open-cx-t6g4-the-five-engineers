@@ -559,13 +559,34 @@ Using all these technologies allowed us to produce a mobile app, which interacts
 ---
 ## Test
 
-There are several ways of documenting testing activities, and quality assurance in general, being the most common: a strategy, a plan, test case specifications, and test checklists.
+### Test Plan
+For this project, we created two types of automated tests: unit tests using Flutter and Dart's default testing framework and Gherkin acceptance tests using the `flutter_gherkin` package. For the unit tests, we chose to first create a test for the scheduling algorithm we developed, since this would be a good way to verify that it was working properly before integrating it with the rest of the app. We also developed some tests for the **Create Session** screen. As for the automated acceptance tests, since the main objective of these tests was to gain experience with BDD, we decided to test the **Login** feature, in scenarios with both valid and invalid user input.
 
-In this section it is only expected to include the following:
-* test plan describing the list of features to be tested and the testing methods and tools;
-* test case specifications to verify the functionalities, using unit tests and acceptance tests.
- 
-A good practice is to simplify this, avoiding repetitions, and automating the testing actions as much as possible.
+We would have liked to create more unit tests for several of the app's features, however since most of the testable features, such as conference, event and session creation rely on picking dates, something which is hard to test with Flutter's default testing framework (which only supports `tap`, `drag` and `enterText` actions), we were unable to easily develop tests for these features.
+
+### Test Case Specifications
+
+#### Unit Tests
+For the scheduling algorithm, a basic test was developed which took in some predefined conference data (so that this test would be independent of the database integration) and applied the algorithm to it. Afterwards, the results are displayed (in this case, the users that were assigned to each session of each event).
+
+The tests for the **Create Session** screen focus on input validation of the limited attendance field (maximum number of people that can participate in the session), testing invalid input such as a negative limit, a fractional limit, zero and even text input.
+
+#### Acceptance Tests
+For the Gherkin acceptance tests, we defined two scenarios for the **Login** feature: one where the user would input the correct credentials and another where he would input incorrect credentials:
+```gherkin
+Scenario: Login with correct credentials
+  Given I fill the 'email' field with 'attendee@email.com'
+  And I fill the 'password' field with 'password'
+  When I tap the 'Login as Attendee' button
+  Then I expect the text 'Select Conference' to be present within 10 seconds
+  
+Scenario: Login with incorrect credentials
+  Given I fill the 'email' field with 'attendee@email.com'
+  And I fill the 'password' field with 'wrongpassword'
+  When I tap the 'Login as Attendee' button
+  Then I expect the widget 'error dialog' to be present within 10 seconds
+```
+The first scenario expects the **Select a Conference** screen to be present after a valid authentication, whilst the second scenario expects an error message to be shown.
 
 ---
 ## Configuration and change management
